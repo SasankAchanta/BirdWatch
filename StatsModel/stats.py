@@ -103,3 +103,14 @@ for entry in data:
 print(f"Species: {data[1]['comName']} \nTotal: {totalWWD}")
 
 '''
+
+
+
+# prompt user for bird name and longitude/latitude
+
+species = input('Please input the bird name: ')
+
+long = input('Please input your longitude')
+
+lat = input('Please input your latitude')
+
