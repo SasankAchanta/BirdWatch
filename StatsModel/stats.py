@@ -6,7 +6,7 @@ from pprint import pprint as pp         # pretty print
 
 API_KEY = '8293oj5n61sq'
 
-'''
+
 # URL for getting the list of species & their codes
 url = "https://api.ebird.org/v2/ref/taxonomy/ebird" 
 
@@ -19,10 +19,8 @@ headers = { "X-eBirdApiToken": API_KEY }
     # CSV is best for looking at data; it can be brought to excel easily
 # QUERY parameters, not URL parameters
 params = { 
-    "fmt": "csv" 
+    "fmt": "json" 
 }
-
-
 
 # Response will hold the entire response from HTTP: gives status code (whether or not it actually worked), the data (i.e. JSON formatted), and headers from the server
 response = requests.get(url, headers=headers, params=params)
@@ -33,7 +31,7 @@ response = requests.get(url, headers=headers, params=params)
 # w = write to the file (create the file if not already created, if already created overwrite current text)
 # encodeType = the way text characters are converted to bytes (utf-8 is most common as it supports all characters, even special ones)
 
-with open('/Users/aydahusby/Desktop/AIM/eBird_List.csv', 'w', encoding='utf-8') as f:
+with open('/Users/aydahusby/Desktop/AIM/eBird_List.json', 'w', encoding='utf-8') as f:
     # response.text is the data from the request as text (just writing the data to the file)
     f.write(response.text)
 print(response.text)
@@ -45,7 +43,7 @@ df = pd.read_csv('eBird_List.csv')
 # create an excel spreadsheet out of the csv file
 # index=False - by default there is an extra column made by pandas for the index of the table; this removes that column 
 df.to_excel('eBird_List.xlsx', index=False)
-'''
+
 
 speciesCode = 'whwdov'
 
@@ -110,7 +108,22 @@ print(f"Species: {data[1]['comName']} \nTotal: {totalWWD}")
 
 species = input('Please input the bird name: ')
 
-long = input('Please input your longitude: ')
+lng = input('Please input your longitude: ')
 
 lat = input('Please input your latitude: ')
+
+specLocLonLat = f'https://api.ebird.org/v2/data/obs/geo/recent/{species}'
+
+headers = {
+    'X-eBirdApiToken': API_KEY
+}
+
+params = {
+    'lng': lng,
+    'lat': lat,
+    'dist': 50
+}
+
+
+
 
