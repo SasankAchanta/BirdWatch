@@ -6,7 +6,7 @@ from pprint import pprint as pp         # pretty print
 
 API_KEY = '8293oj5n61sq'
 
-
+'''
 # URL for getting the list of species & their codes
 url = "https://api.ebird.org/v2/ref/taxonomy/ebird" 
 
@@ -34,11 +34,11 @@ response = requests.get(url, headers=headers, params=params)
 with open('/Users/aydahusby/Desktop/AIM/eBird_List.json', 'w', encoding='utf-8') as f:
     # response.text is the data from the request as text (just writing the data to the file)
     f.write(response.text)
-print(response.text)
 
 # converting the file into excel spreadsheat (.xlsx):
 # create a dataframe with pandas (a data table) out of the csv file created earlier
-df = pd.read_csv('eBird_List.csv')
+df = pd.read_csv('eBird_List.json')
+
 
 # create an excel spreadsheet out of the csv file
 # index=False - by default there is an extra column made by pandas for the index of the table; this removes that column 
@@ -80,7 +80,7 @@ bird = {
 }
 
 
-'''
+
 # get data from region code instead of lng/lat
 
 regionCode = 'US-TX'
@@ -99,19 +99,18 @@ totalWWD = 0
 for entry in data:
     totalWWD += entry.get('howMany', 0)
 print(f"Species: {data[1]['comName']} \nTotal: {totalWWD}")
-
 '''
 
 
 
 # prompt user for bird name and longitude/latitude
-
 species = input('Please input the bird name: ')
-
-lng = input('Please input your longitude: ')
 
 lat = input('Please input your latitude: ')
 
+lng = input('Please input your longitude: ')
+
+# set up the URL, header, and parameters for the eBird API request
 specLocLonLat = f'https://api.ebird.org/v2/data/obs/geo/recent/{species}'
 
 headers = {
@@ -119,10 +118,22 @@ headers = {
 }
 
 params = {
-    'lng': lng,
     'lat': lat,
+    'lng': lng,
     'dist': 50
 }
+
+# make the API request 
+dataResp = requests.get(url=specLocLonLat, headers=headers, params=params)
+
+# convert the data response into a json format
+data = dataResp.json()
+
+# calculate the total population within a 50km radius
+totalPop = 0
+for item in data:
+    totalPop += item.get('howMany', 0)
+
 
 
 
