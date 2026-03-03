@@ -3,8 +3,16 @@ import pandas as pd         # pandas is a library for working with data in table
 # main object in pandas is DataFrame (basically a table)
 import os      
 from pprint import pprint as pp         # pretty print
+import math        #for calculating points
 
+# API key to access eBird
 API_KEY = '8293oj5n61sq'
+
+# the base number of points someone can get
+BASE_POINTS = 100
+
+# the constant number to prevent dividing by zero
+CONST = 1
 
 '''
 # URL for getting the list of species & their codes
@@ -102,16 +110,20 @@ print(f"Species: {data[1]['comName']} \nTotal: {totalWWD}")
 '''
 
 
+BASE_POINTS = 100
+BIG_BONUS = 1000
 
 # prompt user for bird name and longitude/latitude
 species = input('Please input the bird name: ')
 
-lat = input('Please input your latitude: ')
+lat = input('Please input your latitude (2 decimal places): ')
 
-lng = input('Please input your longitude: ')
+lng = input('Please input your longitude (2 decimal places): ')
 
 # set up the URL, header, and parameters for the eBird API request
-specLocLonLat = f'https://api.ebird.org/v2/data/obs/geo/recent/{species}'
+
+# recent observation of a specific species (specific)
+recentObSpec = f'https://api.ebird.org/v2/data/obs/geo/recent/{species}'
 
 headers = {
     'X-eBirdApiToken': API_KEY
@@ -124,17 +136,62 @@ params = {
 }
 
 # make the API request 
-dataResp = requests.get(url=specLocLonLat, headers=headers, params=params)
+speciesResp = requests.get(url=recentObSpec, headers=headers, params=params)
 
 # convert the data response into a json format
-data = dataResp.json()
+specData = speciesResp.json()
 
 # calculate the total population within a 50km radius
+totalSpecPop = 0
+for item in specData:
+    totalSpecPop += item.get('howMany', 0)
+
+
+
+# recent observation of birds (total)
+recentOb = f'https://api.ebird.org/v2/data/obs/geo/recent'
+
+headers = {
+    'X-eBirdApiToken': API_KEY
+}
+
+params = {
+    'lat': lat,
+    'lng': lng,
+    'dist': 50,
+    # back = number of days back for observations (max = 30, default = 14)
+    'back': 14
+}
+
+totalResp = requests.get(url=recentOb, headers=headers, params=params)
+
+totalData = totalResp.json()
+
+
 totalPop = 0
-for item in data:
+for item in totalData:
     totalPop += item.get('howMany', 0)
 
+print(f'species total: {totalSpecPop}\n')
+print(f'total birds: {totalPop}\n')
+
+'''
+totalAndConst = totalPop + CONST
+
+print(f'Total pop + CONST value: {totalAndConst}')
+
+totalDivBytotal = totalSpecPop/totalAndConst
+print(f'Total Species / Total Birds: {totalDivBytotal}')
+'''
 
 
+def calculatePoints(total_birds, total_species):
+    if(total_species == 0):
+        return BIG_BONUS
+    
+    ratio = total_species/total_birds
+    points = round(BASE_POINTS * ratio + CONST) # +CONST to prevent log(0) which causes error
+    return points
 
-
+points = calculatePoints(totalPop, totalSpecPop)
+print(points)
