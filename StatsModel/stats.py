@@ -189,8 +189,10 @@ def calculatePoints(total_birds, total_species):
     if(total_species == 0):
         return BIG_BONUS
     
-    ratio = total_species/total_birds
+    ratio = 1 - (total_species/total_birds)
     points = round(BASE_POINTS * ratio + CONST) # +CONST to prevent log(0) which causes error
+    if(points == 0):
+        return points + 1
     return points
 
 points = calculatePoints(totalPop, totalSpecPop)
