@@ -43,6 +43,7 @@ with open('/Users/aydahusby/Desktop/AIM/eBird_List.json', 'w', encoding='utf-8')
     # response.text is the data from the request as text (just writing the data to the file)
     f.write(response.text)
 
+    
 # converting the file into excel spreadsheat (.xlsx):
 # create a dataframe with pandas (a data table) out of the csv file created earlier
 df = pd.read_csv('eBird_List.json')
@@ -113,17 +114,62 @@ print(f"Species: {data[1]['comName']} \nTotal: {totalWWD}")
 BASE_POINTS = 100
 BIG_BONUS = 1000
 
+
+# URL for getting the list of species & their codes
+url = "https://api.ebird.org/v2/ref/taxonomy/ebird" 
+
+# Headers - information that is sent before the request (like a package label; they may include who you are, how you want the data formatted, or, in this case, and authentication key)
+# X-eBirdApiToken - the label for the API key; this label is what is expected BY eBird API when looking for the API key; look in API documentation to find what you should label the token
+headers = { "X-eBirdApiToken": API_KEY }
+
+# Params - parameters sent with a request to tell the server WHAT data is wanted, and in what format ("fmt"; i.e. JSON or CSV)
+# Usually get attached to URL 
+    # CSV is best for looking at data; it can be brought to excel easily
+# QUERY parameters, not URL parameters
+params = { 
+    "fmt": "json" 
+}
+
+# Response will hold the entire response from HTTP: gives status code (whether or not it actually worked), the data (i.e. JSON formatted), and headers from the server
+response = requests.get(url, headers=headers, params=params)
+
+# creating the file:
+# with...as f - allows opening and modifying a file without having to manually close it
+# open('fileName', 'w/r', encoding='encodeType') - opens the given file (fileName) in order to write or read (w/r)
+# w = write to the file (create the file if not already created, if already created overwrite current text)
+# encodeType = the way text characters are converted to bytes (utf-8 is most common as it supports all characters, even special ones)
+
+BIRD_LIST = response.json()
+
+'''
+with open('/Users/aydahusby/Desktop/AIM/eBird_List.json', 'w', encoding='utf-8') as f:
+    # response.text is the data from the request as text (just writing the data to the file)
+    f.write(response.text)
+'''
+
+def findSpecCode(comName):
+    for item in BIRD_LIST:
+        if (item['comName']).lower() == comName.lower():
+            return item['speciesCode']
+    return('Not Found')
+
+
 # prompt user for bird name and longitude/latitude
 species = input('Please input the bird name: ')
 
-lat = input('Please input your latitude (2 decimal places): ')
+# get the species code
+specCode = findSpecCode(species)
 
-lng = input('Please input your longitude (2 decimal places): ')
+lat = 32.77
+# input('Please input your latitude (2 decimal places): ')
+
+lng = -96.79
+# input('Please input your longitude (2 decimal places): ')
 
 # set up the URL, header, and parameters for the eBird API request
 
 # recent observation of a specific species (specific)
-recentObSpec = f'https://api.ebird.org/v2/data/obs/geo/recent/{species}'
+recentObSpec = f'https://api.ebird.org/v2/data/obs/geo/recent/{specCode}'
 
 headers = {
     'X-eBirdApiToken': API_KEY
@@ -160,7 +206,7 @@ params = {
     'lng': lng,
     'dist': 50,
     # back = number of days back for observations (max = 30, default = 14)
-    'back': 14
+    'back': 30
 }
 
 totalResp = requests.get(url=recentOb, headers=headers, params=params)
@@ -190,10 +236,15 @@ def calculatePoints(total_birds, total_species):
         return BIG_BONUS
     
     ratio = 1 - (total_species/total_birds)
-    points = round(BASE_POINTS * ratio + CONST) # +CONST to prevent log(0) which causes error
+    points = round(BASE_POINTS * ratio + CONST)
     if(points == 0):
         return points + 1
     return points
+
+
+
+specCode = findSpecCode('White-winged duck')
+print(specCode)
 
 points = calculatePoints(totalPop, totalSpecPop)
 print(points)
