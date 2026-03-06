@@ -1,4 +1,5 @@
 import requests
+import math
 
 # birdUtils is designed to handle all interaction with eBird API
 
@@ -15,51 +16,40 @@ def get_taxonomy():
     response = requests.get(url, headers=headers, params=params)
     return response.json()
 
-# Returns the proportion of total birds that are a specific species
-def get_species_proportion(specCode, lat, lng):
-    all_birds = get_total_population(lat, lng)
-    species_birds = get_species_population(specCode, lat, lng)
-    return all_birds / species_birds
-
-# Returns total population of ALL birds at a given location
-def get_total_population(lat, lng):
-    recentOb = f'https://api.ebird.org/v2/data/obs/geo/recent'
+# returns number of hotspots in an area
+def get_total_hotspots(lat, lng, dist, back):
+    recentOb = f'https://api.ebird.org/v2/ref/hotspot/geo'
     headers = {
         'X-eBirdApiToken': API_KEY
     }
     params = {
         'lat': lat,
         'lng': lng,
-        'dist': 50,
-        # back = number of days back for observations (max = 30, default = 14)
-        'back': 29
+        'dist': dist,   # only get hotspots within this radius (km)
+        'back': back,   # only get hotspots updated since {back} days ago
+        'fmt': 'json',
     }
     totalResp = requests.get(url=recentOb, headers=headers, params=params)
+    totalResp.raise_for_status()
     totalData = totalResp.json()
 
-    totalPop = 0
-    for item in totalData:
-        totalPop += item.get('howMany', 0)
+    return len(totalData)
 
-    return totalPop
-
-# Returns population of ONE SPECIES of bird at a given location
-def get_species_population(specCode, lat, lng):
+# returns number of hotspots in an area that have seen a given species
+def get_species_hotspots(specCode, lat, lng, dist, back):
     # recent observation of a specific species
     recentObSpec = f'https://api.ebird.org/v2/data/obs/geo/recent/{specCode}'
     headers = {'X-eBirdApiToken': API_KEY}
     params = {
         'lat': lat,
         'lng': lng,
-        'dist': 50,
-        'back': 29
+        'dist': dist,   # radius of search
+        'back': back,   # only hotspots active within last {back} days
+        'hotspot': True
     }
     speciesResp = requests.get(url=recentObSpec, headers=headers, params=params)
+    speciesResp.raise_for_status()
     specData = speciesResp.json()
 
-    # calculate the total spec population within a 50km radius
-    totalSpecPop = 0
-    for item in specData:
-        totalSpecPop += item.get('howMany', 0)
-
-    return totalSpecPop
+    return len(specData)
+    
