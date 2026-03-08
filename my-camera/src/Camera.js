@@ -9,39 +9,36 @@ function Camera() {
   const startCamera = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { width: 1280, height: 720 },
+        video: true,
       });
       setStream(mediaStream);
     } catch (err) {
-      console.error("Camera error:", err);
+      console.error("Cannot access camera:", err);
+      alert("Cannot use camera. Make sure permissions are allowed.");
     }
   };
 
-  // Attach stream to video element
+  // Attach stream to video once video element exists
   useEffect(() => {
-    if (videoRef.current && stream) {
+    if (stream && videoRef.current) {
       videoRef.current.srcObject = stream;
-      videoRef.current.play().catch((err) => console.error(err));
     }
   }, [stream]);
 
-  // Capture photo
   const takePhoto = () => {
+    const canvas = document.createElement("canvas");
     const video = videoRef.current;
     if (!video) return;
 
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth || 1280;
-    canvas.height = video.videoHeight || 720;
-
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
     const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, 0, 0);
 
     const image = canvas.toDataURL("image/png");
     setPhoto(image);
   };
 
-  // Stop camera
   const stopCamera = () => {
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
@@ -49,11 +46,24 @@ function Camera() {
     }
   };
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-      <h2>Bird Camera</h2>
+  const sendToAI = () => {
+    if (!photo) {
+      alert("Take a photo first!");
+      return;
+    }
+    console.log("Sending photo to AI:", photo);
+    // Later: replace console.log with API call to your AI model
+  };
 
-      {!stream && <button onClick={startCamera}>Start Camera</button>}
+  return (
+    <div style={styles.container}>
+      <h2 style={styles.title}>Bird Camera</h2>
+
+      {!stream && (
+        <button style={styles.button} onClick={startCamera}>
+          Start Camera
+        </button>
+      )}
 
       {stream && (
         <>
@@ -61,39 +71,72 @@ function Camera() {
             ref={videoRef}
             autoPlay
             playsInline
-            style={{
-              width: "400px",
-              height: "300px",
-              objectFit: "cover",
-              border: "2px solid black",
-              background: "#000",
-            }}
+            style={styles.video}
           />
-
-          <div style={{ display: "flex", gap: "10px" }}>
-            <button onClick={takePhoto}>Capture</button>
-            <button onClick={stopCamera}>Stop</button>
+          <div style={styles.buttonRow}>
+            <button style={styles.button} onClick={takePhoto}>
+              Capture
+            </button>
+            <button style={styles.button} onClick={stopCamera}>
+              Stop
+            </button>
           </div>
         </>
       )}
 
       {photo && (
-        <div>
+        <div style={styles.preview}>
           <h3>Preview</h3>
-          <img
-            src={photo}
-            alt="preview"
-            style={{
-              width: "400px",
-              height: "300px",
-              objectFit: "cover",
-              border: "2px solid black",
-            }}
-          />
+          <img src={photo} alt="preview" style={styles.photo} />
+          <button style={{...styles.button, marginTop: "10px"}} onClick={sendToAI}>
+            Send to AI
+          </button>
         </div>
       )}
     </div>
   );
 }
+
+const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "20px",
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    width: "350px",
+    margin: "20px auto",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+    backgroundColor: "#f9f9f9",
+    fontFamily: "Arial, sans-serif",
+  },
+  title: { marginBottom: "15px" },
+  video: {
+    width: "100%",
+    maxWidth: "300px",
+    borderRadius: "6px",
+    border: "1px solid black",
+    marginBottom: "10px",
+  },
+  buttonRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    width: "220px",
+    marginBottom: "10px",
+  },
+  button: {
+    padding: "10px 20px",
+    fontSize: "14px",
+    cursor: "pointer",
+    borderRadius: "6px",
+    border: "1px solid #007bff",
+    backgroundColor: "#007bff",
+    color: "#fff",
+    transition: "background-color 0.2s",
+  },
+  preview: { marginTop: "15px", textAlign: "center" },
+  photo: { width: "300px", borderRadius: "6px", border: "1px solid #ccc" },
+};
 
 export default Camera;
