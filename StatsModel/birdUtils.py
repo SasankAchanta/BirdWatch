@@ -1,4 +1,5 @@
 import requests
+from geopy import distance as dt
 import math
 
 # birdUtils is designed to handle all interaction with eBird API
@@ -52,4 +53,28 @@ def get_species_hotspots(specCode, lat, lng, dist, back):
     specData = speciesResp.json()
 
     return len(specData)
+
+# returns the distance from the user to the nearest sighting of a given species
+def get_nearest_dist(specCode, lat, lng):
+    nearbyObSpec = f'https://api.ebird.org/v2/data/nearest/geo/recent/{specCode}'
+    headers = {'X-eBirdApiToken': API_KEY}
+    params = {
+        'lat': lat,
+        'lng': lng,
+        'back': 30
+    }
+    speciesResp = requests.get(url=nearbyObSpec, headers=headers, params=params)
+    speciesResp.raise_for_status()
+    specData = speciesResp.json()
+
+    if(len(specData) > 0 and specData[0].get('lat') != None):
+        nearby_observation = specData[0]
+        obs_lat = nearby_observation.get('lat')
+        obs_lng = nearby_observation.get('lng')
+        return dt.distance((lat, lng), (obs_lat, obs_lng))
+    
+    else:   # no observations of species exist
+        return 10000    # return large distance
+
+
     

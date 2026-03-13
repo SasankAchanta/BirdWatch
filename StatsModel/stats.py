@@ -8,9 +8,8 @@ import birdUtils as bu
 API_KEY = '8293oj5n61sq'
 
 # constants for point calculation
-BASE_POINTS = 100
-BIG_BONUS = 1000
-CONST = 1
+BASE_POINTS = 500
+MAX_POINTS = 1000
 
 # Generates a look up table for bird name -> species code
 BIRD_LIST = bu.get_taxonomy()
@@ -27,6 +26,8 @@ def findSpecCode(comName):
 # adjusts proportion to account for confidence in rarity
 # (lower confidence in rarity -> assumes less rarity -> less points)
 def adjust_raw_proportion(numerator, denominator):
+    if(numerator == 0):
+        return 0
     p = (numerator + .4 * 3) / (denominator + 3)
     std_error = math.sqrt(p * (1-p) / denominator)
     return p + std_error
@@ -43,8 +44,8 @@ def get_species_proportion(specCode, lat, lng):
         wide_search_needed = True
     
     if(wide_search_needed):
-        if(far_hotspots == 0):  # if no hotspots are near user, assume bird has common rarity
-            return 0.5
+        if(far_hotspots == 0):  # if no hotspots are near user
+            return 0.5  # TO-DO: what if there's absolutely no data? no sightings, no hotspots
         else:  
             print(f'Total hotspots: {far_hotspots}')
             return adjust_raw_proportion(far_species_spots, far_hotspots)
@@ -56,14 +57,17 @@ def calculatePoints(proportion):
     multiplier = 1
     if(proportion > .65):    # bird is very common -> low multiplier
         multiplier = 0.1
-    else:  
-        multiplier = (1.460 * proportion - 0.948) ** 2 + 0.1
-    points = round(multiplier * BASE_POINTS)
+        points = round(multiplier * BASE_POINTS)
+    elif(proportion > 0):
+        multiplier = (1.46 * proportion - .9485) ** 2 + 0.1
+        points = round(multiplier * BASE_POINTS)
+    else:   # TO-DO : what if proportion = 0? handoff to distance?
+        pass
     
     if(points < .1 * BASE_POINTS):
         points = .1 * BASE_POINTS
-    elif(points > BASE_POINTS):
-        points = BASE_POINTS
+    elif(points > MAX_POINTS):
+        points = MAX_POINTS
     return points
     
 def main():
@@ -77,8 +81,10 @@ def main():
 
     # estimate bird's rarity
     proportion = get_species_proportion(specCode, lat, lng)
+    dist = bu.get_nearest_dist(specCode, lat, lng)
 
     print(f'Proportion of hotspots that species was found (upper bound): {proportion}')
+    print(f'Nearest sighting: {dist}')
 
     points = calculatePoints(proportion)
     print(f'Points rewarded: {points}')
