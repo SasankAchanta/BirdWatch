@@ -1,6 +1,9 @@
 import requests
 from geopy import distance as dt
 import math
+from fastapi import FastAPI
+from pydantic import BaseModel
+
 
 # birdUtils is designed to handle all interaction with eBird API
 
@@ -76,6 +79,7 @@ def get_nearest_dist(specCode, lat, lng):
     
     else:   # no observations of species exist
         return 10000    # return large distance
+
 
 
     
