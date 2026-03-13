@@ -61,7 +61,8 @@ def get_nearest_dist(specCode, lat, lng):
     params = {
         'lat': lat,
         'lng': lng,
-        'back': 30
+        'back': 30,
+        'maxResults': 3
     }
     speciesResp = requests.get(url=nearbyObSpec, headers=headers, params=params)
     speciesResp.raise_for_status()
@@ -71,7 +72,7 @@ def get_nearest_dist(specCode, lat, lng):
         nearby_observation = specData[0]
         obs_lat = nearby_observation.get('lat')
         obs_lng = nearby_observation.get('lng')
-        return dt.distance((lat, lng), (obs_lat, obs_lng))
+        return dt.distance((lat, lng), (obs_lat, obs_lng)).km
     
     else:   # no observations of species exist
         return 10000    # return large distance
