@@ -99,5 +99,7 @@ def main():
     print(f'Points rewarded: {points}')
 
 if __name__ == '__main__':
-    main()
+    while(True):
+        print('\n')
+        main()
 
