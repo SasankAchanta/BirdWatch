@@ -5,11 +5,11 @@ function Camera() {
   const [stream, setStream] = useState(null);
   const [photo, setPhoto] = useState(null);
 
-  // Start camera
   const startCamera = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
+        video: { facingMode: "environment" },
+        audio: false
       });
       setStream(mediaStream);
     } catch (err) {
@@ -18,7 +18,6 @@ function Camera() {
     }
   };
 
-  // Attach stream to video once video element exists
   useEffect(() => {
     if (stream && videoRef.current) {
       videoRef.current.srcObject = stream;
@@ -29,30 +28,19 @@ function Camera() {
     const canvas = document.createElement("canvas");
     const video = videoRef.current;
     if (!video) return;
-
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0);
-
     const image = canvas.toDataURL("image/png");
     setPhoto(image);
   };
 
   const stopCamera = () => {
     if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
+      stream.getTracks().forEach(track => track.stop());
       setStream(null);
     }
-  };
-
-  const sendToAI = () => {
-    if (!photo) {
-      alert("Take a photo first!");
-      return;
-    }
-    console.log("Sending photo to AI:", photo);
-    // Later: replace console.log with API call to your AI model
   };
 
   return (
@@ -71,7 +59,8 @@ function Camera() {
             ref={videoRef}
             autoPlay
             playsInline
-            style={styles.video}
+            muted
+            style={{ ...styles.video }}
           />
           <div style={styles.buttonRow}>
             <button style={styles.button} onClick={takePhoto}>
@@ -88,9 +77,6 @@ function Camera() {
         <div style={styles.preview}>
           <h3>Preview</h3>
           <img src={photo} alt="preview" style={styles.photo} />
-          <button style={{...styles.button, marginTop: "10px"}} onClick={sendToAI}>
-            Send to AI
-          </button>
         </div>
       )}
     </div>
@@ -109,7 +95,7 @@ const styles = {
     margin: "20px auto",
     boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
     backgroundColor: "#f9f9f9",
-    fontFamily: "Arial, sans-serif",
+    fontFamily: "Arial, sans-serif"
   },
   title: { marginBottom: "15px" },
   video: {
@@ -117,26 +103,26 @@ const styles = {
     maxWidth: "300px",
     borderRadius: "6px",
     border: "1px solid black",
-    marginBottom: "10px",
+    marginBottom: "10px"
   },
   buttonRow: {
     display: "flex",
     justifyContent: "space-between",
     width: "220px",
-    marginBottom: "10px",
+    marginBottom: "10px"
   },
   button: {
     padding: "10px 20px",
     fontSize: "14px",
     cursor: "pointer",
     borderRadius: "6px",
-    border: "1px solid #007bff",
-    backgroundColor: "#007bff",
+    border: "1px solid #17490d",
+    backgroundColor: "#17490dd4",
     color: "#fff",
-    transition: "background-color 0.2s",
+    transition: "background-color 0.2s"
   },
   preview: { marginTop: "15px", textAlign: "center" },
-  photo: { width: "300px", borderRadius: "6px", border: "1px solid #ccc" },
+  photo: { width: "300px", borderRadius: "6px", border: "1px solid #ccc" }
 };
 
 export default Camera;
