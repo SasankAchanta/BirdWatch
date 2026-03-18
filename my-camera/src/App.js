@@ -6,11 +6,7 @@ function App() {
   return (
     <div className="App">
       <h1>BirdWatch</h1>
-
-      <h2>Camera</h2>
       <Camera />
-
-      <h2>Upload Image</h2>
       <PhotoUpload />
     </div>
   );
