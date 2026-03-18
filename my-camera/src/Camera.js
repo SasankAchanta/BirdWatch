@@ -43,6 +43,15 @@ function Camera() {
     }
   };
 
+  const sendToAI = () => {
+    if (!photo) {
+      alert("Take a photo first!");
+      return;
+    }
+    console.log("Sending photo to AI:", photo);
+    // TODO: replace console.log with your API call
+  };
+
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Bird Camera</h2>
@@ -60,7 +69,7 @@ function Camera() {
             autoPlay
             playsInline
             muted
-            style={{ ...styles.video }}
+            style={styles.video}
           />
           <div style={styles.buttonRow}>
             <button style={styles.button} onClick={takePhoto}>
@@ -77,6 +86,12 @@ function Camera() {
         <div style={styles.preview}>
           <h3>Preview</h3>
           <img src={photo} alt="preview" style={styles.photo} />
+          <button
+            style={{ ...styles.button, marginTop: "10px" }}
+            onClick={sendToAI}
+          >
+            Send to AI
+          </button>
         </div>
       )}
     </div>
@@ -116,8 +131,8 @@ const styles = {
     fontSize: "14px",
     cursor: "pointer",
     borderRadius: "6px",
-    border: "1px solid #17490d",
-    backgroundColor: "#17490dd4",
+    border: "1px solid #007bff",
+    backgroundColor: "#007bff",
     color: "#fff",
     transition: "background-color 0.2s"
   },
