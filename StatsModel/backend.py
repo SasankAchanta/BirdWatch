@@ -11,3 +11,4 @@ app = FastAPI()
 class Location(BaseModel):
     lat: float
     lng: float
+
