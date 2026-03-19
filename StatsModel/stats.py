@@ -1,11 +1,12 @@
+from json import load
+
 import requests
 import pandas as pd
 import os      
 from pprint import pprint as pp     # pretty print
 import math
 import birdUtils as bu
-
-API_KEY = '8293oj5n61sq'
+from dotenv import load_dotenv
 
 # constants for point calculation
 BASE_POINTS = 500

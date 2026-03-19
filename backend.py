@@ -4,6 +4,8 @@ import math
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+# uvicorn
+
 # this will be where we can make the front end calls
 app = FastAPI() 
 
@@ -11,4 +13,9 @@ app = FastAPI()
 class Location(BaseModel):
     lat: float
     lng: float
+
+def post_picture():
+
+def get_picture():
+
 

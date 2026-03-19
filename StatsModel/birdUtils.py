@@ -3,17 +3,21 @@ from geopy import distance as dt
 import math
 from fastapi import FastAPI
 from pydantic import BaseModel
+from dotenv import load_dotenv
+import os
 
+# load all the environment variables from .env file
+load_dotenv()
 
 # birdUtils is designed to handle all interaction with eBird API
+ebird_key = os.getenv('EBIRD_KEY')
 
-API_KEY = '8293oj5n61sq'
 
 # returns json of all ~12,000 birds' taxonomy data
 # ex: bird's name, species code, etc.
 def get_taxonomy():
     url = "https://api.ebird.org/v2/ref/taxonomy/ebird" 
-    headers = { "X-eBirdApiToken": API_KEY }
+    headers = { "X-eBirdApiToken": ebird_key }
     params = { 
         "fmt": "json" 
     }
@@ -24,7 +28,7 @@ def get_taxonomy():
 def get_total_hotspots(lat, lng, dist, back):
     recentOb = f'https://api.ebird.org/v2/ref/hotspot/geo'
     headers = {
-        'X-eBirdApiToken': API_KEY
+        'X-eBirdApiToken': ebird_key
     }
     params = {
         'lat': lat,
@@ -43,7 +47,7 @@ def get_total_hotspots(lat, lng, dist, back):
 def get_species_hotspots(specCode, lat, lng, dist, back):
     # recent observation of a specific species
     recentObSpec = f'https://api.ebird.org/v2/data/obs/geo/recent/{specCode}'
-    headers = {'X-eBirdApiToken': API_KEY}
+    headers = {'X-eBirdApiToken': ebird_key}
     params = {
         'lat': lat,
         'lng': lng,
