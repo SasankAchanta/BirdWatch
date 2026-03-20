@@ -10,8 +10,7 @@ import os
 load_dotenv()
 
 # birdUtils is designed to handle all interaction with eBird API
-ebird_key = os.getenv('EBIRD_KEY')
-
+ebird_key = os.getenv('EBIRD_KEY' | None)
 
 # returns json of all ~12,000 birds' taxonomy data
 # ex: bird's name, species code, etc.
