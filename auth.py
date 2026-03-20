@@ -33,7 +33,9 @@ def sign_in(email, pw):
     except Exception as e:
         st.error(f"Login failed: {e}")
 
+'''
 def sign_out():
     try:
         supabase.auth.sign_out()
-        
+    except Exception as e:
+'''

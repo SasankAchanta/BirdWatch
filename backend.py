@@ -20,15 +20,15 @@ app = FastAPI()
 
 # the user response to signing in; the user is needed in order to get the user_id in the database
 auth_resp = supabase.auth.sign_in_with_password({
-    "email": "spidey5baby5@gmail.com", 
-    "password": "Baby5Spidey"
+    "email": "", 
+    "password": ""
 })
 
 @app.post()
 def post_points():
     auth_resp = supabase.auth.sign_in_with_password({
-        "email": "spidey5baby5@gmail.com", 
-        "password": "Baby5Spidey"
+        "email": "", 
+        "password": ""
     })
     return supabase.table("User_Points").select("points").execute
 
@@ -37,8 +37,8 @@ def post_points():
 @app.get("/points")
 def get_points():
     auth_resp = supabase.auth.sign_in_with_password({
-        "email": "spidey5baby5@gmail.com", 
-        "password": "Baby5Spidey"
+        "email": "", 
+        "password": ""
     })
     return supabase.table("User_Points").select("points").execute
 
