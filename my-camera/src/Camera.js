@@ -1,4 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
+import api from "./api.js";
+
 
 function Camera() {
   const videoRef = useRef(null);
@@ -32,9 +34,10 @@ function Camera() {
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0);
-    const image = canvas.toDataURL("image/png");
-    setPhoto(image);
+    //changed to blob for sending to AI
+    canvas.toBlob((blob) => {setPhoto(blob);}, "image/jpeg");
   };
+  
 
   const stopCamera = () => {
     if (stream) {
@@ -43,13 +46,23 @@ function Camera() {
     }
   };
 
-  const sendToAI = () => {
+  const sendToAI = async () =>{
     if (!photo) {
       alert("Take a photo first!");
       return;
     }
-    console.log("Sending photo to AI:", photo);
-    // TODO: replace console.log with your API call
+    else{
+      console.log("Sending photo to AI:", photo);
+
+      //object for sending images
+      const formdata = new FormData();
+      formdata.append("file", photo);
+      //post request to backend
+      const response = await api.post('/PredictImage', formdata);
+      //bird type and confidence
+      console.log("Response from AI: ", response.data.BirdType);
+      console.log("Response from AI: ", response.data.Confidence);
+    }
   };
 
   return (
@@ -85,7 +98,7 @@ function Camera() {
       {photo && (
         <div style={styles.preview}>
           <h3>Preview</h3>
-          <img src={photo} alt="preview" style={styles.photo} />
+          <img src={URL.createObjectURL(photo)} alt="preview" style={styles.photo}/>
           <button
             style={{ ...styles.button, marginTop: "10px" }}
             onClick={sendToAI}

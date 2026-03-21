@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import api from "./api.js";
+
 function PhotoUpload() {
   //State: stores the selected images
   const [selectedImage, setSelectedImage] = useState(null);
@@ -8,10 +10,21 @@ function PhotoUpload() {
     setSelectedImage(file); //update the state
   }
   //Runs when user clicks the button
-  function sendToAI() {
+  async function sendToAI() {
     if (!selectedImage) {
+      //error if no image is selected
       alert("Please select an image first");
       return;
+    }
+    else{
+      //object for sending images
+      const formdata = new FormData();
+      formdata.append("file", selectedImage);
+      //post request to backend
+      const response = await api.post('/PredictImage', formdata);
+      //bird type and confidence
+      console.log("Response from AI: ", response.data.BirdType);
+      console.log("Response from AI: ", response.data.Confidence);
     }
     console.log("Image ready to send: ", selectedImage);
   }
