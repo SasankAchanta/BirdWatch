@@ -48,15 +48,14 @@ def get_species_proportion(specCode, lat, lng):
     
     if(wide_search_needed):
         if(far_hotspots == 0):  # if no hotspots are near user
-            return 0.5  # TO-DO: what if there's absolutely no data? no sightings, no hotspots
+            return 0  # TO-DO: what if there's absolutely no data? no sightings, no hotspots
         else:  
-            print(f'Total hotspots: {far_hotspots}')
             return adjust_raw_proportion(far_species_spots, far_hotspots)
         
     return adjust_raw_proportion(close_species_spots, close_hotspots)
 
-# points rewarded to user based on bird's rarity (given by proportion)
-def calculatePoints(proportion):
+# points rewarded to user based on bird's rarity (given by proportion & distance)
+def calculatePoints(proportion, distance):
     multiplier = 1
     if(proportion > .65):    # bird is very common -> low multiplier
         multiplier = 0.1
@@ -64,8 +63,13 @@ def calculatePoints(proportion):
     elif(proportion > 0):
         multiplier = (1.46 * proportion - .9485) ** 2 + 0.1
         points = round(multiplier * BASE_POINTS)
-    else:   # TO-DO : what if proportion = 0? handoff to distance?
-        pass
+    else:   # proportion = 0
+        if(distance <= 100):
+            multiplier = 9.2 * (distance / 1000) + 0.1
+        else:
+            exponential = math.exp(-1.3 * (distance / 1000 - 3))
+            multiplier = 1 / (1 + exponential) + 1
+        points = round(multiplier * BASE_POINTS)
     
     if(points < .1 * BASE_POINTS):
         points = .1 * BASE_POINTS
@@ -84,14 +88,21 @@ def main():
 
     # estimate bird's rarity
     proportion = get_species_proportion(specCode, lat, lng)
-    dist = bu.get_nearest_dist(specCode, lat, lng)
+    
+    # get distance if no proportion data exists
+    if(proportion == 0):
+        dist = bu.get_nearest_dist(specCode, lat, lng)
+    else:
+        dist = 0
 
     print(f'Proportion of hotspots that species was found (upper bound): {proportion}')
     print(f'Nearest sighting: {dist}')
 
-    points = calculatePoints(proportion)
+    points = calculatePoints(proportion, dist)
     print(f'Points rewarded: {points}')
 
 if __name__ == '__main__':
-    main()
+    while(True):
+        print('\n')
+        main()
 
