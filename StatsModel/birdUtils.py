@@ -6,11 +6,10 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 import os
 
-# load all the environment variables from .env file
-load_dotenv()
-
+# load the environment variables from .env file
 # birdUtils is designed to handle all interaction with eBird API
-ebird_key = os.getenv('EBIRD_KEY' | None)
+load_dotenv()
+ebird_key = os.getenv('EBIRD_KEY')
 
 # returns json of all ~12,000 birds' taxonomy data
 # ex: bird's name, species code, etc.
@@ -63,7 +62,7 @@ def get_species_hotspots(specCode, lat, lng, dist, back):
 # returns the distance from the user to the nearest sighting of a given species
 def get_nearest_dist(specCode, lat, lng):
     nearbyObSpec = f'https://api.ebird.org/v2/data/nearest/geo/recent/{specCode}'
-    headers = {'X-eBirdApiToken': API_KEY}
+    headers = {'X-eBirdApiToken': ebird_key}
     params = {
         'lat': lat,
         'lng': lng,
