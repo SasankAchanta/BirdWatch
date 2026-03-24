@@ -1,19 +1,35 @@
 import requests
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 import os
-from supabase import create_client, Client
+from supabase import ClientOptions, create_client, Client
 from dotenv import load_dotenv
 
 load_dotenv()
 sb_url = os.getenv("SUPABASE_URL")
 sb_key = os.getenv("SUPABASE_KEY")
 
+security = HTTPBearer()
+
+# get the currently logged in user
+def get_current_user(
+        # formats request header to easily extract the token needed to determine the current user 
+        credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+
+    response = supabase.get_user(token)
+    
+    if not response or not response.user:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    return response.user
+
+
 supabase: Client = create_client(sb_url, 
-                         sb_key
-                         options=(
+                         sb_key,
+                         options=ClientOptions(
                             auto_refresh_token=False,
-                            persist_sessions=False,
+                            persist_session=False,
                          ))
 app = FastAPI()
 
@@ -24,6 +40,9 @@ class SignUpRequest(BaseModel):
 class SignInRequest(BaseModel):
     email: str
     password: str
+
+class PointsChangeRequest(BaseModel):
+    num_points: int
 
 # called whenever front end gets user info from sign up page
 @app.post("/signup")
@@ -81,11 +100,27 @@ def signout():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
     
-@app.post("/add_picture")
-def add_picture():
+# update the points whenever a picture is taken 
+@app.get("/get_points")
+def get_points(current_user=Depends(get_current_user)): 
     try:
-    
+        user_id = current_user.id
+        
+        response = supabase.table("User_Points").select("*").eq("user_id", user_id).execute()
+        return response.data
     except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/post_points")
+def post_points(points: PointsChangeRequest, current_user=Depends(get_current_user)): 
+    try:
+        user_id = current_user.id
+        
+        response = supabase.table("User_Points").update({"points": points.num_points}).eq("user_id", user_id).execute()
+        return response.data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+    
