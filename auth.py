@@ -5,13 +5,16 @@ import os
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
-# MAKE AUTH FRONTEND because supabase works bettwe that way
-
 load_dotenv()
 sb_url = os.getenv("SUPABASE_URL")
 sb_key = os.getenv("SUPABASE_KEY")
 
-supabase = create_client(sb_url, sb_key)
+supabase: Client = create_client(sb_url, 
+                         sb_key
+                         options=(
+                            auto_refresh_token=False,
+                            persist_sessions=False,
+                         ))
 app = FastAPI()
 
 class SignUpRequest(BaseModel):
@@ -22,7 +25,7 @@ class SignInRequest(BaseModel):
     email: str
     password: str
 
-
+# called whenever front end gets user info from sign up page
 @app.post("/signup")
 def signup(user_info: SignUpRequest):
     try:
@@ -48,6 +51,7 @@ def signup(user_info: SignUpRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# called whenever the front end gets user info in the sign in page
 @app.post("/signin")
 def signin(user_info: SignInRequest):
     try:
@@ -67,6 +71,7 @@ def signin(user_info: SignInRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# called whenever the user clicks sign out
 @app.post("/signout")
 def signout():
     try:
@@ -76,3 +81,11 @@ def signout():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+    
+@app.post("/add_picture")
+def add_picture():
+    try:
+    
+    except Exception as e:
