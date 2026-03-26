@@ -106,7 +106,6 @@ def signout():
 def get_points(current_user=Depends(get_current_user)): 
     try:
         user_id = current_user.id
-        
         response = supabase.table("User_Points").select("*").eq("user_id", user_id).execute()
         return response.data
     except Exception as e:
