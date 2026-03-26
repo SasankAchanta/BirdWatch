@@ -6,10 +6,11 @@ from pprint import pprint as pp     # pretty print
 import math
 import birdUtils as bu
 from dotenv import load_dotenv
-from backend import curr_location
+# from backend import curr_location
 
-lng = curr_location.lng
-lat = curr_location.lat
+#lng = curr_location.lng
+#lat = curr_location.lat
+
 # constants for point calculation
 BASE_POINTS = 500
 MAX_POINTS = 1000

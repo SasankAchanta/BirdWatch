@@ -41,7 +41,7 @@ class PointsChangeRequest(BaseModel):
     num_points: int
 
 # the current location of the user; updated after call of the /location endpoint
-curr_location: Location | None = None
+curr_location: Location
 
 
 # a decorator; the endpoint the front end will call and the function IMMEDIATELY after will be run
