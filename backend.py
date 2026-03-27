@@ -1,7 +1,8 @@
 from email.policy import HTTP
+import uuid
 
 import requests
-from fastapi import FastAPI, APIRouter, HTTPException, Depends
+from fastapi import FastAPI, APIRouter, File, HTTPException, Depends, UploadFile
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 import os
@@ -122,7 +123,61 @@ def update_points(bird: BirdRequest,
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# ChatGPT base code
+ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg']
+MAX_FILE_SIZE = 10 * 1024 * 1024    # 10MB
 
+@app.post("/upload")
+async def upload_photo(
+    file: UploadFile = File(...),
+    current_user=Depends(auth.get_current_user),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    try:
+        supabase.postgrest.auth(credentials.credentials)
+
+        # validate file type
+        if file.content_type not in ALLOWED_TYPES:
+            raise HTTPException(400, "Invalid image type")
+
+        contents = await file.read()
+
+        # validate size
+        if len(contents) > MAX_FILE_SIZE:
+            raise HTTPException(400, "File too large")
+
+        # generate unique filename XX
+        ext = file.filename.split(".")[-1]
+        filename = f'{current_user['id']}/{uuid.uuid4()}.{ext}'
+
+        # upload to supabase storage
+        supabase.storage.from_('user_bird_images').upload(
+            filename,
+            contents,
+            {"content-type": file.content_type}
+        )
+
+        # get public URL
+        public_url = supabase.storage.from_('user_bird_images').get_public_url(filename)
+
+        # store metadata in database
+        # id, user_id, file_path, url, created_at
+        result = supabase.table('User_Photos').insert({
+            "user_id": current_user["id"],
+            "file_path": filename,
+            "url": public_url
+        }).execute()
+
+        return {
+            "message": "Upload successful",
+            "url": public_url,
+            "photo_id": result.data[0]["id"]
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 '''
 @app.post("/add_picture")
 def add_picture():
