@@ -79,6 +79,8 @@ def calculatePoints(proportion, distance):
     return points
     
 def main():
+
+    # ALL THIS IS NOW UNNECESSARY HERE BECAUSE IT IS INCLUDED IN BACKEND IN ENDPOINT UPDATE_POINTS 
     # prompt user for bird name and longitude/latitude
     species = input('Please input the bird name: ')
     lat = input('Please input your latitude (2 decimal places): ')

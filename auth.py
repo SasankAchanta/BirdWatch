@@ -1,11 +1,10 @@
 import requests
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, APIRouter, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 import os
 from supabase import ClientOptions, create_client, Client
 from dotenv import load_dotenv
-import stats # for changing points
 import logging # for logging errors
 
 load_dotenv()
@@ -16,6 +15,25 @@ security = HTTPBearer()
 
 # logger for errors/exceptions (with the name of the module):
 logger = logging.getLogger(__name__)
+
+
+supabase: Client = create_client(sb_url, 
+                         sb_key,
+                         options=ClientOptions(
+                            auto_refresh_token=False,
+                            persist_session=False,
+                         ))
+
+# instead of app, make this a router (a PORTION of the app; this helps combine many different file endpoints)
+router = APIRouter()
+
+class SignUpRequest(BaseModel):
+    email: str
+    password: str
+
+class SignInRequest(BaseModel):
+    email: str
+    password: str
 
 # get the currently logged in user
 def get_current_user(
@@ -37,28 +55,8 @@ def get_current_user(
         # raise the exception:
         raise HTTPException(status_code=401, detail="Authentication error")
 
-
-supabase: Client = create_client(sb_url, 
-                         sb_key,
-                         options=ClientOptions(
-                            auto_refresh_token=False,
-                            persist_session=False,
-                         ))
-app = FastAPI()
-
-class SignUpRequest(BaseModel):
-    email: str
-    password: str
-
-class SignInRequest(BaseModel):
-    email: str
-    password: str
-
-class PointsChangeRequest(BaseModel):
-    num_points: int
-
 # called whenever front end gets user info from sign up page
-@app.post("/signup")
+@router.post("/signup")
 def signup(user_info: SignUpRequest):
     try:
         auth_response = supabase.auth.sign_up({
@@ -79,12 +77,13 @@ def signup(user_info: SignUpRequest):
         return {
             "message": "User successfully added!"
         }
-    
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 # called whenever the front end gets user info in the sign in page
-@app.post("/signin")
+@router.post("/signin")
 def signin(user_info: SignInRequest):
     try:
         auth_response = supabase.auth.sign_in_with_password({
@@ -108,58 +107,19 @@ def signin(user_info: SignInRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 # called whenever the user clicks sign out
-@app.post("/signout")
+@router.post("/signout")
 def signout():
     try:
         supabase.auth.sign_out()
         return {
             "message": "User successfully signed out!"
         }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
-# get the user's points to display
-@app.get("/get_points")
-def get_points(current_user=Depends(get_current_user)): 
-    try:
-        user_id = current_user.id
-        response = supabase.table("User_Points").select("points").eq("user_id", user_id).execute()
-        
-        # raise error if user has no points row
-        if not response.data:
-            raise HTTPException(status_code=404, detail="User not found in User_Points table")
-        
-        return {
-            # return ONLY ONE row in the points column
-            "points": response.data[0]["points"] 
-        }
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
 
-# update the points whenever a picture is taken 
-@app.patch("/update_points")
-def update_points(points_change: PointsChangeRequest, current_user=Depends(get_current_user)): 
-    try:
-        user_id = current_user.id
-        response = supabase.table("User_Points").select("points").eq("user_id", user_id).execute()
-        
-        # raise error if user has no points row
-        if not response.data:
-            raise HTTPException(status_code=404, detail="User not found in User_Points table")
-        
-        points = response.data[0]["points"]
-        points = points + points_change.num_points
-        response = supabase.table("User_Points").update({"points": points}).eq("user_id", user_id).execute()
-    
-        return {
-            "points": response.data[0]["points"]
-        }
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
 
     
