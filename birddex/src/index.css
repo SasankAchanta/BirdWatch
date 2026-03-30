@@ -1,0 +1,44 @@
+body {
+  font-family: 'Londrina Solid', cursive;
+  background-color: #2F3820;
+}
+
+.CardContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  perspective: 1000px;
+}
+
+.birdCard {
+  position: absolute;
+  width: 362px;
+  height: 462px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  transition: transform 0.3s ease, opacity 0.3s ease, z-index 0.3s ease;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+.BirdPic {
+  width: 300px;
+  height: 275px;
+  border-radius: 10px;
+  margin-top: 20px;
+  object-fit: cover;
+}
+
+.card-Title {
+  margin: 10px 0 5px;
+}
+
+.info {
+  padding: 0 10px;
+}
