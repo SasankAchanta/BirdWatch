@@ -8,46 +8,11 @@ import CBE from './carmine bee eater.png';
 import question from './questionmark.png';
 
 function App() { 
-  //Bird Data, cand be added onto, includes picture, name, and info
-  const birds = [ 
+  // 524 birds, 3 examples + empty cards
+  const birds1 = [
     { BirdPic: americanGoldfinch, Birdname: "American Goldfinch", info: "Yellow Birb" },
     { BirdPic: barnOwl, Birdname: "Barn Owl", info: "White Owl" },
     { BirdPic: CBE, Birdname: "Carmine Bee Eater", info: "Red Birb" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: barnOwl, Birdname: "Barn Owl", info: "im different" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: barnOwl, Birdname: "Barn Owl", info: "Owl" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: barnOwl, Birdname: "Barn Owl", info: "White" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: barnOwl, Birdname: "Barn", info: "White" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: barnOwl, Birdname: "Owl", info: "owl" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" }
-  ];
-
-  //empty 524 birds
-  const birds1 = [
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
     { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
     { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
     { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
