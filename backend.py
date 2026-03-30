@@ -1,6 +1,9 @@
 from email.policy import HTTP
+<<<<<<< Updated upstream
 import uuid
 
+=======
+>>>>>>> Stashed changes
 import requests
 from fastapi import FastAPI, APIRouter, File, HTTPException, Depends, UploadFile
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -123,6 +126,7 @@ def update_points(bird: BirdRequest,
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+<<<<<<< Updated upstream
 # ChatGPT base code
 ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg']
 MAX_FILE_SIZE = 10 * 1024 * 1024    # 10MB
@@ -206,3 +210,5 @@ def send_location():
     return {"lat: ": curr_location.lat, "lng: ": curr_location.lng}
 
 '''
+=======
+>>>>>>> Stashed changes

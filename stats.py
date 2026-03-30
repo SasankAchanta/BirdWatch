@@ -78,34 +78,10 @@ def calculatePoints(proportion, distance):
         points = MAX_POINTS
     return points
     
-def main():
-
-    # ALL THIS IS NOW UNNECESSARY HERE BECAUSE IT IS INCLUDED IN BACKEND IN ENDPOINT UPDATE_POINTS 
-    # prompt user for bird name and longitude/latitude
-    species = input('Please input the bird name: ')
-    lat = input('Please input your latitude (2 decimal places): ')
-    lng = input('Please input your longitude (2 decimal places): ')
-
-    # get the species code
-    specCode = findSpecCode(species)
-
-    # estimate bird's rarity
-    proportion = get_species_proportion(specCode, lat, lng)
-    
-    # get distance if no proportion data exists
-    if(proportion == 0):
-        dist = bu.get_nearest_dist(specCode, lat, lng)
-    else:
-        dist = 0
-
-    print(f'Proportion of hotspots that species was found (upper bound): {proportion}')
-    print(f'Nearest sighting: {dist}')
-
-    points = calculatePoints(proportion, dist)
-    print(f'Points rewarded: {points}')
-
+'''
 if __name__ == '__main__':
     while(True):
         print('\n')
         main()
 
+'''
