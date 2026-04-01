@@ -7,539 +7,49 @@ import barnOwl from './barn owl.png';
 import CBE from './carmine bee eater.png';
 import question from './questionmark.png';
 
-function App() { 
-  // 524 birds, 3 examples + empty cards
-  const birds1 = [
-    { BirdPic: americanGoldfinch, Birdname: "American Goldfinch", info: "Yellow Birb" },
-    { BirdPic: barnOwl, Birdname: "Barn Owl", info: "White Owl" },
-    { BirdPic: CBE, Birdname: "Carmine Bee Eater", info: "Red Birb" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" },
-    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?" }
-  ];
+function App(){ 
+//Bird array
+const birds = [
+    { BirdPic: americanGoldfinch, Birdname: "American Goldfinch",  Rare: "Common",
+       info: "The American goldfinch (Spinus tristis) is a small North American bird in the finch family. It is migratory, ranging from mid-Alberta to North Carolina during the breeding season, and from just south of the Canada–United States border to Mexico during the winter..."},
+    { BirdPic: barnOwl, Birdname: "Barn Owl", info: "White Owl", Rare: "Uncommon" },
+    { BirdPic: CBE, Birdname: "Carmine Bee Eater", info: "Red Birb", Rare: "Common" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" },
+    { BirdPic: question, Birdname: "Unknown Bird", info: "What is this?", Rare: "?" }
+];
 
-  //sets index values to 0 and y values to null
-  const [Index, NewIndex] = useState(0);
-  const [StartY, NewY] = useState(null); 
+//sets index values to 0
+const [Index, NewIndex] = useState(0);
+
+  //calculates the next card based on current position
+  const getPosition = (index, current, total) => {
+    let diff = index - current;
+
+    if (diff > total / 2){
+      diff -= total;
+    }
+    if (diff < -total / 2){
+      diff += total;
+    }
+
+    return diff;
+  };
 
   //scroll
   let wheelDist = 0;
@@ -549,79 +59,46 @@ function App() {
     if(wheelDist <= -70) {
       //add 1 to index then mod by length of birds, returns to first card once lenght is reached 
       NewIndex((Index + 1) % birds.length); 
+      wheelDist = 0;
     } 
     //if the mouse wheel is scrolled down scroll the cards down else 
     if(wheelDist >= 70){ 
       //subtract 1 from index then mod by length of birds, returns to first card once lenght is reached 
       NewIndex((Index - 1 + birds.length) % birds.length); 
+      wheelDist = 0;
     }
   };
 
-  //touch
-  const touchStart = (e) => NewY(e.touches[0].clientY);
-  const touchEnd = (e) => { 
-    //if no touch thne do nothing 
-    if(StartY === null){
-      return;
-    }
-    //store the touch position when let go and find difference 
-    const endY = e.changedTouches[0].clientY; const delta = StartY-endY; 
-    //if the touch moved up more than 50 pixels scroll the cards up 
-    if(delta <= 50) { 
-      //add 1 to index then mod by length of birds, returns to first card once lenght is reached 
-      NewIndex((Index + 1) % birds.length); 
-    } 
-    //if the touch moved down by more than 50 pixels scroll the cards down else 
-    if(delta >= -50){ 
-      //subtract 1 from index then mod by length of birds, returns to first card once lenght is reached 
-      NewIndex((Index - 1 + birds.length) % birds.length); 
-    }
-    //reset touch position 
-    NewY(null); 
-  };
 
-  //store the mouse position when first clicked 
-  const MouseDown = (e) => NewY(e.clientY);
-  const MouseUp = (e) => { 
-  //if no click thne do nothing 
-  if(StartY === null){
-    return;
-  }
-  //store the mouse position when let go and find difference 
-  const endY = e.clientY; const delta = StartY-endY; 
-  //if the mouse moved up more than 50 pixels scroll the cards up 
-  if(delta >= 50) { 
-    //add 1 to index then mod by length of birds, returns to first card once lenght is reached 
-    NewIndex((Index + 1) % birds.length); 
-  } 
-  //if the mouse moved down by more than 50 pixels scroll the cards down else 
-  if(delta <= -50){ 
-  //subtract 1 from index then mod by length of birds, returns to first card once lenght is reached 
-  NewIndex((Index - 1 + birds.length) % birds.length); 
+  return (
+    //div that handels scroll 
+    <div className="CardContainer" onWheel={scrollWheel}>
+      
+      {birds.map((bird, index) => {  //loop through the birds array and make a card for each one
+
+        //find how far the card is from the current index, 0 = current, 1 = above, -1 = below, all others are hidden
+        const position = getPosition(index, Index, birds.length);
+
+        //doesnet render cards if they are more than 2 cards away from current index
+        if(Math.abs(position) > 3){
+          return null;
+        }
+
+        return (
+          //card maker for each bird, key used to keep track of each card, position also given 
+          <BirdCard
+            key={index}
+            BirdPic={bird.BirdPic}
+            Birdname={bird.Birdname}
+            info={bird.info}
+            Rare={bird.Rare}
+            position={position}
+          />
+        );
+      })}
+
+    </div>
+  );
 }
-//reset mouse position 
-NewY(null); }; return ( 
-//div that handels mouse drags 
-<div className="CardContainer"
-  onMouseDown={MouseDown}
-  onMouseUp={MouseUp} 
-  onWheel={scrollWheel} 
-  onTouchStart={touchStart}
-  onTouchEnd={touchEnd}
- >
- {birds.map((bird, index) => { 
-  //loop throug the birds array and make a card for each one
-  //find how far the card is from the current index, 0 = current, 1 = above, -1 = below, all others are hidden
-   const position = index - Index; return (
-     //card maker for each bird, key used to keep track of each card, position also given 
-     <BirdCard 
-      key={index}
-      BirdPic={bird.BirdPic} 
-      Birdname={bird.Birdname}
-      info={bird.info} 
-      position={position} />
-    );
-  })}
-</div> 
-); } 
-     export default App;
+
+export default App;
