@@ -4,7 +4,7 @@ import pandas as pd
 import os      
 from pprint import pprint as pp     # pretty print
 import math
-import birdUtils as bu
+import Stats.birdUtils as bu
 from dotenv import load_dotenv
 # from backend import curr_location
 

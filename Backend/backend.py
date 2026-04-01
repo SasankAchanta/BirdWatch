@@ -1,6 +1,5 @@
 from email.policy import HTTP
 import uuid
-
 import requests
 from fastapi import FastAPI, APIRouter, File, HTTPException, Depends, UploadFile
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -9,8 +8,8 @@ import os
 from supabase import ClientOptions, create_client, Client
 from dotenv import load_dotenv
 import logging
-import stats
-import auth
+import Stats.stats as stats
+import Backend.auth as auth
 
 # load the environment variables from .env into url and sb_key
 load_dotenv()
@@ -26,11 +25,8 @@ logger = logging.getLogger(__name__)
 # create the supabase client (connect to the database)
 supabase: Client = create_client(sb_url, sb_key, options=ClientOptions(auto_refresh_token=False, persist_session=False))
 
-# "app" is how we can make the front end calls
-app = FastAPI()
-
-# add into this "main" file the endpoints of auth (using auth's router)
-app.include_router(auth.router)
+# create the router to be accessed by app.py
+router = APIRouter()
 
 # this is the data checking (lat and lng MUST be floats; pydantic check it)
 class Location(BaseModel):
@@ -52,7 +48,7 @@ curr_location: Location
 # a decorator; the endpoint the front end will call and the function IMMEDIATELY after will be run
 
 # get the user's points to display
-@app.get("/get_points")
+@router.get("/get_points")
 def get_points(current_user=Depends(auth.get_current_user), 
                credentials: HTTPAuthorizationCredentials = Depends(security)): 
     try:
@@ -77,7 +73,7 @@ def get_points(current_user=Depends(auth.get_current_user),
         raise HTTPException(status_code=500, detail=str(e))
 
 # update the points whenever a picture is taken 
-@app.patch("/update_points")
+@router.patch("/update_points")
 def update_points(bird: BirdRequest, 
                   current_user=Depends(auth.get_current_user),
                   credentials: HTTPAuthorizationCredentials = Depends(security)): 
@@ -123,11 +119,12 @@ def update_points(bird: BirdRequest,
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+'''
 # ChatGPT base code
 ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg']
 MAX_FILE_SIZE = 10 * 1024 * 1024    # 10MB
 
-@app.post("/upload")
+@router.post("/upload")
 async def upload_photo(
     file: UploadFile = File(...),
     current_user=Depends(auth.get_current_user),
@@ -178,3 +175,4 @@ async def upload_photo(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+'''
