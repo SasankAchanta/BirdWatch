@@ -46,6 +46,7 @@ class BirdRequest(BaseModel):
     lat: float
     lng: float
 
+
 # the current location of the user; updated after call of the /location endpoint
 curr_location: Location
 
@@ -164,20 +165,15 @@ async def upload_photo(
             {"content-type": file.content_type}
         )
 
-        # get public URL
-        public_url = supabase.storage.from_('user_bird_images').get_public_url(filename)
-
         # store metadata in database
         # id, user_id, file_path, url, created_at
         result = supabase.table('User_Photos').insert({
             "user_id": current_user.id,
             "file_path": filename,
-            "url": public_url
         }).execute()
 
         return {
             "message": "Upload successful",
-            "url": public_url,
             "photo_id": result.data[0]['id']
         }
     
@@ -186,20 +182,45 @@ async def upload_photo(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/get_photos")
+def get_photos(
+    current_user=Depends(auth.get_current_user),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    try:
+        supabase = create_client(
+            sb_url,
+            sb_key,
+            options=ClientOptions(auto_refresh_token=False, persist_session=False)
+        )
+        supabase.auth.set_session(
+            access_token=credentials.credentials,
+            refresh_token=""
+        )
+        supabase.postgrest.auth(credentials.credentials)
+
+        result = supabase.table("User_Photos") \
+        .select('id','file_path', 'created_at') \
+        .eq('user_id', current_user.id) \
+        .execute()
+
+        # create temporary url's for frontend to access photos
+        for photo in result.data:
+            signed_url = supabase.storage.from_('user_bird_images') \
+            .create_signed_url(photo['file_path'], 3600)    # expires in 1hr
+            photo['url'] = signed_url["signedUrl"]
+
+        return{
+            "photos": result.data
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
 '''
-@app.post("/add_picture")
-def add_picture():
-    try:
-    
-    except Exception as e:
 
-@app.get("/get_picture")
-def get_picture():
-    try:
-
-    except Exception as e:
-    
-    
 @app.post("/location") 
 def get_location(location: Location):
     global curr_location
