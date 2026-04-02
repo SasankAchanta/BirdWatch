@@ -123,10 +123,8 @@ def update_points(bird: BirdRequest,
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# ChatGPT base code
 ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg']
 MAX_FILE_SIZE = 10 * 1024 * 1024    # 10MB
-
 @app.post("/upload")
 async def upload_photo(
     file: UploadFile = File(...),
@@ -134,6 +132,15 @@ async def upload_photo(
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     try:
+        supabase = create_client(
+            sb_url,
+            sb_key,
+            options=ClientOptions(auto_refresh_token=False, persist_session=False)
+        )
+        supabase.auth.set_session(
+            access_token=credentials.credentials,
+            refresh_token=""
+        )
         supabase.postgrest.auth(credentials.credentials)
 
         # validate file type
@@ -148,7 +155,7 @@ async def upload_photo(
 
         # generate unique filename XX
         ext = file.filename.split(".")[-1]
-        filename = f'{current_user['id']}/{uuid.uuid4()}.{ext}'
+        filename = f'{current_user.id}/{uuid.uuid4()}.{ext}'
 
         # upload to supabase storage
         supabase.storage.from_('user_bird_images').upload(
@@ -163,7 +170,7 @@ async def upload_photo(
         # store metadata in database
         # id, user_id, file_path, url, created_at
         result = supabase.table('User_Photos').insert({
-            "user_id": current_user["id"],
+            "user_id": current_user.id,
             "file_path": filename,
             "url": public_url
         }).execute()
@@ -171,10 +178,39 @@ async def upload_photo(
         return {
             "message": "Upload successful",
             "url": public_url,
-            "photo_id": result.data[0]["id"]
+            "photo_id": result.data[0]['id']
         }
     
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+'''
+@app.post("/add_picture")
+def add_picture():
+    try:
+    
+    except Exception as e:
+
+@app.get("/get_picture")
+def get_picture():
+    try:
+
+    except Exception as e:
+    
+    
+@app.post("/location") 
+def get_location(location: Location):
+    global curr_location
+    curr_location = location
+    return {"message": "Location received successfully"}
+
+# 
+@app.get("/location")
+def send_location():
+    if curr_location is None:
+        return {"message": "Location not set"}
+    return {"lat: ": curr_location.lat, "lng: ": curr_location.lng}
+
+'''
