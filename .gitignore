@@ -1,3 +1,6 @@
+# DS_Store
+*.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -159,7 +162,7 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
-# Pyre type checker
+# Pyre type 
 .pyre/
 
 # pytype static type analyzer
