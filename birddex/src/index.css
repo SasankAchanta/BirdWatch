@@ -9,39 +9,23 @@ body {
   margin: 0;
 }
 
-.TitleBox, .infoBox, .birdCard {
-  background-color: #F6E2BE;
-  border-radius: 37px;
-  text-align: center;
-  display: flex;
-}
-.infoPopUP {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 402px;
-  height: 727px;
-  background-color: #F6E2BE;
-  border-radius: 37px 37px 0 0;
-  display: flex;
-  flex-direction: column;
-  z-index: 5;
-}
+
 .birdCard{
   background-color: #F6E2BE;
   border-radius: 37px;
-  text-align: center;
   display: flex;
   box-shadow: 0 8px 15px rgba(61, 30, 30, 0.2);
+  position: absolute;
+  width: 362px;
+  height: 462px;
+  flex-direction: column;
+  padding: 25px;
 }
 
-.infoPopUP {
-  position: absolute;
-  width: 402px;
-  height: 727px;
-  border-radius: 37px 37px 0 0;
-  align-self: center;
+.top{
+  display: flex;
+  align-self: flex-start;
+  gap: 30px;
 }
 
 .BackButton {
@@ -61,34 +45,27 @@ body {
 }
 
 .TitleBox {
-  position: absolute;
-  width: 170px;
-  height: 137px;
-  border-radius: 22px;
-  margin: 20px;
-  align-self: flex-end;
-}
-
-.birdCard {
-  position: absolute;
-  width: 362px;
-  height: 462px;
+  display: flex;
   flex-direction: column;
+  width: 170px;
+  height: 128px;
+  border-radius: 22px;
+  background-color: #F6E2BE;
 }
 
 .infoBox {
+  display: flex;
+  background-color: #F6E2BE;
+  border-radius: 17px;
   width: 324px;
   height: 256px;
-  border-radius: 17px;
-  margin-top: 20px;
-  align-self: center;
+  flex-direction: column;
 }
 
 .BirdPic {
   width: 135px;
   height: 128px;
   border-radius: 20px;
-  margin: 25px 0 0 20px;
   display: flex;
 }
 
@@ -100,8 +77,8 @@ body {
 }
 
 .info {
+  display: flex;
   font-size: 20px;
-  text-align: center;
 }
 
 .readMore{

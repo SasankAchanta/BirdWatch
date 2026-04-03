@@ -8,7 +8,7 @@ import CBE from './carmine bee eater.png';
 import question from './questionmark.png';
 import cardinal from './cardinal.jpg';
 
-function Scroll(){ 
+function Scroll({newPage}){ 
 //Bird array
 const birds = [
     { BirdPic: americanGoldfinch, Birdname: "American Goldfinch",  Rarity: "Common",
@@ -592,14 +592,14 @@ const [Index, NewIndex] = useState(0);
         }
 
         return (
-          //card maker for each bird, key used to keep track of each card, position also given 
+          //card maker for each bird, position also tracked 
           <BirdCard
-            key={index}
             BirdPic={bird.BirdPic}
             Birdname={bird.Birdname}
             info={bird.info}
             Rarity={bird.Rarity}
             position={position}
+            newPage={newPage}
           />
         );
       })}
