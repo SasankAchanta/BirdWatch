@@ -5,9 +5,7 @@ export default function RootLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        // This forces the "slide" transition across both iOS and Android (animation: 'slide_from_right')
         animation: 'none', 
-        // Keeps the background consistent during the slide animation
         contentStyle: { backgroundColor: '#2F3820' } 
       }}
     >

@@ -19,17 +19,15 @@ export default function NavBar() {
   const page = getPageIndex();
   const tabWidth = SCREEN_WIDTH / 4;
 
-  const NavButton = ({ index, route }: { index: number; route: string }) => (
+  const NavButton = ({ index, route }) => (
     <TouchableOpacity
-      // .replace ensures we don't create a never-ending "Back" history
-      onPress={() => router.replace(route as any)} 
+      onPress={() => router.replace(route)} 
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
     >
       <View style={{
         width: 50, height: 50, borderRadius: 25,
         backgroundColor: page === index ? '#8E9569' : '#FFFFFF',
         marginTop: page === index ? -30 : 0,
-        // Adding a slight border to see the buttons clearly
         borderWidth: 2,
         borderColor: '#2F3820'
       }} />
@@ -44,7 +42,6 @@ export default function NavBar() {
       height: 70,
       backgroundColor: '#8E9569',
     }}>
-      {/* The Indicator Circle */}
       <View style={{
         position: 'absolute',
         top: -35,
@@ -55,7 +52,6 @@ export default function NavBar() {
         backgroundColor: '#2F3820',
         zIndex: 1
       }} />
-
       <View style={{ flexDirection: 'row', width: '100%', height: '100%', zIndex: 2 }}>
         <NavButton index={0} route="/" />
         <NavButton index={1} route="/Camera" />
