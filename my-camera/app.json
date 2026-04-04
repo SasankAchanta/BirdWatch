@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "my-camera",
+    "slug": "my-camera",
+    "version": "1.0.0",
+    "platforms": ["ios", "android", "web"],
+    "sdkVersion": "54.0.0"
+  }
+}
