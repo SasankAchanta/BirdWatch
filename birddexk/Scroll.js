@@ -1,18 +1,20 @@
-import {useState} from 'react';
-import { Image, View, Text, Button, Pressable } from 'react-native';
+import { useState, useRef } from 'react';
+import { View, PanResponder, Button, Pressable } from 'react-native';
 import BirdCard from './Cards.jsx';
-  
+import Grid from './Grid.js';
+
 import americanGoldfinch from './birdpics/american goldfinch.png';
 import barnOwl from './birdpics/barn owl.png';
 import CBE from './birdpics/carmine bee eater.png';
 import question from './birdpics/questionmark.png';
 import cardinal from './birdpics/cardinal.jpg';
+import Style from './Style.js';
 
 //takes in new page function
 function Scroll({newPage}){ 
 //Bird array
 const birds = [
-    { BirdPic: CBE, Birdname: "American Goldfinch",  Rarity: "Common",
+    { BirdPic: americanGoldfinch, Birdname: "American Goldfinch",  Rarity: "Common",
        info: "The American goldfinch (Spinus tristis) is a small North American bird in the finch family. It is migratory, ranging from mid-Alberta to North Carolina during the breeding season, and from just south of the Canada–United States border to Mexico during the winter..."},
     { BirdPic: barnOwl, Birdname: "Barn Owl", info: "White Owl", Rarity: "Uncommon" },
     { BirdPic: CBE, Birdname: "Carmine Bee Eater", Rarity: "Common", 
@@ -543,8 +545,68 @@ const birds = [
 
 ];
 
-//sets index values to 0
-const [Index, NewIndex] = useState(0);
+const [Index, setIndex] = useState(0);
+  const PrevIndex = useRef(0);
+  const PrevY = useRef(0);
+  // px to drag per card
+  const pxPerCard = 60; 
+
+  //calclulates the direction and picks next card
+  const step = (direction) => {
+  let next;
+  if (direction === 'up') {
+    next = (PrevIndex.current + 1) % birds.length;
+  } else {
+    next = (PrevIndex.current - 1 + birds.length) % birds.length;
+  }
+  PrevIndex.current = next;
+  setIndex(next);
+};
+
+//handles dragging and swiping and moving cards
+  const panResponder = useRef(
+    PanResponder.create({
+      //touch movements 
+      onMoveShouldSetPanResponder: () => true,
+
+      // reset tracking when finger touches screen
+      onPanResponderGrant: () => {
+        PrevY.current = 0;
+      },
+
+      // move through cards based on distance dragged called while dragging
+     onPanResponderMove: (_, { dy }) => {
+      const delta = dy - PrevY.current;
+      //if the distance dragged if far enough, change card
+      if (Math.abs(delta) >= pxPerCard) {
+        if (delta < 0) {
+          step('up');
+        } else {
+          step('down');
+        }
+        //reset distance dragged
+        PrevY.current = dy;
+      }
+    },
+
+      // calculate the speed of the swipe and move cards, called when finger leaves screen
+      onPanResponderRelease: (_, { vy }) => {
+        PrevY.current = 0;
+        const skip = Math.min(Math.round(Math.abs(vy) * 3), 8);
+        let direction;
+        //if speed is fast enough, finds the direction
+        if (vy < 0) {
+          direction = 'up';
+        } else {
+          direction = 'down';
+        }
+        //moves the correct number of cards in the direction
+        for (let i = 1; i <= skip; i++) {
+          setTimeout(() => step(direction), i * 60);
+        }
+      },
+    })
+  ).current;
 
   //calculates the next card based on current position
   const getPosition = (index, current, total) => {
@@ -560,40 +622,19 @@ const [Index, NewIndex] = useState(0);
     return diff;
   };
 
-  //scroll
-  let wheelDist = 0;
-  const scrollWheel = (e) => {
-      wheelDist += e.deltaY;
-      //if the mouse wheel is scrolled up scroll the cards up 
-      if(wheelDist <= -70) {
-        //add 1 to index then mod by length of birds, returns to first card once lenght is reached 
-        NewIndex((Index + 1) % birds.length); 
-        wheelDist = 0;
-      } 
-      //if the mouse wheel is scrolled down scroll the cards down else 
-      if(wheelDist >= 70){ 
-        //subtract 1 from index then mod by length of birds, returns to first card once lenght is reached 
-        NewIndex((Index - 1 + birds.length) % birds.length); 
-        wheelDist = 0;
-    }
-  };
-
   return (
-    //View that handels scroll 
-    <View className="CardContainer" onWheel={scrollWheel}>
-      
-      {birds.map((bird, index) => {  //loop through the birds array and make a card for each one
+    //div for cards and handles movement
+    <View style={Style.CardContainer} {...panResponder.panHandlers}>
+        <Pressable style={Style.gridButton} onPress={() => newPage('Grid')}/>
 
-        //find how far the card is from the current index
+      {birds.map((bird, index) => {
         const position = getPosition(index, Index, birds.length);
-
-        //doesnet render cards if they are more than 3 cards away from current index
+        //only show cards that are only 2 indexes away
         if(Math.abs(position) > 3){
           return null;
         }
-
+        //bird card maker
         return (
-          //card maker for each bird, position also tracked, new page also sent
           <BirdCard
             key={index}
             BirdPic={bird.BirdPic}
@@ -601,13 +642,10 @@ const [Index, NewIndex] = useState(0);
             info={bird.info}
             Rarity={bird.Rarity}
             position={position}
-            //sends new page function
             newPage={newPage}
-
           />
         );
       })}
-
     </View>
   );
 }
