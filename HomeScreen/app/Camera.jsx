@@ -3,23 +3,27 @@ import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView, ScrollVi
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native'; 
+import { identifyBird } from './api';
+import NavBar from './NavBar'; 
 
 const { width, height } = Dimensions.get('window');
 
-export default function App() {
+export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
+  const isFocused = useIsFocused(); 
+
   const [burstPhotos, setBurstPhotos] = useState([]);
   const [isReviewing, setIsReviewing] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [flash, setFlash] = useState('off');
   const [zoom, setZoom] = useState(0); 
   const cameraRef = useRef(null);
-  
   const prevPinchDist = useRef(null);
 
   useEffect(() => {
-    if (permission && !permission.granted) requestPermission();
-  }, [permission, requestPermission]);
+    if (isFocused && permission && !permission.granted) requestPermission();
+  }, [isFocused, permission]);
 
   const getDistance = (touches) => {
     const [t1, t2] = touches;
@@ -54,7 +58,27 @@ export default function App() {
     }
   };
 
+  const handleIdentify = async () => {
+    if (!selectedPhoto) return;
+    try {
+      const result = await identifyBird(selectedPhoto); 
+      alert(`Bird Identified: ${result.species || 'Unknown Species'}`);
+    } catch (error) {
+      alert("API Error: Could not identify bird.");
+    }
+  };
+
+  const handleBackPress = () => {
+    if (selectedPhoto) {
+      setSelectedPhoto(null);
+      setIsReviewing(true);
+    } else {
+      setIsReviewing(false);
+    }
+  };
+
   if (!permission?.granted) return <View style={styles.container} />;
+  if (!isFocused) return <View style={styles.container} />;
 
   return (
     <ImageBackground 
@@ -79,35 +103,39 @@ export default function App() {
                 <View style={styles.zoomIndicator}>
                   <Text style={styles.zoomText}>{Math.round(zoom * 10 + 1)}x</Text>
                 </View>
+              </CameraView>
+            </View>
+
+            <View style={styles.bottomBar}>
+              <TouchableOpacity style={styles.sideBtn} onPress={pickImage}>
+                <MaterialIcons name="photo-library" size={32} color="white" />
+              </TouchableOpacity>
+              
+              <TouchableOpacity style={styles.shutterOut} onPress={takePhoto}>
+                <View style={styles.shutterIn} />
+              </TouchableOpacity>
+              
+              <View style={styles.sideBtn}>
                 {burstPhotos.length > 0 && (
-                  <TouchableOpacity style={styles.stackPos} onPress={() => setIsReviewing(true)}>
-                    {burstPhotos.slice(0, 3).map((uri, i) => (
-                      <View key={i} style={[styles.stackFrame, { transform: [{ rotate: `${i * 3}deg` }], marginTop: i > 0 ? -56 : 0 }]}>
+                  <TouchableOpacity style={styles.stackContainer} onPress={() => setIsReviewing(true)}>
+                    {burstPhotos.slice(0, 3).reverse().map((uri, i) => (
+                      <View key={i} style={[styles.stackFrame, { transform: [{ rotate: `${i * 3}deg` }], marginTop: i > 0 ? -74 : 0 }]}>
                         <Image source={{ uri }} style={styles.flex1} />
                       </View>
                     ))}
                     <View style={styles.badge}><Text style={styles.badgeText}>{burstPhotos.length}</Text></View>
                   </TouchableOpacity>
                 )}
-              </CameraView>
-            </View>
-            <View style={styles.bottomBar}>
-              <TouchableOpacity onPress={pickImage}><MaterialIcons name="photo-library" size={30} color="white" /></TouchableOpacity>
-              <TouchableOpacity style={styles.shutterOut} onPress={takePhoto}><View style={styles.shutterIn} /></TouchableOpacity>
-              <View style={{ width: 30 }} /> 
+              </View>
             </View>
           </View>
         ) : (
           <View style={styles.flex1}> 
-            {/* Header with Back Arrow */}
             <View style={styles.header}>
-              <TouchableOpacity 
-                style={styles.backBtn} 
-                onPress={() => { isReviewing ? setIsReviewing(false) : setSelectedPhoto(null); }}
-              >
+              <TouchableOpacity style={styles.backBtn} onPress={handleBackPress}>
                 <MaterialIcons name="chevron-left" size={50} color="white" />
               </TouchableOpacity>
-              <Text style={styles.headerTitle}>{isReviewing ? "Select Bird" : "Confirm Photo"}</Text>
+              <Text style={styles.headerTitle}>{isReviewing ? "Select Photo" : "Confirm Bird"}</Text>
             </View>
             
             {isReviewing ? (
@@ -121,57 +149,42 @@ export default function App() {
             ) : (
               <View style={styles.finalBox}>
                 <Image source={{ uri: selectedPhoto }} style={styles.finalImg} />
-                <TouchableOpacity style={styles.actionBtn}><Text style={styles.btnText}>Identify Bird</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.actionBtn} onPress={handleIdentify}>
+                  <Text style={styles.btnText}>Identify Bird</Text>
+                </TouchableOpacity>
               </View>
             )}
           </View>
         )}
+        <NavBar />
       </SafeAreaView>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'transparent' },
+  container: { flex: 1, backgroundColor: '#2F3820' },
   flex1: { flex: 1, width: '100%', height: '100%'},
-  overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.2)' }, 
-  camWrapper: { width: 375, height: 760, marginBottom: 50, marginHorizontal: 10, borderRadius: 20, overflow: 'hidden', backgroundColor: '#000', alignSelf: 'center' },
+  overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.15)' }, 
+  camWrapper: { width: width * 0.95, height: height * 0.72, marginTop: 10, borderRadius: 30, overflow: 'hidden', backgroundColor: '#000', alignSelf: 'center' },
   flashBtn: { position: 'absolute', top: 20, right: 20 },
-  zoomIndicator: { position: 'absolute', top: 20, alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: 15, paddingHorizontal: 12, paddingVertical: 4 },
+  zoomIndicator: { position: 'absolute', top: 20, alignSelf: 'center', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 15, paddingHorizontal: 12, paddingVertical: 4 },
   zoomText: { color: 'white', fontWeight: 'bold' },
-  viewfinder: { width: 220, height: 220, borderWidth: 2, borderColor: 'rgba(255,255,255,0.4)', borderRadius: 40, alignSelf: 'center', marginTop: '50%' },
-  stackPos: { position: 'absolute', right: 20, bottom: 20, width: 65, alignItems: 'center' },
-  stackFrame: { width: 60, height: 60, borderRadius: 12, borderWidth: 2, borderColor: 'white', backgroundColor: '#000', overflow: 'hidden' },
-  badge: { position: 'absolute', top: -10, right: -10, backgroundColor: '#4CAF50', borderRadius: 12, paddingHorizontal: 6, paddingVertical: 2 },
-  badgeText: { color: 'white', fontSize: 10, fontWeight: 'bold' },
-  bottomBar: { position: 'absolute', bottom: 30, flexDirection: 'row', width: '100%', justifyContent: 'space-around', alignItems: 'center' },
-  shutterOut: { width: 80, height: 80, backgroundColor: 'rgba(255,255,255,0.3)', borderRadius: 40, justifyContent: 'center', alignItems: 'center' },
-  shutterIn: { width: 64, height: 64, backgroundColor: 'white', borderRadius: 32 },
-  
-  // FIXED HEADER STYLES
-  header: { 
-    height: 100,
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    paddingHorizontal: 10,
-    marginTop: 20,
-    zIndex: 10
-  },
-  backBtn: {
-    padding: 5,
-  },
-  headerTitle: { 
-    color: 'white', 
-    fontSize: 28, 
-    fontWeight: 'bold', 
-    marginLeft: 5, 
-    fontFamily: 'serif',
-  },
-  
-  grid: { flexDirection: 'row', flexWrap: 'wrap', padding: 10, paddingBottom: 100 },
+  viewfinder: { width: 220, height: 220, borderWidth: 2, borderColor: 'rgba(255,255,255,0.3)', borderRadius: 45, alignSelf: 'center', marginTop: '55%' },
+  bottomBar: { flex: 1, flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 30, paddingBottom: 20 },
+  sideBtn: { width: 80, alignItems: 'center', justifyContent: 'center' },
+  shutterOut: { width: 85, height: 85, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 45, justifyContent: 'center', alignItems: 'center' },
+  shutterIn: { width: 68, height: 68, backgroundColor: 'white', borderRadius: 34 },
+  stackContainer: { width: 80, height: 80, justifyContent: 'center', alignItems: 'center' },
+  stackFrame: { width: 75, height: 75, borderRadius: 12, borderWidth: 2, borderColor: 'white', backgroundColor: '#000', overflow: 'hidden' },
+  badge: { position: 'absolute', top: -3, right: -7, backgroundColor: '#366a49', borderRadius: 15, paddingHorizontal: 10, paddingVertical: 4, zIndex: 10 },
+  badgeText: { color: 'white', fontSize: 12, fontWeight: 'bold' },
+  header: { height: 100, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, marginTop: 10, zIndex: 10 },
+  headerTitle: { color: 'white', fontSize: 28, fontWeight: 'bold', marginLeft: 5, fontFamily: 'serif' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', padding: 10, paddingBottom: 100, justifyContent: 'center' },
   gridCard: { width: (width - 40) / 2, height: (width - 40) / 2, margin: 5, borderRadius: 15, overflow: 'hidden' },
-  finalBox: { flex: 1, padding: 20, justifyContent: 'center', paddingBottom: 100 },
-  finalImg: { width: '100%', height: '60%', borderRadius: 20, marginBottom: 30 },
-  actionBtn: { paddingVertical: 18, borderRadius: 12, alignItems: 'center', backgroundColor: '#4CAF50' },
-  btnText: { color: 'white', fontWeight: 'bold', fontSize: 16 }
+  finalBox: { flex: 1, padding: 20, justifyContent: 'center' },
+  finalImg: { width: '100%', height: '65%', borderRadius: 25, marginBottom: 30 },
+  actionBtn: { paddingVertical: 20, borderRadius: 15, alignItems: 'center', backgroundColor: '#366a49', marginHorizontal: 10 },
+  btnText: { color: 'white', fontWeight: 'bold', fontSize: 18 }
 });
