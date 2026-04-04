@@ -17,5 +17,5 @@
     "**/*.jsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "app/Profile.jsx", "app/Inventory.jsx", "app/Camera.jsx", "app/NavBar.jsx", "app/index.jsx", "app/index.jsx", "app/_layout.jsx"  ]
 }
