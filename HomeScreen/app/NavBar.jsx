@@ -13,6 +13,8 @@ export default function NavBar() {
     if (pathname === '/Camera') return 1;
     if (pathname === '/Inventory') return 2;
     if (pathname === '/Profile') return 3;
+    if (pathname === '/Grid') return 2;
+    if (pathname === '/ReadMore') return 2;
     return 0;
   };
 

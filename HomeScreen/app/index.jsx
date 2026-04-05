@@ -43,7 +43,7 @@ export default function HomeScreen() {
           <Text style={{ color: "#A97A51", fontSize: 30, fontFamily: 'LondrinaSolid' }}>
             Streak: 0 days🔥
           </Text>
-          <div style={{ height: 30 }} />
+          <View style={{ height: 30 }} />
           <View style={{ height: 400, borderRadius: 20, backgroundColor: "#FDFADF", width: "90%", padding: 10 }}>
             <Text style={{ color: "#89572A", fontWeight: "bold", fontSize: 20, textAlign: "center", marginBottom: 10, fontFamily: 'LondrinaSolid' }}>
               Leaderboard
