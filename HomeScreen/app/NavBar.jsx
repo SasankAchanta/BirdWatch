@@ -4,6 +4,24 @@ import { useRouter, usePathname } from 'expo-router';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
+// 1. Move NavButton OUTSIDE and pass variables through props
+const NavButton = ({ index, isSelected, onPress }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+  >
+    <View style={{
+      width: 50, 
+      height: 50, 
+      borderRadius: 25,
+      backgroundColor: isSelected ? '#8E9569' : '#FFFFFF', // Uses isSelected prop
+      marginTop: isSelected ? -30 : 0,                 // Uses isSelected prop
+      borderWidth: 2,
+      borderColor: '#2F3820'
+    }} />
+  </TouchableOpacity>
+);
+
 export default function NavBar() {
   const router = useRouter();
   const pathname = usePathname();
@@ -20,21 +38,6 @@ export default function NavBar() {
 
   const page = getPageIndex();
   const tabWidth = SCREEN_WIDTH / 4;
-
-  const NavButton = ({ index, route }) => (
-    <TouchableOpacity
-      onPress={() => router.replace(route)} 
-      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-    >
-      <View style={{
-        width: 50, height: 50, borderRadius: 25,
-        backgroundColor: page === index ? '#8E9569' : '#FFFFFF',
-        marginTop: page === index ? -30 : 0,
-        borderWidth: 2,
-        borderColor: '#2F3820'
-      }} />
-    </TouchableOpacity>
-  );
 
   return (
     <View style={{
@@ -55,10 +58,27 @@ export default function NavBar() {
         zIndex: 1
       }} />
       <View style={{ flexDirection: 'row', width: '100%', height: '100%', zIndex: 2 }}>
-        <NavButton index={0} route="/" />
-        <NavButton index={1} route="/Camera" />
-        <NavButton index={2} route="/Inventory" />
-        <NavButton index={3} route="/Profile" />
+        {/* 2. Pass the data into the component here */}
+        <NavButton 
+          index={0} 
+          isSelected={page === 0} 
+          onPress={() => router.replace('/')} 
+        />
+        <NavButton 
+          index={1} 
+          isSelected={page === 1} 
+          onPress={() => router.replace('/Camera')} 
+        />
+        <NavButton 
+          index={2} 
+          isSelected={page === 2} 
+          onPress={() => router.replace('/Inventory')} 
+        />
+        <NavButton 
+          index={3} 
+          isSelected={page === 3} 
+          onPress={() => router.replace('/Profile')} 
+        />
       </View>
     </View>
   );

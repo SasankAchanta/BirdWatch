@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, FlatList } from "react-native";
+import { Text, View, FlatList, StyleSheet, Platform } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import NavBar from './NavBar';
@@ -26,7 +26,7 @@ export default function HomeScreen() {
   });
 
   if (!fontsLoaded) {
-    return null;
+    return <View style={{ flex: 1, backgroundColor: "#2F3820" }} />;
   }
 
   return (
@@ -34,7 +34,8 @@ export default function HomeScreen() {
       <View style={{
         flex: 1,
         alignItems: "center",
-        paddingTop: insets.top
+        paddingTop: insets.top,
+        paddingBottom: 70 // Leave space for the NavBar
       }}>
         <View style={{ alignItems: "center", width: "100%" }}>
           <Text style={{ color: "white", fontSize: 50, fontFamily: 'LondrinaSolid' }}>
@@ -76,6 +77,49 @@ export default function HomeScreen() {
         </View>
         <NavBar />
       </View>
+        <Text style={{ color: "white", fontSize: 50, fontFamily: 'LondrinaSolid' }}>
+          Welcome
+        </Text>
+        <Text style={{ color: "#A97A51", fontSize: 30, fontFamily: 'LondrinaSolid' }}>
+          Streak: 0 days🔥
+        </Text>
+        
+        {/* Replaced <div> with <View> */}
+        <View style={{ height: 30 }} />
+
+        <View style={{ height: 400, borderRadius: 20, backgroundColor: "#FDFADF", width: "90%", padding: 10 }}>
+          <Text style={{ color: "#89572A", fontWeight: "bold", fontSize: 20, textAlign: "center", marginBottom: 10, fontFamily: 'LondrinaSolid' }}>
+            Leaderboard
+          </Text>
+          <View style={{ backgroundColor: "#778150", borderRadius: 12, flex: 1 }}>
+            <FlatList
+              data={LEADERBOARD_DATA}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={{ paddingHorizontal: 10, paddingTop: 5, paddingBottom: 5 }}
+              showsVerticalScrollIndicator={true}
+              // FIXED: Removed indicatorStyle="white" as it is iOS only and can cause issues
+              renderItem={({ item }) => (
+                <View style={{ flexDirection: "row", alignItems: "center", paddingVertical: 8 }}>
+                  <Text style={{ color: "white", fontWeight: "bold", width: 35 }}>{item.rank}</Text>
+                  <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: "#E8D5A3", marginHorizontal: 10 }} />
+                  <Text style={{ color: "white", flex: 1, fontFamily: 'LondrinaSolid' }}>{item.name}</Text>
+                  <Text style={{ color: "white", fontWeight: "bold", fontFamily: 'LondrinaSolid' }}>{item.score} pts</Text>
+                </View>
+              )}
+            />
+            <View style={{ borderBottomWidth: 1, borderBottomColor: "#E8D5A3", marginHorizontal: 10 }} />
+            <View style={{ flexDirection: "row", alignItems: "center", paddingVertical: 8, paddingHorizontal: 10 }}>
+              <Text style={{ color: "white", fontWeight: "bold", width: 35 }}>{YOU.rank}</Text>
+              <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: "transparent", borderWidth: 2, borderColor: "#E8D5A3", marginHorizontal: 10 }} />
+              <Text style={{ color: "white", fontWeight: "bold", flex: 1 }}>{YOU.name}</Text>
+              <Text style={{ color: "white", fontWeight: "bold" }}>{YOU.score} pts</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+
+      {/* FIXED: Moved NavBar outside the main scrolling View so position: absolute works correctly */}
+      <NavBar />
     </View>
   );
 }
