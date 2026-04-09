@@ -1,0 +1,90 @@
+body {
+  font-family: 'Londrina Solid', cursive;
+  background-color: #2F3820;
+  color: #9B8254;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+
+.birdCard{
+  background-color: #F6E2BE;
+  border-radius: 37px;
+  display: flex;
+  box-shadow: 0 8px 15px rgba(61, 30, 30, 0.2);
+  position: absolute;
+  width: 362px;
+  height: 462px;
+  flex-direction: column;
+  padding: 25px;
+}
+
+.top{
+  display: flex;
+  align-self: flex-start;
+  gap: 30px;
+}
+
+.BackButton {
+  position: absolute;
+  height: 66px;
+  width: 71px;
+  margin-top: -120px;
+  margin-left: 25px;
+  display: flex;
+}
+
+.CardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.TitleBox {
+  display: flex;
+  flex-direction: column;
+  width: 170px;
+  height: 128px;
+  border-radius: 22px;
+  background-color: #F6E2BE;
+}
+
+.infoBox {
+  display: flex;
+  background-color: #F6E2BE;
+  border-radius: 17px;
+  width: 324px;
+  height: 256px;
+  flex-direction: column;
+}
+
+.BirdPic {
+  width: 135px;
+  height: 128px;
+  border-radius: 20px;
+  display: flex;
+}
+
+.cardTitle {
+  position: absolute;
+  font-size: 20px;
+  margin-left: 10px;
+  align-items: center;
+}
+
+.info {
+  display: flex;
+  font-size: 20px;
+}
+
+.readMore{
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  bottom:75px;
+  margin-left: 150px;
+}
