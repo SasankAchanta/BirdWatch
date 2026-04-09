@@ -28,11 +28,13 @@ export default function NavBar() {
 
   const getPageIndex = () => {
     if (pathname === '/') return 0;
+    if (pathname === '/HomePage') return 0;
     if (pathname === '/Camera') return 1;
     if (pathname === '/Inventory') return 2;
-    if (pathname === '/Profile') return 3;
     if (pathname === '/Grid') return 2;
     if (pathname === '/ReadMore') return 2;
+    if (pathname === '/Profile') return 3;
+   
     return 0;
   };
 
@@ -54,7 +56,7 @@ export default function NavBar() {
         width: 90,
         height: 90,
         borderRadius: 45,
-        backgroundColor: '#2F3820',
+        backgroundColor: '#2f3820',
         zIndex: 1
       }} />
       <View style={{ flexDirection: 'row', width: '100%', height: '100%', zIndex: 2 }}>
@@ -62,7 +64,7 @@ export default function NavBar() {
         <NavButton 
           index={0} 
           isSelected={page === 0} 
-          onPress={() => router.replace('/')} 
+          onPress={() => router.replace('/HomePage')} 
         />
         <NavButton 
           index={1} 

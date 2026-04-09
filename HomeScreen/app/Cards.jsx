@@ -117,7 +117,7 @@ function BirdCard({ BirdPic, Birdname, info, Rarity, position }) {
         <Image source={BirdPic} style={Style.Birdpic} />
         <View style={Style.TitleBox}>
           <Text style={Style.cardTitle}>
-            {'\n'}{Birdname}{'\n\n'}
+            {'\n'}{Birdname}{'\n\n'}Rarity: {Rarity}
           </Text>
         </View>
       </View>

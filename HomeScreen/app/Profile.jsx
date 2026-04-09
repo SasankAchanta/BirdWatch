@@ -1,11 +1,45 @@
-import { View, Text } from 'react-native';
+import { View, Text, SafeAreaView } from 'react-native';
 import NavBar from './NavBar';
 
 export default function ProfileScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2F3820' }}>
-      <Text style={{ color: 'white' }}>Profile Screen</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#2F3820' }}>
+      
+      {/* Top Header Section */}
+      <View style={{ 
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        paddingHorizontal: 20, 
+        marginTop: 40 
+      }}>
+        <View style={{ width: 100, height: 100, borderRadius: 50, backgroundColor: "#E8D5A3" }} />
+        <View style={{ marginLeft: 15 }}>
+          <Text style={{ color: "#E8D5A3", fontSize: 28, fontWeight: "bold", fontFamily: 'LondrinaSolid' }}>
+            Birdwatcher
+          </Text>
+          <Text style={{ color: "#E8D5A3", fontSize: 20, fontFamily: 'LondrinaSolid' }}>
+            @birdwatcher_01
+          </Text>
+        </View>
+      </View>
+
+      {/* Settings Section - Adjusted to be higher */}
+      <View style={{ 
+        alignItems: 'center', // Keep it centered horizontally
+        marginTop: 100,       // Adjust this number to move it up or down
+      }}>
+        <Text style={{ 
+          color: "white", 
+          fontSize: 32, 
+          fontWeight: "bold", 
+          fontFamily: 'LondrinaSolid' 
+        }}>
+          Settings
+        </Text>
+      </View>
+
+      {/* NavBar pushes to the bottom automatically if it has position: absolute or flex: 1 logic inside */}
       <NavBar />
-    </View>
+    </SafeAreaView>
   );
 }

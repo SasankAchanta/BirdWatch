@@ -9,7 +9,9 @@ export default function RootLayout() {
         contentStyle: { backgroundColor: '#2F3820' } 
       }}
     >
+      <Stack.Screen name="SignIn" />
       <Stack.Screen name="index" />
+      <Stack.Screen name="HomePage" />
       <Stack.Screen name="Camera" />
       <Stack.Screen name="Inventory" />
       <Stack.Screen name="Profile" />
