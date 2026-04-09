@@ -1,13 +1,11 @@
 import os
 import io
-#from tensorflow.keras.preprocessing.image import preprocess_input
-#from tensorflow.keras.applications.efficientnet_v2 import preprocess_input
+from tensorflow.keras.applications.efficientnet_v2 import preprocess_input
 import tensorflow as tf
-
 import numpy as np
 import PIL.Image
 import PIL.ImageOps
-from fastapi import FastAPI, File, UploadFile, APIRouter
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 #loads the model, change path if needed
@@ -450,7 +448,7 @@ birdnames=[
     "RUDY KINGFISHER",
     "RUFOUS KINGFISHER",
     "RUFOUS TREPE",
-    "RUFUOS MOTMOT",
+    "RUFOUS MOTMOT",
     "SAMATRAN THRUSH",
     "SAND MARTIN",
     "SANDHILL CRANE",
@@ -543,11 +541,9 @@ birdnames=[
 ]
 
 
-'''
+
 # prediction function
-async def predict_image(file: UploadFile = File(...)):
-    #reads the image
-    contents = await file.read()
+async def predict_image(contents: bytes):
     #converts to RGB
     pil_image = PIL.Image.open(io.BytesIO(contents)).convert("RGB")
     #resize to 224 x 224
@@ -584,3 +580,4 @@ async def predict_image(contents: bytes):
         "BirdType": PredictedBird,
         "Confidence": Confidence
     }
+'''

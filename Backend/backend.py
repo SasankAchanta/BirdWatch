@@ -28,12 +28,6 @@ supabase: Client = create_client(sb_url, sb_key, options=ClientOptions(auto_refr
 
 # create the router to be accessed by app.py
 router = APIRouter()
-'''
-# this is the data checking (lat and lng MUST be floats; pydantic check it)
-class Location(BaseModel):
-    lat: float
-    lng: float
-'''
 
 # get the name of the bird and lng/lat from frontend
 # frontent gets:
@@ -167,7 +161,10 @@ async def upload_photo(lat: float,
         
         bird_prediction = await cnn.predict_image(contents)
         bird_name = bird_prediction['BirdType']
-        
+        print(f"DEBUG: bird_name = '{bird_name}'")
+        specCode = stats.findSpecCode(bird_name)
+        print(f"DEBUG: specCode = '{specCode}'")
+        print(bird_name)
         update_points(bird_name, lat, lng, current_user.id, credentials.credentials)
 
         return {
@@ -180,3 +177,4 @@ async def upload_photo(lat: float,
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+

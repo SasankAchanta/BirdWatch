@@ -6,25 +6,126 @@ from pprint import pprint as pp     # pretty print
 import math
 import Stats.birdUtils as bu
 from dotenv import load_dotenv
-# from backend import curr_location
-
-#lng = curr_location.lng
-#lat = curr_location.lat
+from rapidfuzz import process, fuzz
+from Backend.name_map import OVERRIDES
 
 # constants for point calculation
 BASE_POINTS = 500
 MAX_POINTS = 1000
-
+'''
 # Generates a look up table for bird name -> species code
 BIRD_LIST = bu.get_taxonomy()
 NAME_CODE_DICT = {
-    item['comName'].lower(): item['speciesCode']
+    item['comName'].upper(): item['speciesCode']
     for item in BIRD_LIST
 }
 
+
 # Function for converting bird name -> species code
 def findSpecCode(comName):
-    return NAME_CODE_DICT.get(comName.lower())
+    if not comName:
+        return None
+    
+    # Try exact match first (uppercase)
+    result = NAME_CODE_DICT.get(comName.upper())
+    if result:
+        return result
+    
+    # If exact match fails, try fuzzy matching
+    search_lower = comName.lower().strip()
+    for name, code in NAME_CODE_DICT.items():
+        if search_lower == name.lower():
+            return code
+    
+    # If still no match, log it and return None
+    print(f"WARNING: Could not find species code for '{comName}'")
+    return None
+'''
+# Generates a look up table for bird name -> species code
+BIRD_LIST = bu.get_taxonomy()
+NAME_CODE_DICT = {
+    item['comName'].upper(): item['speciesCode']
+    for item in BIRD_LIST
+}
+
+# Overrides for CNN names that don't match eBird after uppercasing.
+# Key:   CNN output (uppercased)
+# Value: eBird common name (uppercased) — or None if not a real species
+CNN_OVERRIDES = {
+    # Generic / ambiguous names
+    "ALBATROSS":                "WANDERING ALBATROSS",
+    "BLUE HERON":               "GREAT BLUE HERON",
+    "CROW":                     "AMERICAN CROW",
+    "CANARY":                   "ISLAND CANARY",
+    "COCKATOO":                 "SULPHUR-CRESTED COCKATOO",
+    "MYNA":                     "COMMON MYNA",
+    "PEACOCK":                  "INDIAN PEAFOWL",
+    "PUFFIN":                   "ATLANTIC PUFFIN",
+    "KIWI":                     "NORTH ISLAND BROWN KIWI",
+    "OSTRICH":                  "COMMON OSTRICH",
+    "ROADRUNNER":               "GREATER ROADRUNNER",
+    "CASSOWARY":                "SOUTHERN CASSOWARY",
+    "FRIGATE":                  "MAGNIFICENT FRIGATEBIRD",
+    "BIRD OF PARADISE":         "GREATER BIRD-OF-PARADISE",
+    "TEAL DUCK":                "GREEN-WINGED TEAL",
+    # Extra/wrong word
+    "MALLARD DUCK":             "MALLARD",
+    "MANDRIN DUCK":             "MANDARIN DUCK",
+    "ROCK DOVE":                "ROCK PIGEON",
+    "HOOPOES":                  "EURASIAN HOOPOE",
+    # Typos in CNN label list
+    "TOUCHAN":                  "TOCO TOUCAN",
+    "KILLDEAR":                 "KILLDEER",
+    "BLACKBURNIAM WARBLER":     "BLACKBURNIAN WARBLER",
+    "BROWN CREPPER":            "BROWN CREEPER",
+    "BROWN NOODY":              "BROWN NODDY",
+    "COCK OF THE  ROCK":        "ANDEAN COCK-OF-THE-ROCK",
+    "SAMATRAN THRUSH":          "SUMATRAN THRUSH",
+    "GROVED BILLED ANI":        "GROOVE-BILLED ANI",
+    "SPOON BILED SANDPIPER":    "SPOON-BILLED SANDPIPER",
+    "STRIPPED MANAKIN":         "STRIATED MANAKIN",
+    "STRIPPED SWALLOW":         "STREAK-THROATED SWALLOW",
+    "VERMILION FLYCATHER":      "VERMILION FLYCATCHER",
+    "VENEZUELIAN TROUPIAL":     "VENEZUELAN TROUPIAL",
+    "EASTERN TOWEE":            "EASTERN TOWHEE",
+    "EASTERN WIP POOR WILL":    "EASTERN WHIP-POOR-WILL",
+    "TRUMPTER SWAN":            "TRUMPETER SWAN",
+    "BRANDT CORMARANT":         "BRANDT'S CORMORANT",
+    "DOUBLE BRESTED CORMARANT": "DOUBLE-CRESTED CORMORANT",
+    "AUCKLAND SHAQ":            "AUCKLAND SHAG",
+    "IMPERIAL SHAQ":            "IMPERIAL SHAG",
+    "WILSONS BIRD OF PARADISE": "WILSON'S BIRD-OF-PARADISE",
+    "FLAME TANAGER":            "FLAME-COLORED TANAGER",
+    # Scientific name in CNN list
+    "PARUS MAJOR":              "GREAT TIT",
+    "TIT MOUSE":                "TUFTED TITMOUSE",
+    # Not a real species
+    "LOONEY BIRDS":             None,
+}
+
+def findSpecCode(comName):
+    if not comName:
+        return None
+    
+    upper_name = comName.upper().strip()
+
+    # 1 — check override map first (handles typos + ambiguous CNN names)
+    if upper_name in CNN_OVERRIDES:
+        ebird_name = CNN_OVERRIDES[upper_name]
+        if ebird_name is None:
+            print(f"WARNING: '{comName}' is not a real species")
+            return None
+        return NAME_CODE_DICT.get(ebird_name)
+
+    # 2 — exact match against eBird taxonomy (handles the ~90% of clean names)
+    result = NAME_CODE_DICT.get(upper_name)
+    if result:
+        return result
+
+    # 3 — nothing found
+    print(f"WARNING: Could not find species code for '{comName}'")
+    return None
+
 
 # helper function for get_species_proportion
 # adjusts proportion to account for confidence in rarity
@@ -78,10 +179,3 @@ def calculatePoints(proportion, distance):
         points = MAX_POINTS
     return points
     
-'''
-if __name__ == '__main__':
-    while(True):
-        print('\n')
-        main()
-
-'''

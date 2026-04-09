@@ -5,6 +5,9 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import os
+from rapidfuzz import process, fuzz
+from Backend.name_map import OVERRIDES
+
 
 # load the environment variables from .env file
 # birdUtils is designed to handle all interaction with eBird API
