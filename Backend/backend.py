@@ -111,7 +111,7 @@ def update_points(bird_name, lat, lng, user_id, credentials_token):
 # this needs to call the update points function, which will in turn call the cnn backend function
 # ChatGPT base code
 ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg']
-MAX_FILE_SIZE = 10 * 1024 * 1024    # 10MB
+MAX_FILE_SIZE = 20 * 1024 * 1024    # 20MB
 @router.post("/upload")
 async def upload_photo(lat: float,
     lng: float,
@@ -178,3 +178,39 @@ async def upload_photo(lat: float,
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.get("/get_photos")
+def get_photos(
+    current_user=Depends(auth.get_current_user),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    try:
+        supabase = create_client(
+            sb_url,
+            sb_key,
+            options=ClientOptions(auto_refresh_token=False, persist_session=False)
+        )
+        supabase.auth.set_session(
+            access_token=credentials.credentials,
+            refresh_token=""
+        )
+        supabase.postgrest.auth(credentials.credentials)
+
+        result = supabase.table("User_Photos") \
+        .select('id','file_path', 'created_at') \
+        .eq('user_id', current_user.id) \
+        .execute()
+
+        # create temporary url's for frontend to access photos
+        for photo in result.data:
+            signed_url = supabase.storage.from_('user_bird_images') \
+            .create_signed_url(photo['file_path'], 3600)    # expires in 1hr
+            photo['url'] = signed_url["signedUrl"]
+
+        return{
+            "photos": result.data
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
