@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Dimensions } from 'react-native';
+import { View, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -49,7 +49,8 @@ export default function NavBar() {
       height: 70,
       backgroundColor: '#8E9569',
     }}>
-      <View style={{
+      <View 
+      style={{
         position: 'absolute',
         top: -35,
         left: (page * tabWidth) + (tabWidth / 2) - 45,
