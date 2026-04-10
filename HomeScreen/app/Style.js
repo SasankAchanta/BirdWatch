@@ -14,22 +14,55 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
   },
+
+  readmore:{
+    width:ScreenW,
+    height: ScreenH,
+    alignContent: 'center',
+    justifyContent:'center',
+  },
+  nametxt:{
+    fontFamily: 'LondrinaSolid-regular',
+    fontSize: 35,
+    color: '#ffffff',
+    alignSelf: 'left',
+    left: 35,
+    padding: 5,
+  },
+
   flex1: {
     flex: 1,
     width: '100%',
     height: '100%'
   },
+  txtboxes:{
+    marginTop: ScreenH * 0.35,
+  },
+
+  PicWinfo:{
+    alignSelf:'left',
+    width: 230,
+    height: 400,
+  },
+  OtherInfo:{
+    alignSelf:'flex-end',
+    top:'-350',
+    width: 220,
+    height: 350,
+  },
 
   input: {  
-    top: ScreenH*.35,
+    textAlign: 'center',
     height: 60,
-    margin: 35,
     borderWidth: 3,
     backgroundColor: '#FDFADF',
     borderRadius: 10,
     borderColor: '#2F3820',
     fontFamily: 'LondrinaSolid-regular',
     fontSize: 20,
+    position: "relative",
+    marginHorizontal: 35,
+    marginBottom: 25,
   },
 
   Welcome:{
@@ -43,6 +76,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     borderRadius: 14,
+
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
   },
 
   welcome:{
@@ -63,6 +101,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#7B9477',
     borderRadius: 20,
     justifyContent: 'center',
+
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
   },
 
   buttonTxt:{
@@ -95,7 +138,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#C0DABC',
     borderRadius: 20,
     justifyContent: 'center',
+    
     alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
   },
  
 
@@ -122,6 +170,11 @@ const styles = StyleSheet.create({
     height: 200, 
     backgroundColor: '#E9D1A6', 
     borderRadius: 20,
+
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
   },
   GridImg: {
     display: 'flex',

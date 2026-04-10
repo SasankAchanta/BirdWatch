@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, View, FlatList, StyleSheet, Platform } from "react-native";
+import { Text, View, FlatList, ImageBackground} from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useFonts } from 'expo-font';
 import NavBar from './NavBar';
+
+
 
 const LEADERBOARD_DATA = [
   { id: '1', rank: 1, name: 'Bobby', score: '10,000' },
@@ -21,16 +22,11 @@ const YOU = { id: '105', rank: 105, name: 'You', score: '6,700' };
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
-  const [fontsLoaded] = useFonts({
-    'LondrinaSolid': require('../assets/images/fonts/Londrina_Solid/LondrinaSolid-Regular.ttf')
-  });
-
-  if (!fontsLoaded) {
-    return <View style={{ flex: 1, backgroundColor: "#2F3820" }} />;
-  }
+  
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#2F3820" }}>
+    <ImageBackground source={{ uri: 'https://i.pinimg.com/1200x/0c/34/eb/0c34ebd1e937148e8daec033b06f4b48.jpg' }} style={{ flex: 1}}>
+      <View style={{ flex: 1, backgroundColor: "#2f382096" }}>
       <View style={{
         flex: 1,
         alignItems: "center",
@@ -77,6 +73,7 @@ export default function HomeScreen() {
         </View>
         <NavBar />
       </View>
-    </View>
+      </View>
+    </ImageBackground>
   );
 }
