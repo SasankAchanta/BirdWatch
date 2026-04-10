@@ -1,5 +1,5 @@
 import React from 'react';
-import {ImageBackground, View, StyleSheet, TextInput, Pressable, Text, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Keyboard  } from 'react-native';
+import {ImageBackground, View, TextInput, Pressable, Text, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Keyboard  } from 'react-native';
 import Style from './Style.js';
 import { useRouter, usePathname } from 'expo-router';
 

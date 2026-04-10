@@ -1,6 +1,5 @@
 import React from "react";
-import { Image, View, Text, Button, Pressable } from 'react-native';
-import {useState} from 'react';
+import { Image, View, Text, Pressable } from 'react-native';
 import Style from './Style.js';
 import NavBar from './NavBar.jsx';
 

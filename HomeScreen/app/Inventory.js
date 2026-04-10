@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { View, PanResponder, Button, Pressable } from 'react-native';
+import { View, PanResponder, Pressable } from 'react-native';
 import BirdCard from './Cards.jsx';
 import NavBar from './NavBar.jsx';
 

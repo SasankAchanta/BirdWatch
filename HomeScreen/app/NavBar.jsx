@@ -1,23 +1,23 @@
 import React from 'react';
-import { View, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
+import { View, TouchableOpacity, Dimensions, Image } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // 1. Move NavButton OUTSIDE and pass variables through props
-const NavButton = ({ index, isSelected, onPress }) => (
+const NavButton = ({ index, isSelected, onPress, iconSource }) => (
+  
   <TouchableOpacity
     onPress={onPress}
     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
   >
-    <View style={{
+    <Image source={iconSource} style={{
       width: 50, 
       height: 50, 
-      borderRadius: 25,
-      backgroundColor: isSelected ? '#8E9569' : '#FFFFFF', // Uses isSelected prop
+      padding:5,
+      borderRadius:25,
+      backgroundColor: isSelected ? '#8E9569' : '#ffffff00', // Uses isSelected prop
       marginTop: isSelected ? -30 : 0,                 // Uses isSelected prop
-      borderWidth: 2,
-      borderColor: '#2F3820'
     }} />
   </TouchableOpacity>
 );
@@ -65,22 +65,26 @@ export default function NavBar() {
         <NavButton 
           index={0} 
           isSelected={page === 0} 
-          onPress={() => router.replace('/HomePage')} 
+          onPress={() => router.replace('/HomePage')}
+          iconSource={require('./icons/HomeSolid.png')} 
         />
         <NavButton 
           index={1} 
           isSelected={page === 1} 
           onPress={() => router.replace('/Camera')} 
+          iconSource={require('./icons/Camera.png')}
         />
         <NavButton 
           index={2} 
           isSelected={page === 2} 
           onPress={() => router.replace('/Inventory')} 
+          iconSource={require('./icons/Photo.png')}
         />
         <NavButton 
           index={3} 
           isSelected={page === 3} 
-          onPress={() => router.replace('/Profile')} 
+          onPress={() => router.replace('/Profile')}
+          iconSource={require('./icons/profile.png')}
         />
       </View>
     </View>

@@ -1,9 +1,8 @@
 import React from 'react';
-import {ImageBackground, View, StyleSheet, TextInput, Pressable, Text, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {ImageBackground, View, TextInput, Pressable, Text, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import Style from './Style.js';
 import { useRouter, usePathname } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useFonts } from 'expo-font';
 import NavBar from './NavBar';
 
 
@@ -16,14 +15,6 @@ const TextInputExample = () => {
   const [password, onChangePassword] = React.useState('');
 
   const InputsFilled = username.length > 0 && password.length > 0;
-
-  const [fontsLoaded] = useFonts({
-      'LondrinaSolid': require('../assets/images/fonts/Londrina_Solid/LondrinaSolid-Regular.ttf')
-    });
-
-    if (!fontsLoaded) {
-      return null;
-    }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

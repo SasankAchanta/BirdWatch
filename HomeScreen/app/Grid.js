@@ -1,10 +1,11 @@
 import React from "react";
-import { Image, View, Text, Button, Pressable, ScrollView } from 'react-native';
-import {useState, useRef} from 'react';
+import {View, Pressable, ScrollView } from 'react-native';
+import {useState} from 'react';
 import Style from './Style.js';
 import GridCard from './GridCard.jsx';
-
 import NavBar from './NavBar.jsx';
+import { useRouter, usePathname } from 'expo-router';
+
 
 import americanGoldfinch from './birdpics/american goldfinch.png';
 import barnOwl from './birdpics/barn owl.png';
@@ -12,7 +13,6 @@ import CBE from './birdpics/carmine bee eater.png';
 import question from './birdpics/questionmark.png';
 import cardinal from './birdpics/cardinal.jpg';
 
-import { useRouter, usePathname } from 'expo-router';
 
 
 const birds = [
@@ -547,30 +547,45 @@ const birds = [
 
 ];
 
-
-//blank page
 function Grid(){
   const router = useRouter();
   const pathname = usePathname();
-    const [Index, setIndex] = useState(0);
+  
+  //start with 5 cards
+  const [visibleCount, setVisibleCount] = useState(50);
 
-    return(
-      <View style={Style.cardscreen}>
-    <ScrollView contentContainerStyle={Style.Grid}> 
-      
-        {birds.map((bird, index) => {
-        return (
-          <GridCard
-            key={index}
-            BirdPic={bird.BirdPic}
-            Birdname={bird.Birdname}
-          />
-        );
-      })}
-        <Button title="GBack" onPress={() => router.replace('/Inventory')}></Button>    
-    </ScrollView>
+  //load 50 more each time
+  const loadMore = () => {
+    setVisibleCount(prevCount => prevCount + 50);
+  };
+  //split the array into sets of 50
+  const visibleBirds = birds.slice(0, visibleCount);
+
+  return(
+    //create bird cards for grid
+    <View style={Style.cardscreen}>
+      <ScrollView contentContainerStyle={Style.Grid}> 
+        
+        {visibleBirds.map((bird, index) => {
+          return (
+            <GridCard
+              key={index}
+              BirdPic={bird.BirdPic}
+              Birdname={bird.Birdname}
+            />
+          );
+        })}
+        
+        {visibleCount < birds.length && ( // load more button
+          <View style={{ width: '100%', marginVertical: 20 }}>
+            <Pressable title="Show More" onPress={loadMore} color="#8E9569"> </Pressable>
+          </View>
+        )}
+
+        <Pressable title="Back" onPress={() => router.replace('/Inventory')}></Pressable>    
+      </ScrollView>
       <NavBar />
     </View>
-    );
+  );
 }
 export default Grid;
