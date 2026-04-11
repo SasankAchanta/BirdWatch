@@ -1,9 +1,8 @@
 import React from "react";
-import {View, Pressable, ScrollView } from 'react-native';
+import {View, Pressable, ScrollView, Button } from 'react-native';
 import {useState} from 'react';
 import Style from './Style.js';
 import GridCard from './GridCard.jsx';
-import NavBar from './NavBar.jsx';
 import { useRouter, usePathname } from 'expo-router';
 
 
@@ -12,7 +11,6 @@ import barnOwl from './birdpics/barn owl.png';
 import CBE from './birdpics/carmine bee eater.png';
 import question from './birdpics/questionmark.png';
 import cardinal from './birdpics/cardinal.jpg';
-
 
 
 const birds = [
@@ -552,17 +550,17 @@ function Grid(){
   const pathname = usePathname();
   
   //start with 5 cards
-  const [visibleCount, setVisibleCount] = useState(50);
+  const [visibleCount, setVisibleCount] = useState(10);
 
   //load 50 more each time
   const loadMore = () => {
-    setVisibleCount(prevCount => prevCount + 50);
+    setVisibleCount(prevCount => prevCount + 30);
   };
   //split the array into sets of 50
   const visibleBirds = birds.slice(0, visibleCount);
+  const isDone = visibleCount >= birds.length;
 
   return(
-    //create bird cards for grid
     <View style={Style.cardscreen}>
       <ScrollView contentContainerStyle={Style.Grid}> 
         
@@ -576,15 +574,13 @@ function Grid(){
           );
         })}
         
-        {visibleCount < birds.length && ( // load more button
+        {!isDone && (
           <View style={{ width: '100%', marginVertical: 20 }}>
-            <Pressable title="Show More" onPress={loadMore} color="#8E9569"> </Pressable>
+            <Button stle={{justifycontent: 'center'}} title="Show More" onPress={loadMore} color="#8E9569"> </Button>
           </View>
         )}
-
-        <Pressable title="Back" onPress={() => router.replace('/Inventory')}></Pressable>    
+        <Button title="Back" onPress={() => router.replace('/Inventory')}></Button>    
       </ScrollView>
-      <NavBar />
     </View>
   );
 }

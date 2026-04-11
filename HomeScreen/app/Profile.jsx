@@ -1,5 +1,4 @@
 import { View, Text, SafeAreaView } from 'react-native';
-import NavBar from './NavBar';
 
 export default function ProfileScreen() {
   return (
@@ -38,8 +37,6 @@ export default function ProfileScreen() {
         </Text>
       </View>
 
-      {/* NavBar pushes to the bottom automatically if it has position: absolute or flex: 1 logic inside */}
-      <NavBar />
     </SafeAreaView>
   );
 }

@@ -5,7 +5,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native'; 
 import { identifyBird } from './api';
-import NavBar from './NavBar'; 
 
 const { width, height } = Dimensions.get('window');
 
@@ -59,14 +58,17 @@ export default function CameraScreen() {
   };
 
   const handleIdentify = async () => {
-    if (!selectedPhoto) return;
-    try {
-      const result = await identifyBird(selectedPhoto); 
-      alert(`Bird Identified: ${result.species || 'Unknown Species'}`);
-    } catch (error) {
-      alert("API Error: Could not identify bird.");
-    }
-  };
+  try {
+    const result = await predictImage(selectedPhoto);
+
+    alert(
+      `Bird: ${result.species || result.BirdType} \nConfidence: ${result.confidence}`
+    );
+  } catch (err) {
+    console.log(err);
+    alert("API Error");
+  }
+};
 
   const handleBackPress = () => {
     if (selectedPhoto) {
@@ -156,7 +158,6 @@ export default function CameraScreen() {
             )}
           </View>
         )}
-        <NavBar />
       </SafeAreaView>
     </ImageBackground>
   );

@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { View, PanResponder, Pressable } from 'react-native';
 import BirdCard from './Cards.jsx';
-import NavBar from './NavBar.jsx';
 
 import { useRouter, usePathname } from 'expo-router';
 
@@ -631,7 +630,6 @@ const [Index, setIndex] = useState(0);
   return (
     //div for cards and handles movement
     <View style={Style.cardscreen}>
-            <NavBar />
     <View style={Style.CardContainer} {...panResponder.panHandlers}>
         <Pressable style={Style.gridButton} onPress={() => router.replace('/Grid')}/>
 

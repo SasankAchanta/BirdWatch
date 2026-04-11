@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, Dimensions, Image } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
 
+
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // 1. Move NavButton OUTSIDE and pass variables through props
@@ -12,12 +13,13 @@ const NavButton = ({ index, isSelected, onPress, iconSource }) => (
     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
   >
     <Image source={iconSource} style={{
-      width: 50, 
-      height: 50, 
       padding:5,
       borderRadius:25,
       backgroundColor: isSelected ? '#8E9569' : '#ffffff00', // Uses isSelected prop
-      marginTop: isSelected ? -30 : 0,                 // Uses isSelected prop
+      marginTop: isSelected ? -30 : 0,
+      width: isSelected ? 55:50, 
+      height: isSelected ? 55: 50,
+                       // Uses isSelected prop
     }} />
   </TouchableOpacity>
 );
@@ -25,6 +27,12 @@ const NavButton = ({ index, isSelected, onPress, iconSource }) => (
 export default function NavBar() {
   const router = useRouter();
   const pathname = usePathname();
+
+  const hideOnRoutes = ['/', '/SignUp'];
+
+  if (hideOnRoutes.includes(pathname)) {
+    return null;
+  } 
 
   const getPageIndex = () => {
     if (pathname === '/') return 0;
@@ -37,6 +45,7 @@ export default function NavBar() {
    
     return 0;
   };
+  
 
   const page = getPageIndex();
   const tabWidth = SCREEN_WIDTH / 4;

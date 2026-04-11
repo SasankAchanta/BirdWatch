@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, View, FlatList, ImageBackground} from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import NavBar from './NavBar';
 
 
 
@@ -71,7 +70,6 @@ export default function HomeScreen() {
             </View>
           </View>
         </View>
-        <NavBar />
       </View>
       </View>
     </ImageBackground>

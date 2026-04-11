@@ -1,7 +1,6 @@
 import React from "react";
 import { Image, View, Text, Pressable } from 'react-native';
 import Style from './Style.js';
-import NavBar from './NavBar.jsx';
 
 import { useRouter, usePathname } from 'expo-router';
 
@@ -15,7 +14,6 @@ function ReadMore(){
 
     return(
     <View style={{flex:1}}>
-            <NavBar />
         <View style={Style.PicWinfo}> 
             <Image source={require('./birdpics/american goldfinch.png')} style={{ width: 180, height: 160, alignSelf: 'center', top: 60, padding: 5, borderRadius:20}}></Image>
             <View  style={{ width: 170, height: 170, alignSelf: 'center', top: 75, backgroundColor: '#F6E2BE', padding: 5, borderRadius: 20,justifyContent:'center'}}>
