@@ -2,17 +2,34 @@ import React from 'react';
 import {ImageBackground, View, TextInput, Pressable, Text, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Keyboard  } from 'react-native';
 import Style from './Style.js';
 import { useRouter, usePathname } from 'expo-router';
+import API from './api.js';
 
+
+import { Signup, Login, setAuthToken } from "./api"; // adjust path if needed
 
 const TextInputExample = () => {
+
+  const HandleSignup = async () => {
+    try {
+      const res = await Signup(email, password);
+  
+      console.log(res);
+    
+      // go to home page
+      router.replace('/HomePage');
+    } catch (err) {
+      console.log(err.response?.data || err.message);
+    }
+    };
+
+
   const router = useRouter();
   const pathname = usePathname();
 
   const [email, onChangeEmail] = React.useState('');
-  const [username, onChangeUsername] = React.useState('');
   const [password, onChangePassword] = React.useState('');
 
-  const InputsFilled = username.length > 0 && password.length > 0;
+  const InputsFilled = email.length > 0 && password.length > 0;
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -38,12 +55,6 @@ const TextInputExample = () => {
           onChangeText={onChangeEmail}
           value={email}
         />
-        <Text style={Style.nametxt}>Username:</Text>
-        <TextInput
-          style={Style.input}
-          onChangeText={onChangeUsername}
-          value={username}
-        />
         <Text style={Style.nametxt}>Password:</Text>
         <TextInput
           style={Style.input}
@@ -54,7 +65,7 @@ const TextInputExample = () => {
         </ImageBackground>
         </ScrollView>
         
-        <Pressable disabled={!InputsFilled} style={Style.enter} onPress={() => router.replace('/HomePage')}>
+        <Pressable disabled={!InputsFilled} style={Style.enter} onPress={HandleSignup}>
           <Text style={Style.buttonTxt1}> Enter </Text>
         </Pressable>
       

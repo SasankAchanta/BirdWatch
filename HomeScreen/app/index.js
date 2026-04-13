@@ -3,17 +3,39 @@ import {ImageBackground, View, TextInput, Pressable, Text, KeyboardAvoidingView,
 import Style from './Style.js';
 import { useRouter, usePathname } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import API from './api.js';
+
+
+import { Login, setAuthToken } from "./api"; // adjust path if needed
+
 
 
 const TextInputExample = () => {
+  
+  const handleLogin = async () => {
+  try {
+    const res = await Login(email, password);
+
+    console.log(res);
+
+    
+    // go to home page
+    router.replace('/HomePage');
+  } catch (err) {
+    console.log(err.response?.data || err.message);
+  }
+  };
+
+
   const router = useRouter();
   const pathname = usePathname();
   const insets = useSafeAreaInsets();
 
-  const [username, onChangeUsername] = React.useState('');
+  const [email, onChangeEmail] = React.useState('');
   const [password, onChangePassword] = React.useState('');
 
-  const InputsFilled = username.length > 0 && password.length > 0;
+  const InputsFilled = email.length > 0 && password.length > 0;
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -35,22 +57,23 @@ const TextInputExample = () => {
       </View>
       
       <View style={Style.txtboxes}>
-        <Text style={Style.nametxt}>Username:</Text>
+        <Text style={Style.nametxt}>Email:</Text>
         <TextInput
           style={Style.input}
-          onChangeText={onChangeUsername}
-          value={username}
+          onChangeText={onChangeEmail}
+          value={email}
         />
         <Text style={Style.nametxt}>Password:</Text>
         <TextInput
           style={Style.input}
           onChangeText={onChangePassword}
           value={password}
+          secureTextEntry
         />
         </View>
       </ImageBackground>
       </ScrollView>
-        <Pressable disabled={!InputsFilled} style={Style.enter} onPress={() => router.replace('/HomePage')}>
+        <Pressable disabled={!InputsFilled} style={Style.enter} onPress={handleLogin}>
           <Text style={Style.buttonTxt1}> Enter </Text>
         </Pressable>
       </KeyboardAvoidingView>

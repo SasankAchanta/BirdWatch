@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { View, PanResponder, Pressable } from 'react-native';
+import { View, PanResponder, Pressable, ImageBackground } from 'react-native';
 import BirdCard from './Cards.jsx';
 
 import { useRouter, usePathname } from 'expo-router';
@@ -628,7 +628,9 @@ const [Index, setIndex] = useState(0);
   };
 
   return (
-    //div for cards and handles movement
+    <ImageBackground source={{uri: 'https://i.pinimg.com/1200x/4f/e9/3a/4fe93a8428778e21e9d8211e4088b08f.jpg'}}  style={{ flex: 1}}>
+            <View style={{ flex: 1, backgroundColor: "#262d1ebe" }}>
+      
     <View style={Style.cardscreen}>
     <View style={Style.CardContainer} {...panResponder.panHandlers}>
         <Pressable style={Style.gridButton} onPress={() => router.replace('/Grid')}/>
@@ -653,6 +655,8 @@ const [Index, setIndex] = useState(0);
       })}
     </View>
     </View>
+    </View>
+    </ImageBackground>
   );
 }
 

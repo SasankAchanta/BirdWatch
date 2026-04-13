@@ -4,7 +4,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native'; 
-import { identifyBird } from './api';
+import { predictImage } from './api';
 
 const { width, height } = Dimensions.get('window');
 
@@ -174,16 +174,16 @@ const styles = StyleSheet.create({
   viewfinder: { width: 220, height: 220, borderWidth: 2, borderColor: 'rgba(255,255,255,0.3)', borderRadius: 45, alignSelf: 'center', marginTop: '55%' },
   bottomBar: { flex: 1, flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 30, paddingBottom: 20 },
   sideBtn: { width: 80, alignItems: 'center', justifyContent: 'center' },
-  shutterOut: { width: 85, height: 85, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 45, justifyContent: 'center', alignItems: 'center' },
+  shutterOut: { width: 85, height: 85, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 45, justifyContent: 'center', alignItems: 'center', top: -10, },
   shutterIn: { width: 68, height: 68, backgroundColor: 'white', borderRadius: 34 },
-  stackContainer: { width: 80, height: 80, justifyContent: 'center', alignItems: 'center' },
+  stackContainer: { width: 80, height: 80, justifyContent: 'center', alignItems: 'center', top: -10,},
   stackFrame: { width: 75, height: 75, borderRadius: 12, borderWidth: 2, borderColor: 'white', backgroundColor: '#000', overflow: 'hidden' },
   badge: { position: 'absolute', top: -3, right: -7, backgroundColor: '#366a49', borderRadius: 15, paddingHorizontal: 10, paddingVertical: 4, zIndex: 10 },
   badgeText: { color: 'white', fontSize: 12, fontWeight: 'bold' },
   header: { height: 100, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, marginTop: 10, zIndex: 10 },
   headerTitle: { color: 'white', fontSize: 28, fontWeight: 'bold', marginLeft: 5, fontFamily: 'serif' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', padding: 10, paddingBottom: 100, justifyContent: 'center' },
-  gridCard: { width: (width - 40) / 2, height: (width - 40) / 2, margin: 5, borderRadius: 15, overflow: 'hidden' },
+  gridCard: { width: (width - 40) / 2, height: (width - 40) / 2, margin: 5, borderRadius: 15, overflow: 'hidden'},
   finalBox: { flex: 1, padding: 20, justifyContent: 'center' },
   finalImg: { width: '100%', height: '65%', borderRadius: 25, marginBottom: 30 },
   actionBtn: { paddingVertical: 20, borderRadius: 15, alignItems: 'center', backgroundColor: '#366a49', marginHorizontal: 10 },
