@@ -1,3 +1,4 @@
+from calendar import c
 from email.policy import HTTP
 import uuid
 import requests
@@ -37,7 +38,18 @@ class Location(BaseModel):
     lat: float
     lng: float
 
-# a decorator; the endpoint the front end will call and the function IMMEDIATELY after will be run
+def create_supabase_session(credentials):
+    supabase = create_client(
+            sb_url,
+            sb_key,
+            options=ClientOptions(auto_refresh_token=False, persist_session=False)
+        )
+    supabase.auth.set_session(
+        access_token=credentials.credentials,
+        refresh_token=""
+    )
+    supabase.postgrest.auth(credentials.credentials)
+    return supabase
 
 # get the user's points to display
 @router.get("/get_points")
@@ -120,16 +132,7 @@ async def upload_photo(lat: float,
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     try:
-        supabase = create_client(
-            sb_url,
-            sb_key,
-            options=ClientOptions(auto_refresh_token=False, persist_session=False)
-        )
-        supabase.auth.set_session(
-            access_token=credentials.credentials,
-            refresh_token=""
-        )
-        supabase.postgrest.auth(credentials.credentials)
+        supabase = create_supabase_session(credentials)
 
         # validate file type
         if file.content_type not in ALLOWED_TYPES:
@@ -184,16 +187,7 @@ def get_photos(
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     try:
-        supabase = create_client(
-            sb_url,
-            sb_key,
-            options=ClientOptions(auto_refresh_token=False, persist_session=False)
-        )
-        supabase.auth.set_session(
-            access_token=credentials.credentials,
-            refresh_token=""
-        )
-        supabase.postgrest.auth(credentials.credentials)
+        supabase = create_supabase_session(credentials)
 
         result = supabase.table("User_Photos") \
         .select('id','file_path', 'created_at') \
@@ -214,3 +208,47 @@ def get_photos(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# get summary for pokedex from Supabase
+@router.get("/get_summary")
+def get_summary(
+    bird_name: str,
+    current_user=Depends(auth.get_current_user),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    try:
+        supabase = create_supabase_session(credentials)
+        
+        result = supabase.table("birds") \
+        .select('summary') \
+        .eq('name', bird_name.upper()) \
+        .execute()
+
+        return{
+            "summary": result.data
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+'''
+# get image for pokedex from Supabase
+@router.get("/get_image")
+def get_image(
+    current_user=Depends(auth.get_current_user),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+
+
+# get map for pokedex from Supabase
+@router.get("/get_map")
+def get_map(
+    current_user=Depends(auth.get_current_user),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+'''
+
