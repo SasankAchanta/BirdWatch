@@ -80,6 +80,9 @@ def signup(user_info: SignUpRequest):
     except HTTPException:
         raise
     except Exception as e:
+        e_msg = str(e).lower() 
+        if "database error saving new user" in e_msg:
+            raise HTTPException(status_code=409, detail="An account with this email already exists")
         raise HTTPException(status_code=500, detail=str(e))
 
 # called whenever the front end gets user info in the sign in page
