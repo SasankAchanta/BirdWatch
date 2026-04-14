@@ -69,9 +69,14 @@ def signup(user_info: SignUpRequest):
             raise HTTPException(status_code=400, detail="Signup failed")
 
         # insert a new row into the supabase table and initialize user_id to the user's id and points to 0
-        points_response = supabase.table("User_Points").insert({
+        supabase.table("User_Points").insert({
             "user_id": user.id,
             "points": 0
+        }).execute()
+
+        #insert a new row into supabase pokedex table 
+        supabase.table("bird_checklist").insert({
+            "id": user.id
         }).execute()
 
         return {
