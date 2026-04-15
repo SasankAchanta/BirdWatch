@@ -1,5 +1,6 @@
 from calendar import c
 from email.policy import HTTP
+import stat
 import uuid
 import requests
 from fastapi import FastAPI, APIRouter, File, HTTPException, Depends, UploadFile, Body
@@ -235,20 +236,60 @@ def get_summary(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-'''
+
 # get image for pokedex from Supabase
 @router.get("/get_image")
 def get_image(
+    bird_name: str,
     current_user=Depends(auth.get_current_user),
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
+    try:
+        supabase = create_supabase_session(credentials)
+
+        # get the image's signed url from the bucket based off the bird_name
+        signed_url_response = supabase.storage.from_('wiki_bird_images').create_signed_url(f'{bird_name}.jpg', 3600)
+
+        signed_url = signed_url_response.get("signedUrl") or signed_url_response.get("signedURL")
+
+        if not signed_url:
+            raise HTTPException(status_code=404, detail=f"Image not found for bird: {bird_name}")
+
+        return{
+            "img-url": signed_url
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # get map for pokedex from Supabase
 @router.get("/get_map")
 def get_map(
+    bird_name: str,
     current_user=Depends(auth.get_current_user),
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
-'''
+    try:
+        # Construct the file path in the bucket using the bird name
+        file_path = f"{bird_name}.jpg"  
 
+        # Generate a signed URL (valid for 1 hour)
+        response = supabase.storage.from_("bird-maps").create_signed_url(
+            path=file_path,
+            expires_in=3600
+        )
+
+        signed_url = response.get("signedURL")
+
+        if not signed_url:
+            raise HTTPException(status_code=404, detail=f"Map not found for bird: {bird_name}")
+
+        return {
+            "map": signed_url
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail= str(e))
