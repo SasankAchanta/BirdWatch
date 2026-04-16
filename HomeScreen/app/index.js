@@ -26,6 +26,9 @@ const TextInputExample = () => {
     console.log(err.response?.data || err.message);
   }
   };
+  function testlogin(){
+    router.replace('/HomePage');
+  }
 
 
   const router = useRouter();
@@ -47,8 +50,8 @@ const TextInputExample = () => {
       <View style={Style.Welcome}>
         <Text style={Style.welcome}> Welcome! </Text>
         <View style={Style.Buttons}>
-        <Pressable style={Style.Login}>
-          <Text style={Style.buttonTxt} onPress={() => router.replace('/')}> Login </Text>
+        <Pressable style={Style.Login} onPress={() => router.replace('/')}>
+          <Text style={Style.buttonTxt}>Login </Text>
         </Pressable>
         <Pressable style={Style.signup} onPress={() => router.replace('/SignUp')}>
           <Text style={Style.buttonTxt1}> Sign Up </Text>
@@ -73,7 +76,7 @@ const TextInputExample = () => {
         </View>
       </ImageBackground>
       </ScrollView>
-        <Pressable disabled={!InputsFilled} style={Style.enter} onPress={handleLogin}>
+        <Pressable disabled={!InputsFilled} style={Style.enter} onPress={testlogin}>
           <Text style={Style.buttonTxt1}> Enter </Text>
         </Pressable>
       </KeyboardAvoidingView>

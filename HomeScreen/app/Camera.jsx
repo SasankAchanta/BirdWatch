@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView, ScrollView, Dimensions, ImageBackground } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView, ScrollView, Dimensions, ImageBackground, Button } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -19,6 +19,8 @@ export default function CameraScreen() {
   const [zoom, setZoom] = useState(0); 
   const cameraRef = useRef(null);
   const prevPinchDist = useRef(null);
+
+  
 
   useEffect(() => {
     if (isFocused && permission && !permission.granted) requestPermission();

@@ -150,12 +150,15 @@ const styles = StyleSheet.create({
   gridButton: {
     display: 'flex',
     top: -350,
-    width: 50,
-    height: 30,
+    width: 70,
+    height: 40,
     backgroundColor: '#C5AD82',
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
+    borderWidth: 3,
+    borderColor: '#D2A167',
   },
   Grid:{
     flexDirection: 'row',
@@ -190,6 +193,7 @@ const styles = StyleSheet.create({
     fontFamily: 'LondrinaSolid-regular',
     fontSize: 20,
     textAlign: 'center',
+    color:'#9B8254',
   },
 
   cardscreen:{

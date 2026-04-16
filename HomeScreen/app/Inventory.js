@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { View, PanResponder, Pressable, ImageBackground } from 'react-native';
+import { View, PanResponder, Pressable, ImageBackground, Text} from 'react-native';
 import BirdCard from './Cards.jsx';
 
 import { useRouter, usePathname } from 'expo-router';
@@ -633,7 +633,9 @@ const [Index, setIndex] = useState(0);
       
     <View style={Style.cardscreen}>
     <View style={Style.CardContainer} {...panResponder.panHandlers}>
-        <Pressable style={Style.gridButton} onPress={() => router.replace('/Grid')}/>
+      <Pressable style={Style.gridButton}onPress={() => router.replace('/Grid')}>
+        <Text style={{color:"#2F3820", fontFamily: 'LondrinaSolid-regular', fontSize: 30, textAlign: 'center', justifyContent:'center' }}>GRID</Text>
+      </Pressable>
 
       {birds.map((bird, index) => {
         const position = getPosition(index, Index, birds.length);

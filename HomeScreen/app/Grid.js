@@ -1,5 +1,5 @@
 import React from "react";
-import {View, Pressable, ScrollView, Button } from 'react-native';
+import {View, Pressable, ScrollView, Button, Text } from 'react-native';
 import {useState} from 'react';
 import Style from './Style.js';
 import GridCard from './GridCard.jsx';
@@ -11,6 +11,7 @@ import barnOwl from './birdpics/barn owl.png';
 import CBE from './birdpics/carmine bee eater.png';
 import question from './birdpics/questionmark.png';
 import cardinal from './birdpics/cardinal.jpg';
+import { Background } from "@react-navigation/elements";
 
 
 const birds = [
@@ -575,12 +576,20 @@ function Grid(){
         })}
         
         {!isDone && (
-          <View style={{ width: '100%', marginVertical: 20 }}>
-            <Button stle={{justifycontent: 'center'}} title="Show More" onPress={loadMore} color="#8E9569"> </Button>
+          <View style={{ width: '100%' }}>
+            <Pressable style={{alignSelf: 'center', marginBottom: 50, width: 100, height: 40, backgroundColor: '#E9D1A6', justifyContent: 'center', borderRadius: 15, borderWidth: 5, borderColor: '#D2A167' }}onPress={loadMore}>
+              <Text style={{color:"#2F3820", fontFamily: 'LondrinaSolid-regular', fontSize: 20, textAlign: 'center' }}>LOAD MORE</Text>
+            </Pressable>
           </View>
         )}
-        <Button title="Back" onPress={() => router.replace('/Inventory')}></Button>    
+
+            
       </ScrollView>
+      <View>
+          <Pressable style={{alignSelf: 'left', top: -130, left: 20, width: 60, height: 60, backgroundColor: '#E9D1A6', justifyContent: 'center', borderRadius: 20, borderWidth: 5, borderColor: '#D2A167' }}onPress={() => router.replace('/Inventory')}>
+              <Text style={{color:"#2F3820", fontFamily: 'LondrinaSolid-regular', fontSize: 40, textAlign: 'center', justifyContent:'center' }}>{"<"}</Text>
+            </Pressable>
+          </View>
     </View>
   );
 }

@@ -40,8 +40,8 @@ const TextInputExample = () => {
       <View style={Style.Welcome}>
         <Text style={Style.welcome}> Welcome! </Text>
         <View style={Style.Buttons}>
-        <Pressable style={Style.signup}>
-          <Text style={Style.buttonTxt1} onPress={() => router.replace('/')}> Login </Text>
+        <Pressable style={Style.signup} onPress={() => router.replace('/')}>
+          <Text style={Style.buttonTxt1}> Login </Text>
         </Pressable>
         <Pressable title="Sign Up" style={Style.Login} onPress={() => router.replace('/SignUp')}>
           <Text style={Style.buttonTxt}> Sign Up </Text>

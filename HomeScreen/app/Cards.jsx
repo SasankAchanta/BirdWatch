@@ -1,7 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { View, Text, Image, Pressable, Animated } from 'react-native';
 import Style from './Style.js';
-import ReadMore from './ReadMore.js';
 
 import { useRouter, usePathname } from 'expo-router';
 
@@ -72,7 +71,7 @@ const getZIndex = (pos) => {
   }
 };
 
-function BirdCard({ BirdPic, Birdname, info, Rarity, position }) {
+function BirdCard({ idx, BirdPic, Birdname, info, Rarity, position }) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -125,7 +124,7 @@ function BirdCard({ BirdPic, Birdname, info, Rarity, position }) {
       <View style={Style.infoBox}>
         <Text style={Style.info}>{info}</Text>
         {knownbird && (
-          <Pressable style={Style.readMore} onPress={() => router.replace('/ReadMore')}>
+          <Pressable style={Style.readMore} onPress={() => router.push({pathname: '/ReadMore', params:{name: Birdname}})}>
             <Text>Read More</Text>
           </Pressable>
         )}
