@@ -1,7 +1,9 @@
 from calendar import c
 from email.policy import HTTP
+from multiprocessing import current_process
 import stat
 import uuid
+from grpc import ssl_server_certificate_configuration
 import requests
 from fastapi import FastAPI, APIRouter, File, HTTPException, Depends, UploadFile, Body
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -120,7 +122,6 @@ def update_points(bird_name, lat, lng, user_id, credentials_token):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 # this needs to call the update points function, which will in turn call the cnn backend function
 # ChatGPT base code
 ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg']
@@ -163,14 +164,19 @@ async def upload_photo(lat: float,
             "file_path": filename,
         }).execute()
         
+        # get the prediction of the bird and update user points 
         bird_prediction = await cnn.predict_image(contents)
         bird_name = bird_prediction['BirdType']
-        print(f"DEBUG: bird_name = '{bird_name}'")
-        specCode = stats.findSpecCode(bird_name)
-        print(f"DEBUG: specCode = '{specCode}'")
-        print(bird_name)
         update_points(bird_name, lat, lng, current_user.id, credentials.credentials)
 
+        # update the bird_checklist
+        checklist_response = supabase.table('bird_checklist').select('birds').eq('id', current_user.id).execute()
+        checklist = checklist_response.data[0]['birds']
+        if checklist.get(bird_name) is False:
+            # set value to true
+            checklist[bird_name] = True
+            supabase.table('bird_checklist').update({'birds': checklist}).eq('id', current_user.id).execute()
+        # add else so that user gets less points if they already caught the bird
         return {
             "message": "Upload successful",
             "bird": bird_name,
@@ -248,7 +254,7 @@ def get_image(
         supabase = create_supabase_session(credentials)
 
         # get the image's signed url from the bucket based off the bird_name
-        signed_url_response = supabase.storage.from_('wiki_bird_images').create_signed_url(f'{bird_name}.jpg', 3600)
+        signed_url_response = supabase.storage.from_('wiki_bird_images').create_signed_url(f'{bird_name.upper()}.jpg', 3600)
 
         signed_url = signed_url_response.get("signedUrl") or signed_url_response.get("signedURL")
 
@@ -272,24 +278,22 @@ def get_map(
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):
     try:
-        # Construct the file path in the bucket using the bird name
-        file_path = f"{bird_name}.jpg"  
+        supabase = create_supabase_session(credentials)
 
-        # Generate a signed URL (valid for 1 hour)
-        response = supabase.storage.from_("bird-maps").create_signed_url(
-            path=file_path,
-            expires_in=3600
-        )
+        # get the image's signed url from the bucket based off the bird_name
+        signed_url_response = supabase.storage.from_('wiki_bird_maps').create_signed_url(f'{bird_name.upper()}.jpg', 3600)
 
-        signed_url = response.get("signedURL")
+        signed_url = signed_url_response.get("signedUrl") or signed_url_response.get("signedURL")
 
         if not signed_url:
-            raise HTTPException(status_code=404, detail=f"Map not found for bird: {bird_name}")
+            raise HTTPException(status_code=404, detail=f"Image not found for bird: {bird_name}")
 
-        return {
-            "map": signed_url
+        return{
+            "map-url": signed_url
         }
+     
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail= str(e))
+    
