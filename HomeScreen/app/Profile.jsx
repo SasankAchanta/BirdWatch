@@ -41,7 +41,7 @@ export default function ProfileScreen() {
 
       <View style={{ alignItems: 'center', marginTop: 30}}>
         <Text style={{ color: "#E8D5A3", fontSize: 28, fontWeight: "bold", fontFamily: 'LondrinaSolid' }}>
-            Birds Collected: 5/524
+            Birds Collected: 5/500
         </Text>
       </View>
 
