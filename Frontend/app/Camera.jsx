@@ -193,6 +193,7 @@ export default function CameraScreen() {
   );
 }
 
+// CSS styling
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#2F3820' },
   flex1: { flex: 1, width: '100%', height: '100%'},
