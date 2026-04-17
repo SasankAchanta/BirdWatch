@@ -216,7 +216,6 @@ def get_photos(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 # get summary for pokedex from Supabase
 @router.get("/get_summary")
 def get_summary(
@@ -240,8 +239,6 @@ def get_summary(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
 
 # get image for pokedex from Supabase
 @router.get("/get_image")
@@ -268,7 +265,6 @@ def get_image(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 # get map for pokedex from Supabase
 @router.get("/get_map")
