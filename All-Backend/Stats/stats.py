@@ -12,41 +12,26 @@ from Backend.name_map import OVERRIDES
 # constants for point calculation
 BASE_POINTS = 500
 MAX_POINTS = 1000
-'''
-# Generates a look up table for bird name -> species code
-BIRD_LIST = bu.get_taxonomy()
-NAME_CODE_DICT = {
-    item['comName'].upper(): item['speciesCode']
-    for item in BIRD_LIST
-}
 
-
-# Function for converting bird name -> species code
-def findSpecCode(comName):
-    if not comName:
-        return None
-    
-    # Try exact match first (uppercase)
-    result = NAME_CODE_DICT.get(comName.upper())
-    if result:
-        return result
-    
-    # If exact match fails, try fuzzy matching
-    search_lower = comName.lower().strip()
-    for name, code in NAME_CODE_DICT.items():
-        if search_lower == name.lower():
-            return code
-    
-    # If still no match, log it and return None
-    print(f"WARNING: Could not find species code for '{comName}'")
-    return None
-'''
 # Generates a look up table for bird name -> species code
-BIRD_LIST = bu.get_taxonomy()
-NAME_CODE_DICT = {
-    item['comName'].upper(): item['speciesCode']
-    for item in BIRD_LIST
-}
+BIRD_LIST = None
+
+def get_bird_list():
+    global BIRD_LIST
+    if BIRD_LIST is None:
+        BIRD_LIST = bu.get_taxonomy()
+    return BIRD_LIST
+
+NAME_CODE_DICT = None
+
+def get_name_code_dict():
+    global NAME_CODE_DICT
+    if NAME_CODE_DICT is None:
+        NAME_CODE_DICT = {
+            item['comName'].upper(): item['speciesCode']
+            for item in get_bird_list()
+        }
+    return NAME_CODE_DICT
 
 # Overrides for CNN names that don't match eBird after uppercasing.
 # Key:   CNN output (uppercased)
@@ -109,19 +94,18 @@ def findSpecCode(comName):
     
     upper_name = comName.upper().strip()
 
-    # 1 — check override map first (handles typos + ambiguous CNN names)
+   # 1 — check override map first (handles typos + ambiguous CNN names)
     if upper_name in CNN_OVERRIDES:
         ebird_name = CNN_OVERRIDES[upper_name]
         if ebird_name is None:
             print(f"WARNING: '{comName}' is not a real species")
             return None
-        return NAME_CODE_DICT.get(ebird_name)
+        return get_name_code_dict().get(ebird_name)
 
     # 2 — exact match against eBird taxonomy (handles the ~90% of clean names)
-    result = NAME_CODE_DICT.get(upper_name)
+    result = get_name_code_dict().get(upper_name)
     if result:
         return result
-
     # 3 — nothing found
     print(f"WARNING: Could not find species code for '{comName}'")
     return None

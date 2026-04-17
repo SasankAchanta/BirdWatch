@@ -22,7 +22,7 @@ def get_taxonomy():
     params = { 
         "fmt": "json" 
     }
-    response = requests.get(url, headers=headers, params=params)
+    response = requests.get(url, headers=headers, params=params, verify=False)  # CHANGED: added verify=False
     return response.json()
 
 # returns number of hotspots in an area
@@ -38,7 +38,7 @@ def get_total_hotspots(lat, lng, dist, back):
         'back': back,   # only get hotspots updated since {back} days ago
         'fmt': 'json',
     }
-    totalResp = requests.get(url=recentOb, headers=headers, params=params)
+    totalResp = requests.get(url=recentOb, headers=headers, params=params, verify=False)  # CHANGED: added verify=False
     totalResp.raise_for_status()
     totalData = totalResp.json()
 
@@ -56,7 +56,7 @@ def get_species_hotspots(specCode, lat, lng, dist, back):
         'back': back,   # only hotspots active within last {back} days
         'hotspot': True
     }
-    speciesResp = requests.get(url=recentObSpec, headers=headers, params=params)
+    speciesResp = requests.get(url=recentObSpec, headers=headers, params=params, verify=False)  # CHANGED: added verify=False
     speciesResp.raise_for_status()
     specData = speciesResp.json()
 
@@ -72,7 +72,7 @@ def get_nearest_dist(specCode, lat, lng):
         'back': 30,
         'maxResults': 3
     }
-    speciesResp = requests.get(url=nearbyObSpec, headers=headers, params=params)
+    speciesResp = requests.get(url=nearbyObSpec, headers=headers, params=params, verify=False)  # CHANGED: added verify=False
     speciesResp.raise_for_status()
     specData = speciesResp.json()
 
@@ -84,7 +84,3 @@ def get_nearest_dist(specCode, lat, lng):
     
     else:   # no observations of species exist
         return 10000    # return large distance
-
-
-
-    
