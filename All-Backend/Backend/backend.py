@@ -277,6 +277,7 @@ def get_map(
         supabase = create_supabase_session(credentials)
 
         # get the image's signed url from the bucket based off the bird_name
+        #HARDCODED TO JPG BUT SOMTIMES MAP IS SVG OR PNG
         signed_url_response = supabase.storage.from_('wiki_bird_maps').create_signed_url(f'{bird_name.upper()}.jpg', 3600)
 
         signed_url = signed_url_response.get("signedUrl") or signed_url_response.get("signedURL")

@@ -1,17 +1,15 @@
-import barnOwl from './birdpics/barn owl.png';
 import { View, Image, Text, Pressable} from 'react-native';
 import Style from './Style.js';
 
-import { useRouter, usePathname } from 'expo-router';
+import { useRouter } from 'expo-router';
 
+//need all this info to make a read more page
 function Read({ BirdPic, PopuationPic, Info, Map, Birdname, ScientificName, Facts}) {
-  const knownbird = Birdname !== "Unknown Bird";
   const router = useRouter();
-  const pathname = usePathname();
     return ( 
     <View>
     <View style={Style.PicWinfo}> 
-            <Image source={BirdPic} style={{ width: 180, height: 160, alignSelf: 'center', top: 60, padding: 5, borderRadius:20}}></Image>
+            <Image source={{uri: BirdPic}} style={{ width: 170, height: 160, alignSelf: 'center', top: 60, padding: 5, borderRadius:20}}></Image>
             <View style={{ width: 170, height: 170, alignSelf: 'center', top: 75, backgroundColor: '#F6E2BE', padding: 5, borderRadius: 20,justifyContent:'center'}}>
                 <Text style = {{fontFamily: 'LondrinaSolid-regular', fontSize: 15, textAlign:'left', color:'#9B8254', marginLeft: 20}}>
                     {Facts} 

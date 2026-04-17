@@ -1,19 +1,22 @@
 import React from 'react';
 import {ImageBackground, View, TextInput, Pressable, Text, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Keyboard  } from 'react-native';
 import Style from './Style.js';
-import { useRouter, usePathname } from 'expo-router';
-import API from './api.js';
+import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-import { Signup, Login, setAuthToken } from "./api"; // adjust path if needed
+import { Signup} from "./api.js";
 
 const TextInputExample = () => {
 
+  //calls sign up endpoint and save token
   const HandleSignup = async () => {
     try {
       const res = await Signup(email, password);
   
       console.log(res);
+
+      const token = res.token;
+      await AsyncStorage.setItem("token", token);
     
       // go to home page
       router.replace('/HomePage');
@@ -24,8 +27,7 @@ const TextInputExample = () => {
 
 
   const router = useRouter();
-  const pathname = usePathname();
-
+  
   const [email, onChangeEmail] = React.useState('');
   const [password, onChangePassword] = React.useState('');
 

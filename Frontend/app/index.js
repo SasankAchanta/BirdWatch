@@ -7,12 +7,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import API from './api.js';
 
 
-import { Login, setAuthToken } from "./api"; // adjust path if needed
+import { Login } from "./api.js";
 
 
-
+//endpoint connected
 const TextInputExample = () => {
   
+  //calls login endpoint and saves token
   const handleLogin = async () => {
   try {
     const res = await Login(email, password);
@@ -28,14 +29,14 @@ const TextInputExample = () => {
     console.log(err.response?.data || err.message);
   }
   };
+  
+  //test login - can login with anything
   function testlogin(){
     router.replace('/HomePage');
   }
 
 
   const router = useRouter();
-  const pathname = usePathname();
-  const insets = useSafeAreaInsets();
 
   const [email, onChangeEmail] = React.useState('');
   const [password, onChangePassword] = React.useState('');

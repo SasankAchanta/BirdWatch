@@ -15,7 +15,7 @@ import Style from './Style.js';
 function Scroll(){ 
   const router = useRouter();
 
-//Bird array
+//Bird array - needs to be changed to use DB, values not hardcoded
 const birds = [
     { BirdPic: americanGoldfinch, Birdname: "American Goldfinch",  Rarity: "Common",
        info: "The American goldfinch (Spinus tristis) is a small North American bird in the finch family. It is migratory, ranging from mid-Alberta to North Carolina during the breeding season, and from just south of the Canada–United States border to Mexico during the winter..."},

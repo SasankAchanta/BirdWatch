@@ -51,7 +51,7 @@ function Grid() {
 
           return {
             BirdPic: pic,
-            //place holder name
+            //place holder name change to get name of bird
             Birdname: "Bird",
           };
         });

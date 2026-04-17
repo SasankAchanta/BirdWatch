@@ -21,7 +21,7 @@ export default function CameraScreen() {
   const cameraRef = useRef(null);
   const prevPinchDist = useRef(null);
 
-  //gets location
+  //gets location function
   const getLocation = async () => {
   let { status } = await Location.requestForegroundPermissionsAsync();
 
@@ -29,9 +29,8 @@ export default function CameraScreen() {
     alert("Location permission not granted");
     return null;
   }
-
+  //get location and save cords
   let loc = await Location.getCurrentPositionAsync({});
-
   return {
     lat: loc.coords.latitude,
     lng: loc.coords.longitude,
@@ -77,20 +76,23 @@ export default function CameraScreen() {
 
   const handleIdentify = async () => {
   try {
+    //get location and token
     const location = await getLocation();
-    const token = await AsyncStorage.getItem("token"); // already a plain JWT
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) {
       alert("Not logged in");
       return;
     }
 
+    //upload photo with upload endpoint
     const result = await uploadPhoto(
       selectedPhoto,
       location?.lat || 0,
       location?.lng || 0,
       token
     );
+    //alert with bird name else fail
     alert(`Bird: ${result.bird}`);
   } catch (err) {
     console.log(err.response?.data || err.message);

@@ -1,27 +1,10 @@
   import axios from "axios";
 
   const API = axios.create({
-    baseURL: "http://YOUR IP:8000",
+    baseURL: "http://172.20.10.2:8000",
   });
 
-
-  export const predictImage = async (imageUri) => {
-    const formData = new FormData();
-
-    formData.append("file", {
-      uri: imageUri,
-      name: "photo.jpg",
-      type: "image/jpeg",
-    });
-
-    const res = await API.post("/PredictImage", formData, {
-      headers: {
-        //"Content-Type": "multipart/form-data",
-      },
-    });
-
-    return res.data;
-  };
+  //login endpoint
   export const Login = async (email, password) => {
   const res = await API.post("/signin", {
     email,
@@ -30,7 +13,7 @@
 
   return res.data;
 };
-
+//signup endpoint
 export const Signup = async (email, password) => {
   const res = await API.post("/signup", {
     email,
@@ -39,7 +22,7 @@ export const Signup = async (email, password) => {
 
   return res.data;
 };
-
+//upload enpoint
 export const uploadPhoto = async (imageUri, Latitude, Longitude, token) => {
   const formData = new FormData();
   formData.append("file", {
@@ -60,9 +43,45 @@ export const uploadPhoto = async (imageUri, Latitude, Longitude, token) => {
   );
   return res.data;
 };
-
+//get user photo endpoint
 export const getPhotos = async (token) => {
   const res = await API.get("/get_photos", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//get summary
+export const getSummary = async (birdName, token) => {
+  const res = await API.get("/get_summary", {
+    params: { bird_name: birdName },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//get bird image, from wiki
+export const getImage = async (birdName, token) => {
+  const res = await API.get("/get_image", {
+    params: { bird_name: birdName },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//get map
+export const getMap = async (birdName, token) => {
+  const res = await API.get("/get_map", {
+    params: { bird_name: birdName },
     headers: {
       Authorization: `Bearer ${token}`,
     },

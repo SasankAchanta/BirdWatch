@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Location from 'expo-location';
 
 
-
+//hard coded change to use database 
 const LEADERBOARD_DATA = [
   { id: '1', rank: 1, name: 'Bobby', score: '10,000' },
   { id: '2', rank: 2, name: 'birdwatcher_02', score: '10,000' },
