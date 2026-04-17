@@ -63,7 +63,7 @@ def signup(user_info: SignUpRequest):
             "email": user_info.email,
             "password": user_info.password
         })
-
+        session = auth_response.session
         user = auth_response.user
         if not user:
             raise HTTPException(status_code=400, detail="Signup failed")
@@ -80,7 +80,8 @@ def signup(user_info: SignUpRequest):
         }).execute()
 
         return {
-            "message": "User successfully added!"
+            "message": "User successfully added!",
+            "token": session.access_token
         }
     except HTTPException:
         raise
