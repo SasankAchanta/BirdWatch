@@ -1,3 +1,6 @@
+# Keras models
+*.keras
+
 # DS_Store
 *.DS_Store
 
@@ -208,3 +211,35 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Expo / React Native
+.expo/
+.expo-shared/
+.eas/
+
+# Node dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# IDE and Editor caches
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# OS files
+Thumbs.db
+.DS_Store
+ehthumbs.db
+
+# Android
+android/local.properties
+.gradle/
+
+# Build outputs
+out/
+
+# Turbo
+.turbo/
