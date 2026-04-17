@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
   },
   info: {
     fontFamily: 'LondrinaSolid-regular',
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
     padding: 20,
   },
