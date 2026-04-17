@@ -167,7 +167,7 @@ async def upload_photo(lat: float,
         # get the prediction of the bird and update user points 
         bird_prediction = await cnn.predict_image(contents)
         bird_name = bird_prediction['BirdType']
-        update_points(bird_name, lat, lng, current_user.id, credentials.credentials)
+        num_points = update_points(bird_name, lat, lng, current_user.id, credentials.credentials)
 
         # update the bird_checklist
         checklist_response = supabase.table('bird_checklist').select('birds').eq('id', current_user.id).execute()
@@ -180,7 +180,8 @@ async def upload_photo(lat: float,
         return {
             "message": "Upload successful",
             "bird": bird_name,
-            "photo_id": result.data[0]['id']
+            "photo_id": result.data[0]['id'],
+            "added_points": num_points
         }
     
     except HTTPException:
@@ -226,11 +227,12 @@ def get_summary(
     try:
         supabase = create_supabase_session(credentials)
         
+        print(f"Querying for: '{bird_name.upper()}'")
         result = supabase.table("birds") \
-        .select('summary') \
-        .eq('name', bird_name.upper()) \
-        .execute()
-
+            .select('summary') \
+            .eq('name', bird_name.upper()) \
+            .execute()
+        print(f"Result: {result.data}")
         return{
             "summary": result.data
         }
@@ -249,17 +251,14 @@ def get_image(
 ):
     try:
         supabase = create_supabase_session(credentials)
-
-        # get the image's signed url from the bucket based off the bird_name
-        signed_url_response = supabase.storage.from_('wiki_bird_images').create_signed_url(f'{bird_name.upper()}.jpg', 3600)
-
-        signed_url = signed_url_response.get("signedUrl") or signed_url_response.get("signedURL")
-
-        if not signed_url:
-            raise HTTPException(status_code=404, detail=f"Image not found for bird: {bird_name}")
+        
+        result = supabase.table("birds") \
+        .select('image_path') \
+        .eq('name', bird_name.upper()) \
+        .execute()
 
         return{
-            "img-url": signed_url
+            "img_url. ": result.data
         }
     except HTTPException:
         raise
@@ -294,3 +293,20 @@ def get_map(
     except Exception as e:
         raise HTTPException(status_code=500, detail= str(e))
     
+# return entire hashmap for that user
+@router.get("/get_caught_birds")
+def get_caught(
+    current_user=Depends(auth.get_current_user),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    try:
+        supabase = create_supabase_session(credentials)
+
+        result = supabase.table('bird_checklist').select('birds').eq('id', current_user.id).execute()
+        return{
+            "bird checklist": result.data
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail= str(e))
