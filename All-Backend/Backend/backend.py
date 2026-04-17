@@ -226,11 +226,12 @@ def get_summary(
     try:
         supabase = create_supabase_session(credentials)
         
+        print(f"Querying for: '{bird_name.upper()}'")
         result = supabase.table("birds") \
-        .select('summary') \
-        .eq('name', bird_name.upper()) \
-        .execute()
-
+            .select('summary') \
+            .eq('name', bird_name.upper()) \
+            .execute()
+        print(f"Result: {result.data}")
         return{
             "summary": result.data
         }
@@ -249,17 +250,14 @@ def get_image(
 ):
     try:
         supabase = create_supabase_session(credentials)
-
-        # get the image's signed url from the bucket based off the bird_name
-        signed_url_response = supabase.storage.from_('wiki_bird_images').create_signed_url(f'{bird_name.upper()}.jpg', 3600)
-
-        signed_url = signed_url_response.get("signedUrl") or signed_url_response.get("signedURL")
-
-        if not signed_url:
-            raise HTTPException(status_code=404, detail=f"Image not found for bird: {bird_name}")
+        
+        result = supabase.table("birds") \
+        .select('image_path') \
+        .eq('name', bird_name.upper()) \
+        .execute()
 
         return{
-            "img-url": signed_url
+            "img_url. ": result.data
         }
     except HTTPException:
         raise
