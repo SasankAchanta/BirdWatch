@@ -204,8 +204,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignSelf: 'center',
   },
-
-
   CardContainer: {
     width: ScreenW * 0.9,
     height: 560,

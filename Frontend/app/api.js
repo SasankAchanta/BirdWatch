@@ -91,5 +91,15 @@ export const getMap = async (birdName, token) => {
   return res.data;
 };
 
+//gets all birds and if they are caught
+export const getCaughtBirds = async (token) => {
+  const res = await API.get("/get_caught_birds", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
 
   export default API;

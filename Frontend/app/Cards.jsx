@@ -113,7 +113,7 @@ function BirdCard({ idx, BirdPic, Birdname, info, Rarity, position }) {
       }
     ]}>          
       <View style={Style.top}>
-        <Image source={BirdPic} style={Style.Birdpic} />
+        <Image source={{uri: BirdPic}} style={Style.Birdpic} />
         <View style={Style.TitleBox}>
           <Text style={Style.cardTitle}>
             {'\n'}{Birdname}{'\n\n'}Rarity: {Rarity}

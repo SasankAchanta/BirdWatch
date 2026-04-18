@@ -8,9 +8,12 @@ import { Signup} from "./api.js";
 
 const TextInputExample = () => {
 
+  // SAVE USERNAME
+
   //calls sign up endpoint and save token
   const HandleSignup = async () => {
     try {
+      //add username here once endpoint has it and edit the api.js to also include it in the sign up thing
       const res = await Signup(email, password);
       
       console.log(res);
