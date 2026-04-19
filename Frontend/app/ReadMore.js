@@ -8,14 +8,12 @@ import { getSummary, getImage } from "./api.js";
 
 /*THINGS LEFT ON THIS PAGE
   MAP
-  Population status
-  facts & scientific name(if needed)
-  summaries are kinda short
 */
 
 // fallback image
-const question =
-  "https://static.vecteezy.com/system/resources/previews/000/440/531/original/question-mark-vector-icon.jpg";
+const question = "https://static.vecteezy.com/system/resources/previews/000/440/531/original/question-mark-vector-icon.jpg";
+
+const HARDCODEDMAP = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Spinus_tristis_map.svg/500px-Spinus_tristis_map.svg.png';
 
 export default function ReadMore() {
 
@@ -65,20 +63,6 @@ export default function ReadMore() {
           just place the map getter here based on name and place that variable in the Map at the bottom
         */
 
-        /*POPULATION PIC GOES HERE
-          use the same method as the summary and image
-          make a endpoint in API.js liek the other ones wit hthe paramters needed
-          endpoint should be like the other ones that need bird name and token
-          just place the map getter here based on name and place that variable in the PopulationPic at the bottom
-        */
-
-        /*Scientific name and Facts if we have those go here - WE DONT HAVE THESE 
-          i dont think these exist but if added make connect the endpoints in api.js and use here
-          enpoint connection would be similar to the others cuz only the bird name and token is needed
-          scientific name is simple its just text, make a variable store the text is the variable then put in the scientific name at the bottom
-          facts is similar but has more text and would likley have to be formatted, jsut put here and put its var in the bottom
-        */
-
         setSummary(text);
 
         //get image, question = deafult, replaced by bird image
@@ -117,7 +101,7 @@ export default function ReadMore() {
         //population pic var goes here
         PopuationPic={null}
         //put MAP variable here
-        Map={null}
+        Map={HARDCODEDMAP}
       />
     </View>
   );

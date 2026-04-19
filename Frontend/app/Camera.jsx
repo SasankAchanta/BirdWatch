@@ -93,7 +93,7 @@ export default function CameraScreen() {
       token
     );
     //alert with bird name else fail
-    alert(`Bird: ${result.bird} \nPoints: ${result.added_points.points}`);
+    alert(`Bird: ${result.bird} \nPoints: ${result.added_points}`);
   } catch (err) {
     console.log(err.response?.data || err.message);
     alert("Upload failed");
