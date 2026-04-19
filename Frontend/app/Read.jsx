@@ -1,4 +1,4 @@
-import { View, Image, Text, Pressable} from 'react-native';
+import { View, Image, Text, Pressable, ScrollView} from 'react-native';
 import Style from './Style.js';
 
 import { useRouter } from 'expo-router';
@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 function Read({ BirdPic, PopuationPic, Info, Map, Birdname, ScientificName, Facts}) {
   const router = useRouter();
     return ( 
-    <View>
+    <ScrollView>
     <View style={Style.PicWinfo}> 
             <Image source={{uri: BirdPic}} style={{ width: 170, height: 160, alignSelf: 'center', top: 60, padding: 5, borderRadius:20}}></Image>
             <View style={{ width: 170, height: 170, alignSelf: 'center', top: 75, backgroundColor: '#F6E2BE', padding: 5, borderRadius: 20,justifyContent:'center'}}>
@@ -29,7 +29,7 @@ function Read({ BirdPic, PopuationPic, Info, Map, Birdname, ScientificName, Fact
         <Text style = {{fontFamily: 'LondrinaSolid-regular', fontSize: 13, textAlign:'center', color:'#ffffff', top: -320, padding:10,}}>
             {Info}
             </Text>
-    </View>
+    </ScrollView>
   );
 }
 
