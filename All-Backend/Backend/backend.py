@@ -115,7 +115,8 @@ def update_points(bird_name, lat, lng, user_id, credentials_token):
         response = supabase.table("User_Points").update({"points": points}).eq("user_id", user_id).execute()
     
         return {
-            "points": response.data[0]["points"]
+            "points": response.data[0]["points"],
+            "points_added": add_points
         }
     except HTTPException:
         raise
@@ -181,7 +182,7 @@ async def upload_photo(lat: float,
             "message": "Upload successful",
             "bird": bird_name,
             "photo_id": result.data[0]['id'],
-            "added_points": num_points
+            "added_points": num_points["points_added"]
         }
     
     except HTTPException:
