@@ -58,7 +58,7 @@ function Scroll() {
         return;
       }
 
-      const rare = "Common";
+      const rare = "?";
 
       //get images
       const imageResults = await Promise.allSettled(
