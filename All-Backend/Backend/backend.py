@@ -170,6 +170,18 @@ async def upload_photo(lat: float,
         bird_name = bird_prediction['BirdType']
         num_points = update_points(bird_name, lat, lng, current_user.id, credentials.credentials)
 
+        points_added = num_points["points_added"]
+        if(points_added <= 200):
+            rarity = "Common"
+        elif(200 < points_added <= 400 ):
+            rarity = "Uncommon"
+        elif(400 < points_added <= 600):
+            rarity = "Rare"
+        elif(600 < points_added <= 800):
+            rarity = "Mythic"
+        elif(points_added > 800):
+            rarity = "Legendary"
+
         # update the bird_checklist
         checklist_response = supabase.table('bird_checklist').select('birds').eq('id', current_user.id).execute()
         checklist = checklist_response.data[0]['birds']
@@ -177,12 +189,14 @@ async def upload_photo(lat: float,
             # set value to true
             checklist[bird_name] = True
             supabase.table('bird_checklist').update({'birds': checklist}).eq('id', current_user.id).execute()
-        # add else so that user gets less points if they already caught the bird
+       
+       # add else so that user gets less points if they already caught the bird
         return {
             "message": "Upload successful",
             "bird": bird_name,
             "photo_id": result.data[0]['id'],
-            "added_points": num_points["points_added"]
+            "added_points": points_added,
+            "rarity": rarity
         }
     
     except HTTPException:
