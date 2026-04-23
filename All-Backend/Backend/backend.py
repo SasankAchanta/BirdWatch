@@ -54,25 +54,27 @@ def create_supabase_session(credentials):
     supabase.postgrest.auth(credentials.credentials)
     return supabase
 
-# get the user's points to display
+# get the user's points and username to display
 @router.get("/get_points")
 def get_points(current_user=Depends(auth.get_current_user), 
                credentials: HTTPAuthorizationCredentials = Depends(security)): 
     try:
         user_id = current_user.id
 
-        # authorize the user; different from get_current_user auth because you are going into the actual database rather than JWT (2 different systems)
-        supabase.postgrest.auth(credentials.credentials)
-
+        supabase = create_supabase_session(credentials)
+        
         response = supabase.table("User_Points").select("points").eq("user_id", user_id).execute()
         
+        # get the username of te user and return it
+        username = current_user.user_metadata.get("display_name")
         # raise error if user has no points row
         if not response.data:
             raise HTTPException(status_code=404, detail="User not found in User_Points table")
         
         return {
             # return ONLY ONE row in the points column
-            "points": response.data[0]["points"] 
+            "points": response.data[0]["points"],
+            "username": username
         }
     except HTTPException:
         raise
