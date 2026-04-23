@@ -8,13 +8,12 @@ import { Signup} from "./api.js";
 
 const TextInputExample = () => {
 
-  // SAVE USERNAME
 
   //calls sign up endpoint and save token
   const HandleSignup = async () => {
     try {
-      //add username here once endpoint has it and edit the api.js to also include it in the sign up thing
-      const res = await Signup(email, password);
+      
+      const res = await Signup(email, password, username);
       
       console.log(res);
 
@@ -45,7 +44,7 @@ const TextInputExample = () => {
     <ImageBackground source={{ uri: 'https://i.pinimg.com/736x/96/be/5d/96be5d6ff03c61316b42e6a07a46ab90.jpg' }} style={Style.flex1}>
 
       <View style={Style.Welcome}>
-        <Text style={Style.welcome}> ! </Text>
+        <Text style={Style.welcome}> Welcome! </Text>
         <View style={Style.Buttons}>
         <Pressable style={Style.signup} onPress={() => router.replace('/')}>
           <Text style={Style.buttonTxt1}> Login </Text>

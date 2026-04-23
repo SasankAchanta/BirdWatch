@@ -15,10 +15,11 @@
   return res.data;
 };
 //signup endpoint
-export const Signup = async (email, password) => {
+export const Signup = async (email, password, username) => {
   const res = await API.post("/signup", {
     email,
     password,
+    username,
   });
 
   return res.data;

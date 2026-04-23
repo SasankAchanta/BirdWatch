@@ -4,86 +4,58 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams } from "expo-router";
 import Read from "./Read.jsx";
 
-import { getSummary, getImage } from "./api.js";
+import { getSummary, getImage, getMap } from "./api.js";
 
-/*THINGS LEFT ON THIS PAGE
-  MAP
-*/
-
-// fallback image
-const question = "https://static.vecteezy.com/system/resources/previews/000/440/531/original/question-mark-vector-icon.jpg";
-
-const HARDCODEDMAP = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Spinus_tristis_map.svg/500px-Spinus_tristis_map.svg.png';
+const question =
+  "https://static.vecteezy.com/system/resources/previews/000/440/531/original/question-mark-vector-icon.jpg";
 
 export default function ReadMore() {
-
-  //get name from grid
   const { name } = useLocalSearchParams();
-
-  //clean name
   const Name = decodeURIComponent(String(name ?? "")).trim();
 
-  const [summary, setSummary] = useState(null);
+  const [summary, setSummary] = useState("Loading...");
   const [image, setImage] = useState(question);
+  const [map, setMap] = useState(question); // IMPORTANT: never null
 
   useEffect(() => {
     const load = async () => {
       try {
-
-        //get token
         const token = await AsyncStorage.getItem("token");
-        if (!token) {
-          console.log("no token");
-          return;
-        }
 
-        if (!Name) {
-          console.log("no name");
-          return;
-        }
+        if (!token || !Name) return;
 
-        //get summary, defult then actual summary
+        // ---------------- SUMMARY ----------------
         const summaryRes = await getSummary(Name, token);
-        let text = "No summary available";
 
-        if (summaryRes) {
-          if (summaryRes.summary) {
-            if (summaryRes.summary[0]) {
-              if (summaryRes.summary[0].summary) {
-                text = summaryRes.summary[0].summary;
-              }
-            }
-          }
-        }
-
-        /*MAP GOES HERE
-          use the same method as the summary and image
-          make a endpoint in API.js liek the other ones wit hthe paramters needed
-          endpoint should be like the other ones that need bird name and token
-          just place the map getter here based on name and place that variable in the Map at the bottom
-        */
+        const text =
+          summaryRes?.summary?.[0]?.summary ||
+          "No summary available";
 
         setSummary(text);
 
-        //get image, question = deafult, replaced by bird image
+        // ---------------- IMAGE ----------------
         const imageRes = await getImage(Name, token);
 
-        let url = question;
+        const imageUrl =
+          imageRes?.["img_url. "]?.[0]?.image_path ||
+          question;
 
-        if (imageRes) {
-          if (imageRes["img_url. "]) {
-            if (imageRes["img_url. "][0]) {
-              url = imageRes["img_url. "][0].image_path;
-            }
-          }
-        }
+        setImage(imageUrl);
 
-        setImage(url);
+        // ---------------- MAP ----------------
+        const mapRes = await getMap(Name, token);
+
+        const mapUrl =
+          mapRes?.["map_url. "]?.[0]?.map_path ||
+          question;
+
+        setMap(mapUrl);
 
       } catch (err) {
         console.log("Error loading bird data:", err);
         setSummary("Error loading summary");
         setImage(question);
+        setMap(question);
       }
     };
 
@@ -96,8 +68,7 @@ export default function ReadMore() {
         BirdPic={image}
         Info={summary}
         Birdname={Name}
-        //put MAP variable here
-        Map={HARDCODEDMAP}
+        Map={map}
       />
     </View>
   );

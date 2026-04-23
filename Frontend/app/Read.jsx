@@ -1,7 +1,10 @@
 import { ImageBackground, View, Image, Text, Pressable, ScrollView} from 'react-native';
 import Style from './Style.js';
 
+
+
 import { useRouter } from 'expo-router';
+import { WebView } from "react-native-webview";
 
 //need all this info to make a read more page
 function Read({ BirdPic, Info, Map, Birdname}) {
@@ -13,7 +16,9 @@ function Read({ BirdPic, Info, Map, Birdname}) {
     <View style={Style.PicWinfo}> 
             <Image source={{uri: BirdPic}} style={{ width: 170, height: 160, alignSelf: 'left', left: 15, top:60, borderRadius:20, borderWidth: 3, borderColor: '#F6E2BE'}}></Image>
             <View style={{ width: 250, height: 170, left:145, top: 75, backgroundColor: '#2F3820', borderRadius: 20, justifyContent:'center', borderWidth: 3, borderColor: '#F6E2BE'}}>
-               <Image source={{uri: Map}} style={{ width: 170, height: 160, alignSelf: 'center', padding: 5, borderRadius:20}}></Image>
+              <View style={{ width: '80%', height: '80%', overflow: 'hidden', alignSelf:'center', borderRadius:20}}>
+                <WebView source={{uri: Map}} style={{ flex: 1 }} scrollEnabled={false}></WebView>
+              </View>
             </View>      
         </View>
         <View style={Style.OtherInfo}> 
@@ -22,7 +27,6 @@ function Read({ BirdPic, Info, Map, Birdname}) {
               </Pressable>  
             <Text style = {{fontFamily: 'LondrinaSolid-regular', fontSize: 45, textAlign:'center', color:'#F6E2BE'}}>
                     {Birdname}</Text>
-            <Image source={Map} style={{ width: 180, height: 180, alignSelf: 'center', top: 40, padding: 5, borderRadius:20}}></Image>  
                       
         </View>
         <Text style = {{fontFamily: 'LondrinaSolid-regular', fontSize: 17, textAlign:'center', color:'#ffffff', top: -320, padding:10,}}>
