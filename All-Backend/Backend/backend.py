@@ -259,6 +259,7 @@ def get_image(
         return{
             "img_url. ": result.data
         }
+    
     except HTTPException:
         raise
     except Exception as e:
@@ -273,22 +274,18 @@ def get_map(
 ):
     try:
         supabase = create_supabase_session(credentials)
-
-        # get the image's signed url from the bucket based off the bird_name
-        #HARDCODED TO JPG BUT SOMTIMES MAP IS SVG OR PNG
-        signed_url_response = supabase.storage.from_('wiki_bird_maps').create_signed_url(f'{bird_name.upper()}.jpg', 3600)
-
-        signed_url = signed_url_response.get("signedUrl") or signed_url_response.get("signedURL")
-
-        if not signed_url:
-            raise HTTPException(status_code=404, detail=f"Image not found for bird: {bird_name}")
+        
+        result = supabase.table("birds") \
+        .select('map_path') \
+        .eq('name', bird_name.upper()) \
+        .execute()
 
         return{
-            "map-url": signed_url
+            "map_url. ": result.data
         }
-     
+    
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail= str(e))
+        raise HTTPException(status_code=500, detail=str(e))
     
