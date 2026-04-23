@@ -4,7 +4,7 @@ import Style from './Style.js';
 import { useRouter } from 'expo-router';
 
 //need all this info to make a read more page
-function Read({ BirdPic, PopuationPic, Info, Map, Birdname, ScientificName, Facts}) {
+function Read({ BirdPic, Info, Map, Birdname}) {
   const router = useRouter();
     return ( 
     <ImageBackground source={{ uri: 'https://i.pinimg.com/736x/96/be/5d/96be5d6ff03c61316b42e6a07a46ab90.jpg' }} style={Style.flex1}>

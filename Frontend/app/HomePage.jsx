@@ -82,7 +82,7 @@ export default function HomeScreen() {
           <View style={{ height: 30 }} />
 
           <View style={{ height: 400, borderRadius: 20, backgroundColor: "#FDFADF", width: "90%", padding: 10 }}>
-            <Text style={{ color: "#89572A", fontWeight: "bold", fontSize: 20, textAlign: "center", marginBottom: 10 }}>
+            <Text style={{ color: "#89572A", fontWeight: "bold", fontSize: 20, textAlign: "center", marginBottom: 10, fontFamily: "LondrinaSolid-regular"}}>
               Leaderboard
             </Text>
 
@@ -136,7 +136,7 @@ export default function HomeScreen() {
                   }}
                 />
 
-                <Text style={{ color: "white", flex: 1 }}>
+                <Text style={{ color: "white", flex: 1, fontFamily: "LondrinaSolid-regular" }}>
                   {userData?.name || "You"}
                 </Text>
 

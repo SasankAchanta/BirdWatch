@@ -13,7 +13,7 @@ import Style from './Style.js';
 const question =
   "https://static.vecteezy.com/system/resources/previews/000/440/531/original/question-mark-vector-icon.jpg";
 
-// Your original array — BirdPic and info will get overwritten by backend data
+// default card, not clickable, shows while others load
 const TestBirds = [
   { BirdPic: question, Birdname: "Unknown Bird", Rarity: "?", info: "Unknown Bird" },
 ];

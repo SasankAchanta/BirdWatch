@@ -96,10 +96,6 @@ export default function ReadMore() {
         BirdPic={image}
         Info={summary}
         Birdname={Name}
-        Facts="Place Holder Fact"
-        ScientificName=" Scientific name"
-        //population pic var goes here
-        PopuationPic={null}
         //put MAP variable here
         Map={HARDCODEDMAP}
       />
