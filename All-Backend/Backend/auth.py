@@ -30,6 +30,7 @@ router = APIRouter()
 class SignUpRequest(BaseModel):
     email: str
     password: str
+    username: str
 
 class SignInRequest(BaseModel):
     email: str
@@ -61,7 +62,12 @@ def signup(user_info: SignUpRequest):
     try:
         auth_response = supabase.auth.sign_up({
             "email": user_info.email,
-            "password": user_info.password
+            "password": user_info.password,
+            "options": {
+                "data": {
+                    "display_name": user_info.username
+                }
+            }
         })
         session = auth_response.session
         user = auth_response.user
