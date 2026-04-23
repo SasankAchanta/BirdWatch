@@ -1,9 +1,67 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
 
 export default function ProfileScreen() {
   const [showAllPics, setShowAllPics] =  useState(false);
-  function handleShowAllBirds() {setShowAllPics(!showAllPics);}
+
+  const [profile, setProfile] = useState(null);
+  const [points, setPoints] = useState(0);
+  const [collectedBirds, setCollectedBirds] = useState(0);
+  const [pictures, setPictures] = useState([]);
+
+  function handleShowAllBirds() {setShowAllPics(!showAllPics);} 
+  async function getUser(){  {/*This function is where the user API call will go */}
+      try{
+        const response = await fetch();
+        const data = await response.json();
+        setProfile(data);
+      }catch(err){
+        console.log("Error geting user profile", err);
+      }
+  }
+  async function getPoints(){  {/*This function is where the points API call will go */}
+      try{
+        const response = await fetch();
+        const data = await response.json();
+        setPoints(data.points);
+      }catch(err){
+        console.log("Error geting points", err);
+      }
+  }
+  async function getCollectedBirds(){ {/*This function is where the users birds API call will go */}
+    try{
+        const response = await fetch();
+        const data = await response.json();
+        setCollectedBirds(data.count);
+      }catch(err){
+        console.log("Error geting collected birds", err);
+      }
+  }
+  async function getPictures(){  {/*This function is where the pictures API  of all teh birds user has call will go */}
+    try{
+        const response = await fetch();
+        const data = await response.json();
+        setPictures(data);
+      }catch(err){
+        console.log("Error geting pictures", err);
+      }
+  }
+
+  useEffect(() => {
+  const loadData = async () => {
+    try { // Fires all calls at once and waits for all to finish
+      await Promise.all([
+        getUser(),
+        getPoints(),
+        getCollectedBirds(),
+        getPictures()
+      ]);
+    } catch (error) {
+      console.log("One or more calls failed", error);
+    }
+  };
+  loadData();
+}, []);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#2F3820' }}>
 
@@ -18,71 +76,59 @@ export default function ProfileScreen() {
         <View style={{ width: 100, height: 100, borderRadius: 50, backgroundColor: "#E8D5A3" }} />
         <View style={{ marginLeft: 15 }}>
           <Text style={{ color: "#E8D5A3", fontSize: 28, fontWeight: "bold", fontFamily: 'LondrinaSolid' }}>
-            Birdwatcher
+            {profile ? profile.name : "Birdwatcher"}
           </Text>
           <Text style={{ color: "#E8D5A3", fontSize: 20, fontFamily: 'LondrinaSolid' }}>
-            @birdwatcher_01
+            {profile ? `@${profile.username}` : "@birdwatcher_01"}
           </Text>
         </View>
       </View>
 
-      <View style = {{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginTop: 0, justifyContent: 'flex-end' }}> 
+      <View style = {{alignItems: 'center', marginTop: 30}}> 
          <Text style={{ color: "#E8D5A3", fontSize: 28, fontWeight: "bold", fontFamily: 'LondrinaSolid' }}>
            Achievements
+           <ScrollView horizontal={true}>
+
+           </ScrollView>
          </Text>
       </View>
 
       
-      <View style={{ alignItems: 'center', marginTop: 30}}>
+      <View style={{ alignItems: 'center', marginTop: 40}}>
         <Text style={{ color: "#E8D5A3", fontSize: 28, fontWeight: "bold", fontFamily: 'LondrinaSolid' }}>
-            Points: 1000
+            Points: {points}
         </Text>
       </View>
 
-      <View style={{ alignItems: 'center', marginTop: 30}}>
+      <View style={{ alignItems: 'center', marginTop: 40}}>
         <Text style={{ color: "#E8D5A3", fontSize: 28, fontWeight: "bold", fontFamily: 'LondrinaSolid' }}>
-            Birds Collected: 5/500
+            Birds Collected: {collectedBirds}/500
         </Text>
       </View>
 
-      <View style={{ alignItems: 'center', marginTop: 30}}>
-        <Text style={{ color: "#E8D5A3", fontSize: 28, fontWeight: "bold", fontFamily: 'LondrinaSolid' }}>Pictures:</Text>
-            <ScrollView 
-            horizontal = {true} 
-            contentContainerStyle={{ alignItems: 'center', marginTop: 10, paddingHorizontal: 20, gap: 15}}>
-            <Image
-              source = {{}}
-              style = {{width: 50, height: 50, marginRight: 10, borderRadius: 10, paddingHorizontal: 20, gap: 15, backgroundColor: '#E8D5A3'}}
-            />
-            <Image
-              source = {{}}
-              style = {{width: 50, height: 50, marginRight: 10, borderRadius: 10, paddingHorizontal: 20, gap: 15, backgroundColor: '#E8D5A3'}}
-            />
-            <Image
-              source = {{}}
-              style = {{width: 50, height: 50, marginRight: 10, borderRadius: 10, paddingHorizontal: 20, gap: 15, backgroundColor: '#E8D5A3'}}
-            />
+      <View style={{ alignItems: 'center', marginTop: 40}}>
+        <Text style={{ color: "#E8D5A3", fontSize: 28, fontWeight: "bold", fontFamily: 'LondrinaSolid' }}> Pictures:</Text>
+      <ScrollView 
+      horizontal={true} 
+      contentContainerStyle={{ alignItems: 'center', marginTop: 10, paddingHorizontal: 20, gap: 15}}
+      >
+     {pictures.slice(0, showAllPics ? pictures.length : 3).map((pic, index) => (
+     <Image
+       key={index}
+       source={{ uri: pic.url }} 
+       style={{ width: 50, height: 50, borderRadius: 10, backgroundColor: '#E8D5A3' }}
+     />
+     ))}
 
-            {showAllPics && (
-            <>
-            <Image
-              source = {{}}
-              style = {{width: 50, height: 50, marginRight: 10, borderRadius: 10, paddingHorizontal: 20, gap: 15, backgroundColor: '#E8D5A3'}}
-            />
-            <Image
-              source = {{}}
-              style = {{width: 50, height: 50, marginRight: 10, borderRadius: 10, paddingHorizontal: 20, gap: 15, backgroundColor: '#E8D5A3'}}
-            />
-            <Image
-              source = {{}}
-              style = {{width: 50, height: 50, marginRight: 10, borderRadius: 10, paddingHorizontal: 20, gap: 15, backgroundColor: '#E8D5A3'}}
-            />
-            </>
-            )}
-            <Text>
-            <TouchableOpacity onPress = {handleShowAllBirds} style={{ backgroundColor: '#E8D5A3', padding: 10, borderRadius: 10, fontFamily: 'LondrinaSolid' }}>{showAllPics ? "Show Less" : "Show More"}</TouchableOpacity> {/* If "all pics showing" is true? If yes, 'Show Less'. If no, 'Show More' */}
-            </Text>
-            </ScrollView>
+      <TouchableOpacity 
+      onPress={handleShowAllBirds} 
+      style={{ backgroundColor: '#E8D5A3', borderRadius: 10, padding: 10 }}
+     >
+      <Text>
+      {showAllPics ? "Show Less" : "Show More"}
+       </Text>
+      </TouchableOpacity>
+      </ScrollView>
       </View>
 
     </SafeAreaView>

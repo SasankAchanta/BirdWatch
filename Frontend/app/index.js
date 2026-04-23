@@ -1,11 +1,8 @@
 import React from 'react';
 import {ImageBackground, View, TextInput, Pressable, Text, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import Style from './Style.js';
-import { useRouter, usePathname } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import API from './api.js';
-
 
 import { Login } from "./api.js";
 

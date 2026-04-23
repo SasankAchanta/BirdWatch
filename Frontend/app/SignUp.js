@@ -8,11 +8,14 @@ import { Signup} from "./api.js";
 
 const TextInputExample = () => {
 
+  // SAVE USERNAME
+
   //calls sign up endpoint and save token
   const HandleSignup = async () => {
     try {
+      //add username here once endpoint has it and edit the api.js to also include it in the sign up thing
       const res = await Signup(email, password);
-  
+      
       console.log(res);
 
       const token = res.token;
@@ -20,6 +23,7 @@ const TextInputExample = () => {
     
       // go to home page
       router.replace('/HomePage');
+      console.log("move pages");
     } catch (err) {
       console.log(err.response?.data || err.message);
     }
@@ -30,8 +34,9 @@ const TextInputExample = () => {
   
   const [email, onChangeEmail] = React.useState('');
   const [password, onChangePassword] = React.useState('');
+  const [username, onChangeUsername] = React.useState('');
 
-  const InputsFilled = email.length > 0 && password.length > 0;
+  const InputsFilled = email.length > 0 && password.length > 0 && username.length > 0;
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -40,7 +45,7 @@ const TextInputExample = () => {
     <ImageBackground source={{ uri: 'https://i.pinimg.com/736x/96/be/5d/96be5d6ff03c61316b42e6a07a46ab90.jpg' }} style={Style.flex1}>
 
       <View style={Style.Welcome}>
-        <Text style={Style.welcome}> Welcome! </Text>
+        <Text style={Style.welcome}> ! </Text>
         <View style={Style.Buttons}>
         <Pressable style={Style.signup} onPress={() => router.replace('/')}>
           <Text style={Style.buttonTxt1}> Login </Text>
@@ -51,6 +56,12 @@ const TextInputExample = () => {
         </View>
       </View>
       <View style={Style.txtboxes}>
+        <Text style={Style.nametxt}>Username:</Text>
+        <TextInput
+          style={Style.input}
+          onChangeText={onChangeUsername}
+          value={username}
+        />
         <Text style={Style.nametxt}>Email:</Text>
         <TextInput
           style={Style.input}

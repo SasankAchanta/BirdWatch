@@ -3,12 +3,15 @@ import { View, Pressable, ScrollView, Text } from "react-native";
 import { useRouter } from "expo-router";
 import Style from "./Style.js";
 import GridCard from "./GridCard.jsx";
-import { getPhotos } from "./api";
+import { getImage } from "./api";
+import { getCaughtBirdNames } from "./GetBirds.js";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import question from "./birdpics/questionmark.png";
+
 
 // backup bird, while it loads
+const question = 'https://static.vecteezy.com/system/resources/previews/000/440/531/original/question-mark-vector-icon.jpg'
 const fallbackBirds = [
   { BirdPic: question, Birdname: "Unknown Bird" },
 ];
@@ -24,36 +27,41 @@ function Grid() {
     const load = async () => {
       try {
         const token = await AsyncStorage.getItem("token");
-        const data = await getPhotos(token);
+        //get caught bird names
+        const names = await getCaughtBirdNames(token);
+        console.log("names:", names);
 
-        const photos = data.photos;
-        
-        //make sure an array is returned
-        if (Array.isArray(photos) == false) {
-            return;
+        //if no birds, prevent crash
+        if (!Array.isArray(names) || names.length === 0) {
+            setBirds([
+            {
+              BirdPic: question,
+              Birdname: "Unknown Bird",
+            },
+          ]);
+          return;
         }
-        if (photos.length === 0) {
-            return;
-        }
-        
-        // total birds to collect
-        const total = 524; 
-        
-        // format the photos, image wiht name
-        const formatted = photos.map((item, index) => {
-          let pic;
-          
-          if (item.url) {
-             pic = { uri: item.url };
-          } else {
-             pic = question;
-          }
 
-          return {
-            BirdPic: pic,
-            //place holder name change to get name of bird
-            Birdname: "Bird",
+        // gets image per bird
+      const imageResults = await Promise.allSettled(
+        names.map((name) => getImage(name, token))
+      );
+      
+      const total = 524;
+      //make bird objects from names
+      const formatted = names.map((name, i) => {
+        const res = imageResults[i];
+
+        const url =
+          res?.status === "fulfilled"
+            ? res.value?.["img_url. "]?.[0]?.image_path
+            : null;
+        
+          return{
+            BirdPic: url || question,
+            Birdname: name,
           };
+
         });
 
         const collected = formatted.length;

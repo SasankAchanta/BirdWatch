@@ -5,7 +5,6 @@ import { useRouter, usePathname } from 'expo-router';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-// 1. Move NavButton OUTSIDE and pass variables through props
 const NavButton = ({ index, isSelected, onPress, iconSource }) => (
   
   <TouchableOpacity
@@ -78,7 +77,6 @@ export default function NavBar() {
         shadowRadius: 10,        
       }} />
       <View style={{ flexDirection: 'row', width: '100%', height: '100%', zIndex: 2 }}>
-        {/* 2. Pass the data into the component here */}
         <NavButton 
           index={0} 
           isSelected={page === 0} 
