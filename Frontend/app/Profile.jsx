@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, SafeAreaView, Image, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { getPhotos } from './api';
+import { getPhotos, getPoints } from './api';
 import { getCaughtBirdNames } from "./GetBirds";
 
 export default function ProfileScreen() {
@@ -20,27 +20,29 @@ export default function ProfileScreen() {
       const token = await AsyncStorage.getItem("token");
       if (!token) return;
 
-      const [photosData, caughtBirds] = await Promise.all([
+      const [photosData, caughtBirds, pointsData] = await Promise.all([
         getPhotos(token),
-        getCaughtBirdNames(token)
+        getCaughtBirdNames(token),
+        getPoints(token)
       ]);
 
-      // photos can be array or wrapped
+      // photos
       const photoArray = Array.isArray(photosData)
         ? photosData
         : photosData?.photos || [];
 
       setPictures(photoArray);
 
-      setCollectedBirds(caughtBirds.length);
+      // birds
+      setCollectedBirds(caughtBirds.length || 0);
 
-      // temp profile
+      // points + username from backend
+      setPoints(pointsData.points || 0);
+
       setProfile({
-        name: "Birdwatcher",
-        username: "birdwatcher_01"
+        name: pointsData.username || "?",
+        username: pointsData.username || "?"
       });
-
-      setPoints(photoArray.length * 10);
 
     } catch (err) {
       console.log("Error loading profile data:", err);
@@ -52,7 +54,8 @@ export default function ProfileScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#2F3820' }}>
+    <ImageBackground source={{ uri: "https://i.pinimg.com/736x/9e/66/a9/9e66a9f584e2882b19309a43ae8716de.jpg" }} style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#000000b7' }}>
 
       {/* Header */}
       <View style={{
@@ -75,7 +78,7 @@ export default function ProfileScreen() {
             fontWeight: "bold",
             fontFamily: 'LondrinaSolid'
           }}>
-            {profile?.name || "Birdwatcher"}
+            {profile?.name || "?"}
           </Text>
 
           <Text style={{
@@ -83,7 +86,7 @@ export default function ProfileScreen() {
             fontSize: 20,
             fontFamily: 'LondrinaSolid'
           }}>
-            @{profile?.username || "birdwatcher_01"}
+            @{profile?.username || "?"}
           </Text>
         </View>
       </View>
@@ -139,29 +142,35 @@ export default function ProfileScreen() {
                 key={index}
                 source={{ uri: pic.url }}
                 style={{
-                  width: 50,
-                  height: 50,
+                  width: 75,
+                  height: 75,
                   borderRadius: 10,
                   backgroundColor: '#E8D5A3'
                 }}
               />
             ))}
-
-          <TouchableOpacity
+        </ScrollView>
+      </View>
+       <TouchableOpacity
             onPress={togglePictures}
             style={{
+              width: 80,
+              height: 40,
+              alignSelf: 'center',
+
+              top: 50,
               backgroundColor: '#E8D5A3',
               borderRadius: 10,
               padding: 10
             }}
           >
-            <Text>
+            <Text style={{fontFamily: 'LondrinaSolid-regular', fontSize: 15}}>
               {showAllPics ? "Show Less" : "Show More"}
             </Text>
           </TouchableOpacity>
-        </ScrollView>
-      </View>
 
-    </SafeAreaView>
+    </View>
+    </ImageBackground>
+
   );
 }

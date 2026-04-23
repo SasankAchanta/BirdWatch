@@ -103,4 +103,14 @@ export const getCaughtBirds = async (token) => {
   return res.data;
 };
 
+export const getPoints = async (token) => {
+  const res = await API.get("/get_points", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
   export default API;

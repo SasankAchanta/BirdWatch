@@ -220,10 +220,9 @@ function Scroll() {
 
   return (
     <ImageBackground
-      source={{ uri: "https://i.pinimg.com/1200x/4f/e9/3a/4fe93a8428778e21e9d8211e4088b08f.jpg" }}
+      source={{ uri: 'https://i.pinimg.com/1200x/4f/e9/3a/4fe93a8428778e21e9d8211e4088b08f.jpg' }}
       style={{ flex: 1 }}
     >
-      <View style={{ flex: 1, backgroundColor: "#262d1ebe" }}>
         <View style={Style.cardscreen}>
           <View style={Style.CardContainer} {...panResponder.panHandlers}>
 
@@ -260,7 +259,6 @@ function Scroll() {
 
           </View>
         </View>
-      </View>
     </ImageBackground>
   );
 }

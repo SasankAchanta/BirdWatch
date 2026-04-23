@@ -16,7 +16,7 @@ function Read({ BirdPic, Info, Map, Birdname}) {
     <View style={Style.PicWinfo}> 
             <Image source={{uri: BirdPic}} style={{ width: 170, height: 160, alignSelf: 'left', left: 15, top:60, borderRadius:20, borderWidth: 3, borderColor: '#F6E2BE'}}></Image>
             <View style={{ width: 250, height: 170, left:145, top: 75, backgroundColor: '#2F3820', borderRadius: 20, justifyContent:'center', borderWidth: 3, borderColor: '#F6E2BE'}}>
-              <View style={{ width: '80%', height: '80%', overflow: 'hidden', alignSelf:'center', borderRadius:20}}>
+              <View style={{ width: '80%', height: '80%', overflow: 'hidden', alignSelf:'center', borderRadius:20, resizeMode:'cover'}}>
                 <WebView source={{uri: Map}} style={{ flex: 1 }} scrollEnabled={false}></WebView>
               </View>
             </View>      

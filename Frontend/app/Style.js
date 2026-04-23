@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
   GridCard: {
     display: 'flex',
-    width: (ScreenW/2) - 30, 
+    width: (ScreenW/2) - 40, 
     height: 200, 
     backgroundColor: '#E9D1A6', 
     borderRadius: 20,
@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
   },
 
   cardscreen:{
+    backgroundColor: '#000000a1',
     width: ScreenW,
     height: ScreenH,
     flex: 1,

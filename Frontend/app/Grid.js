@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Pressable, ScrollView, Text } from "react-native";
+import { View, Pressable, ScrollView, Text, ImageBackground } from "react-native";
 import { useRouter } from "expo-router";
 import Style from "./Style.js";
 import GridCard from "./GridCard.jsx";
@@ -111,6 +111,7 @@ function Grid() {
   }
   
   return (
+    <ImageBackground source={{ uri: 'https://i.pinimg.com/1200x/53/88/7b/53887bdfd9a21adfc230916f9fd87506.jpg' }} style = {{flex: 1}}>
     <View style={Style.cardscreen}>
       <ScrollView contentContainerStyle={[Style.Grid, {paddingBottom: 120}]}>
         {visibleBirds.map((bird, index) => (
@@ -140,6 +141,7 @@ function Grid() {
 
       </Pressable>
     </View>
+    </ImageBackground>
   );
 }
 

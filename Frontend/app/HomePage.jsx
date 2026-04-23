@@ -3,13 +3,14 @@ import { Text, View, FlatList, ImageBackground, ActivityIndicator } from "react-
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { getCaughtBirds } from "./api"; // <-- your axios API file
+import { getPoints } from "./api.js";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
 
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [userData, setUserData] = useState(null);
+  const [points, setPoints] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -22,19 +23,15 @@ export default function HomeScreen() {
           return;
         }
 
-        // CALL YOUR AXIOS API INSTEAD OF FETCH
-        const data = await getCaughtBirds(token);
+        const data = await getPoints(token);
 
-        /*
-          EXPECTED: backend should return something like:
-          {
-            leaderboard: [...],
-            user: {...}
-          }
-        */
+        setPoints(data.points || 0);
+
+        setUserData({
+          name: data.username || "FAKE BIRDWATCHER",
+        });
 
         setLeaderboardData(data.leaderboard || []);
-        setUserData(data.user || null);
 
       } catch (error) {
         console.log("Failed to load home data:", error);
@@ -111,18 +108,17 @@ export default function HomeScreen() {
                     </Text>
 
                     <Text style={{ color: "white", fontWeight: "bold" }}>
-                      {item.score?.toLocaleString() || 0} pts
+                      {item.score || 0} pts
                     </Text>
                   </View>
                 )}
               />
 
-              {/* USER ROW */}
               <View style={{ borderTopWidth: 1, borderColor: "#E8D5A3" }} />
 
               <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
                 <Text style={{ color: "white", fontWeight: "bold", width: 35 }}>
-                  {userData?.rank || "?"}
+                  ?
                 </Text>
 
                 <View
@@ -141,11 +137,12 @@ export default function HomeScreen() {
                 </Text>
 
                 <Text style={{ color: "white", fontWeight: "bold" }}>
-                  {userData?.score?.toLocaleString() || 0} pts
+                  {points.toLocaleString()} pts
                 </Text>
               </View>
             </View>
           </View>
+
         </View>
       </View>
     </ImageBackground>
