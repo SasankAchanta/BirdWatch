@@ -1,12 +1,12 @@
-  import axios from "axios";
+import axios from "axios";
 
-  const API = axios.create({
-    //change to your own url to use
-    baseURL: "http://172.20.10.2:8000",
-  });
+const API = axios.create({
+  //change to your own url to use
+  baseURL: "http://172.20.10.2:8000",
+});
 
-  //login endpoint
-  export const Login = async (email, password) => {
+//login endpoint
+export const Login = async (email, password) => {
   const res = await API.post("/signin", {
     email,
     password,
@@ -113,4 +113,4 @@ export const getPoints = async (token) => {
   return res.data;
 };
 
-  export default API;
+export default API;

@@ -86,6 +86,8 @@ CNN_OVERRIDES = {
     "TIT MOUSE":                "TUFTED TITMOUSE",
     # Not a real species
     "LOONEY BIRDS":             None,
+    "AFRICAN CROWNED CRANE":      "Gray Crowned-Crane",
+    "Fairy Penguin":      "African Penguin"
 }
 
 def findSpecCode(comName):

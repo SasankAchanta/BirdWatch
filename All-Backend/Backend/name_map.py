@@ -53,4 +53,6 @@ OVERRIDES = {
     "Venezuelian Troupial":       "Venezuelan Troupial",
     "Eastern Towee":              "Eastern Towhee",            # typo
     "Eastern Wip Poor Will":      "Eastern Whip-poor-will",
+    "AFRICAN CROWNED CRANE":      "Gray Crowned-Crane",
+    "Fairy Penguin":      "African Penguin"
 }
