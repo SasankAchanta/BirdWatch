@@ -234,6 +234,50 @@ def get_photos(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+# one endpoint for main bird-dex info
+@router.get('/get_card_info')
+def get_info(
+    bird_name: str,
+    current_user=Depends(auth.get_current_user),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    try:
+        supabase = create_supabase_session(credentials)
+        
+        # gets summary
+        print(f"Querying for: '{bird_name.upper()}'")
+        result = supabase.table("birds") \
+            .select('summary') \
+            .eq('name', bird_name.upper()) \
+            .execute()
+        print(f"Result: {result.data}")
+        summary = result.data
+
+        # get image
+        result = supabase.table("birds") \
+        .select('image_path') \
+        .eq('name', bird_name.upper()) \
+        .execute()
+        img_url = result.data
+
+        # get map
+        result = supabase.table("birds") \
+        .select('map_path') \
+        .eq('name', bird_name.upper()) \
+        .execute()
+        map_url = result.data
+
+        return{
+            'summary': summary,
+            'img_url. ': img_url,
+            "map_url. ": map_url
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # get summary for pokedex from Supabase
 @router.get("/get_summary")
