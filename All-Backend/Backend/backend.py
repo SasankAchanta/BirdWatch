@@ -324,3 +324,26 @@ def get_caught(
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail= str(e))
+
+@router.get("/get_leaderboard")
+def get_leaderboard(
+    current_user=Depends(auth.get_current_user),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    try:
+        supabase = create_supabase_session(credentials)
+
+        # order points in descending order
+        result = supabase.table('User_Points').select('username, points').order("points", desc=True).execute()
+        
+        if not result.data:
+            return{
+                "leaderboard": []
+            }
+        return{
+            "leaderboard": result.data
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail= str(e))

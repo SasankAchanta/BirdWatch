@@ -2,7 +2,7 @@
 
   const API = axios.create({
     //change to your own url to use
-    baseURL: "http://172.20.10.2:8000",
+    baseURL: "https://nontropical-francina-morbifically.ngrok-free.dev",
   });
 
   //login endpoint
