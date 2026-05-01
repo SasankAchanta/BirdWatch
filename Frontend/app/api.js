@@ -113,4 +113,16 @@ export const getPoints = async (token) => {
   return res.data;
 };
 
+// get wikipedia link
+export const getWiki = async (birdName, token) => {
+  const res = await API.get("/get_wiki", {
+    params: { bird_name: birdName },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
   export default API;

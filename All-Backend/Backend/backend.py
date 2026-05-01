@@ -15,6 +15,7 @@ import logging
 import Stats.stats as stats
 import Backend.auth as auth
 import Models.cnn_backend as cnn
+import Backend.wikiUtils as wikiUtils
 
 # load the environment variables from .env into url and sb_key
 load_dotenv()
@@ -256,6 +257,20 @@ def get_summary(
 
     except HTTPException:
         raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# get image for pokedex from Supabase
+@router.get("/get_wiki")
+def get_wiki(
+    bird_name: str,
+    current_user=Depends(auth.get_current_user),
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    try:
+        wiki_title = wikiUtils.transform_bird_name(bird_name)
+        url = f"https://en.wikipedia.org/wiki/{wiki_title}"
+        return {"url": url}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -7,34 +7,34 @@ import { useRouter, usePathname } from 'expo-router';
 
 //give the y value to move based on index
 const getY = (pos) => {
-  if(pos === 0){
-     return 0;
+  if (pos === 0) {
+    return 0;
   }
-  else if(pos === -1)  {
-     return -80;
+  else if (pos === -1) {
+    return -80;
   }
-  else if(pos === 1) {
-     return 80;
+  else if (pos === 1) {
+    return 80;
   }
-  else if(pos === -2)  {
-     return -130;
+  else if (pos === -2) {
+    return -130;
   }
-  else if(pos === 2) {
-     return 130;
+  else if (pos === 2) {
+    return 130;
   }
   //if more than 2 indexs away dont do anything
-  return 0.1; 
+  return 0.1;
 };
 
 //give value to scale by based on index
 const getScale = (pos) => {
-  if(pos === 0){      
+  if (pos === 0) {
     return 0.9;
   }
-  if(Math.abs(pos) === 1){
+  if (Math.abs(pos) === 1) {
     return 0.8;
   }
-  if(Math.abs(pos) === 2){
+  if (Math.abs(pos) === 2) {
     return 0.7;
   }
   //if more than 2 indexs away  do nothing
@@ -43,30 +43,30 @@ const getScale = (pos) => {
 
 //gives color based on index
 const getColor = (pos) => {
-  if(pos === 0){
+  if (pos === 0) {
     return "#E9D1A6";
   }
   //same color for -1 and 1
-  else if(Math.abs(pos) === 1) {
+  else if (Math.abs(pos) === 1) {
     return "#C5AD82";
   }
-  else{
+  else {
     return "#AF976C";
   }
 };
 
 //gives zIndex based on index for card stacking
 const getZIndex = (pos) => {
-  if(pos === 0){
-      return 3;
+  if (pos === 0) {
+    return 3;
   }
-  else if(pos === -1){
-     return 2;
+  else if (pos === -1) {
+    return 2;
   }
-  else if(pos === 1){
-     return 1;
+  else if (pos === 1) {
+    return 1;
   }
-  else{
+  else {
     return 0;
   }
 };
@@ -94,10 +94,10 @@ function BirdCard({ idx, BirdPic, Birdname, info, Rarity, position }) {
   }, [position]);
 
   //used to disable read more button for unknown birds
-  let knownbird = Birdname 
-  if(knownbird === "Unknown Bird") {
+  let knownbird = Birdname
+  if (knownbird === "Loading...") {
     knownbird = false;
-  } 
+  }
   else {
     knownbird = true;
   }
@@ -111,9 +111,9 @@ function BirdCard({ idx, BirdPic, Birdname, info, Rarity, position }) {
         backgroundColor: getColor(position),
         transform: [{ translateY: animY }, { scale: animScale }],
       }
-    ]}>          
+    ]}>
       <View style={Style.top}>
-        <Image source={{uri: BirdPic}} style={Style.Birdpic} />
+        <Image source={{ uri: BirdPic }} style={Style.Birdpic} />
         <View style={Style.TitleBox}>
           <Text style={Style.cardTitle}>
             {'\n'}{Birdname}{'\n\n'}Rarity: {Rarity}
@@ -124,7 +124,7 @@ function BirdCard({ idx, BirdPic, Birdname, info, Rarity, position }) {
       <View style={Style.infoBox}>
         <Text style={Style.info}>{info}</Text>
         {knownbird && (
-          <Pressable style={Style.readMore} onPress={() => router.push({pathname: '/ReadMore', params:{name: Birdname}})}>
+          <Pressable style={Style.readMore} onPress={() => router.push({ pathname: '/ReadMore', params: { name: Birdname } })}>
             <Text>Read More</Text>
           </Pressable>
         )}

@@ -19,12 +19,13 @@ export default function BirdResultScreen({ visible, birdData, onClose }) {
   const router = useRouter();
   const activeRarityColor = getRarityColor(birdData?.rarity);
 
-  const handleAddAndNavigate = () => {
+  const handleAddAndNavigate = async () => {
 
     /* 
       backend POST request to add bird to user inventory would go here. It then sends them to the birddex screen 
     */
     
+
     onClose();
     router.replace('/Inventory'); 
   };

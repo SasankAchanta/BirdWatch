@@ -80,25 +80,25 @@ export default function NavBar() {
         <NavButton 
           index={0} 
           isSelected={page === 0} 
-          onPress={() => router.replace('/HomePage')}
+          onPress={() => { if (pathname !== '/HomePage') router.replace('/HomePage') }}
           iconSource={require('./icons/1house.png')} 
         />
         <NavButton 
           index={1} 
           isSelected={page === 1} 
-          onPress={() => router.replace('/Camera')} 
+          onPress={() => { if (pathname !== '/Camera') router.replace('/Camera') }} 
           iconSource={require('./icons/Camera(1).png')}
         />
         <NavButton 
           index={2} 
           isSelected={page === 2} 
-          onPress={() => router.replace('/Inventory')} 
+          onPress={() => { if (pathname !== '/Inventory') router.replace('/Inventory') }} 
           iconSource={require('./icons/cards.png')}
         />
         <NavButton 
           index={3} 
           isSelected={page === 3} 
-          onPress={() => router.replace('/Profile')}
+          onPress={() => { if (pathname !== '/Profile') router.replace('/Profile') }}
           iconSource={require('./icons/profile.png')}
         />
       </View>

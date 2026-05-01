@@ -1,5 +1,6 @@
 //simple function to get all the true birds from the birds caught array
 import { getCaughtBirds } from "./api.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const getCaughtBirdNames = async (token) => {
   try {
@@ -36,3 +37,4 @@ export const getCaughtBirdNames = async (token) => {
     return [];
   }
 };
+

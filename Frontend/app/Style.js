@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
 
   cardscreen:{
-    backgroundColor: '#000000a1',
+    backgroundColor: '#1d221fa1',
     width: ScreenW,
     height: ScreenH,
     flex: 1,
