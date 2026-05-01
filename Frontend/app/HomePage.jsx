@@ -3,7 +3,9 @@ import { Text, View, FlatList, ImageBackground, ActivityIndicator } from "react-
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { getPoints } from "./api.js";
+import { getPoints, getLeaderboard } from "./api.js";
+import drippybird from './birdpics/drippybird.png'
+
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -11,27 +13,39 @@ export default function HomeScreen() {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [userData, setUserData] = useState(null);
   const [points, setPoints] = useState(0);
+  const [rank, setRank] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadLiveStats() {
       try {
         const token = await AsyncStorage.getItem("token");
+        if (!token) return;
 
-        if (!token) {
-          console.log("No token found");
-          return;
-        }
+        // Get user
+        const user = await getPoints(token);
+        setPoints(user.points || 0);
 
-        const data = await getPoints(token);
+        const username = user.username || "FAKE BIRDWATCHER";
+        setUserData({ name: username });
 
-        setPoints(data.points || 0);
+        // Get leaderboard
+        const leaderboardRes = await getLeaderboard(token);
 
-        setUserData({
-          name: data.username || "FAKE BIRDWATCHER",
-        });
+        const formatted = leaderboardRes.leaderboard.map((item, index) => ({
+          rank: index + 1,
+          name: item.username,
+          score: item.points,
+        }));
 
-        setLeaderboardData(data.leaderboard || []);
+        setLeaderboardData(formatted);
+
+        //Calculate rank
+        const foundIndex = leaderboardRes.leaderboard.findIndex(
+          (item) => item.username === username
+        );
+
+        setRank(foundIndex >= 0 ? foundIndex + 1 : null);
 
       } catch (error) {
         console.log("Failed to load home data:", error);
@@ -57,7 +71,7 @@ export default function HomeScreen() {
             paddingBottom: 70,
           }}
         >
-          <Text style={{ color: "white", fontSize: 50, fontFamily: "LondrinaSolid" }}>
+          <Text style={{ color: "white", fontSize: 50, fontFamily: "LondrinaSolid-regular" }}>
             Welcome
           </Text>
 
@@ -71,10 +85,11 @@ export default function HomeScreen() {
             <View style={{ backgroundColor: "#778150", borderRadius: 12, flex: 1 }}>
               <FlatList
                 data={leaderboardData}
-                keyExtractor={(item, index) => item.id?.toString() || index.toString()}
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <View style={{ flexDirection: "row", alignItems: "center", paddingVertical: 8 }}>
-                    <Text style={{ color: "white", fontWeight: "bold", width: 35 }}>
+                    
+                    <Text style={{ color: "white", fontWeight: "bold", width: 35, textAlign: "center", fontFamily: "LondrinaSolid-regular" }}>
                       {item.rank}
                     </Text>
 
@@ -84,17 +99,18 @@ export default function HomeScreen() {
                         height: 50,
                         borderRadius: 25,
                         backgroundColor: "#E8D5A3",
-                        marginHorizontal: 10,
+                        marginHorizontal: 15,
                       }}
                     />
 
-                    <Text style={{ color: "white", flex: 1 }}>
+                    <Text style={{ color: "white", flex: 1, fontFamily: "LondrinaSolid-regular" }}>
                       {item.name}
                     </Text>
 
-                    <Text style={{ color: "white", fontWeight: "bold" }}>
+                    <Text style={{ color: "white", fontWeight: "bold", fontFamily: "LondrinaSolid-regular" }}>
                       {item.score || 0} pts
                     </Text>
+
                   </View>
                 )}
               />
@@ -102,20 +118,24 @@ export default function HomeScreen() {
               <View style={{ borderTopWidth: 1, borderColor: "#E8D5A3" }} />
 
               <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
-                <Text style={{ color: "white", fontWeight: "bold", width: 35 }}>
-                  ?
+                
+                <Text style={{ color: "white", fontWeight: "bold", width: 35, textAlign: "center", fontFamily: "LondrinaSolid-regular" }}>
+                  {rank ?? "?"}
                 </Text>
 
                 <View
-                  style={{
+                style={{
                     width: 50,
                     height: 50,
-                    borderRadius: 25,
+                    borderRadius: 50,
                     borderWidth: 2,
                     borderColor: "#E8D5A3",
+                    overflow: "hidden",
                     marginHorizontal: 10,
                   }}
-                />
+                >
+              <ImageBackground source={drippybird} style={{ width: '100%', height: '100%' }} />
+              </View>
 
                 <Text style={{ color: "white", flex: 1, fontFamily: "LondrinaSolid-regular" }}>
                   {userData?.name || "You"}
@@ -124,31 +144,30 @@ export default function HomeScreen() {
                 <Text style={{ color: "white", fontWeight: "bold" }}>
                   {points.toLocaleString()} pts
                 </Text>
+
               </View>
             </View>
           </View>
-
         </View>
 
-        {/* LOADING SCREEN OVERLAY */}
+        {/* LOADING OVERLAY */}
         {isLoading && (
-          <View style={{ 
-            position: "absolute", 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            bottom: 0, 
-            justifyContent: "center", 
-            alignItems: "center", 
-            backgroundColor: "rgba(0,0,0,0.6)" // Dim transparent background
+          <View style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.6)"
           }}>
             <ActivityIndicator size="large" color="#E8D5A3" />
-            <Text style={{ color: "white", marginTop: 10, fontFamily: "LondrinaSolid" }}>
+            <Text style={{ color: "white", marginTop: 10, fontFamily: "LondrinaSolid-regular" }}>
               Loading...
             </Text>
           </View>
         )}
-
       </View>
     </ImageBackground>
   );

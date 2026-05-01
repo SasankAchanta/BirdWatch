@@ -37,4 +37,6 @@ export const getCaughtBirdNames = async (token) => {
     return [];
   }
 };
-
+
+export default getCaughtBirdNames;
+

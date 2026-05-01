@@ -2,7 +2,7 @@
 
   const API = axios.create({
     //change to your own url to use
-    baseURL: "https://nontropical-francina-morbifically.ngrok-free.dev",
+    baseURL: "http://172.20.10.2:8000",
   });
 
   //login endpoint
@@ -117,6 +117,16 @@ export const getPoints = async (token) => {
 export const getWiki = async (birdName, token) => {
   const res = await API.get("/get_wiki", {
     params: { bird_name: birdName },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+export const getLeaderboard = async (token) => {
+  const res = await API.get("/get_leaderboard", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
