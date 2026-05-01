@@ -6,8 +6,7 @@ import Read from "./Read.jsx";
 
 import { getSummary, getImage, getMap } from "./api.js";
 
-const question =
-  "https://static.vecteezy.com/system/resources/previews/000/440/531/original/question-mark-vector-icon.jpg";
+const question = 'https://as1.ftcdn.net/jpg/03/35/13/14/220_F_335131435_DrHIQjlOKlu3GCXtpFkIG1v0cGgM9vJC.jpg';
 
 export default function ReadMore() {
   const { name } = useLocalSearchParams();

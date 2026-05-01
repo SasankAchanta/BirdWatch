@@ -8,7 +8,8 @@ import {
   SafeAreaView,
   ScrollView,
   Dimensions,
-  ImageBackground
+  ImageBackground,
+  ActivityIndicator // Added for the loading overlay
 } from 'react-native';
 
 import { CameraView, useCameraPermissions } from 'expo-camera';
@@ -24,6 +25,10 @@ import BirdResultScreen from './BirdResultScreen';
 const { width, height } = Dimensions.get('window');
 
 export default function CameraScreen() {
+  // --- ADDED LOADING STATES ---
+  const [isLoading, setIsLoading] = useState(true);
+  const [isIdentifying, setIsIdentifying] = useState(false);
+
   const [permission, requestPermission] = useCameraPermissions();
   const isFocused = useIsFocused();
 
@@ -40,10 +45,33 @@ export default function CameraScreen() {
   const [resultVisible, setResultVisible] = useState(false);
   const [birdData, setBirdData] = useState(null);
 
+  // --- UPDATED USE-EFFECT FOR LOADING ---
   useEffect(() => {
-    if (isFocused && permission && !permission.granted) {
-      requestPermission();
+    let active = true;
+
+    async function init() {
+      try {
+        if (!isFocused || !permission) return;
+
+        let finalPermission = permission;
+
+        if (!finalPermission.granted) {
+          finalPermission = await requestPermission();
+        }
+
+        if (!active) return;
+      } catch (e) {
+        console.log(e);
+      } finally {
+        if (active) setIsLoading(false);
+      }
     }
+
+    init();
+
+    return () => {
+      active = false;
+    };
   }, [isFocused, permission]);
 
   const getLocation = async () => {
@@ -104,6 +132,8 @@ export default function CameraScreen() {
 
   const handleIdentify = async () => {
     try {
+      setIsIdentifying(true); // --- ADDED ---
+
       const token = await AsyncStorage.getItem("token");
       if (!token) {
         alert("Not logged in");
@@ -139,6 +169,8 @@ export default function CameraScreen() {
     } catch (err) {
       console.log(err.response?.data || err.message);
       alert("Identification failed.");
+    } finally {
+      setIsIdentifying(false); // --- ADDED ---
     }
   };
 
@@ -151,10 +183,6 @@ export default function CameraScreen() {
     }
   };
 
-  if (!permission?.granted || !isFocused) {
-    return <View style={styles.container} />;
-  }
-
   return (
     <ImageBackground
       source={{ uri: 'https://i.pinimg.com/736x/96/be/5d/96be5d6ff03c61316b42e6a07a46ab90.jpg' }}
@@ -162,119 +190,123 @@ export default function CameraScreen() {
     >
       <SafeAreaView style={styles.overlay}>
 
-        {(!isReviewing && !selectedPhoto) ? (
-          <View style={styles.flex1}>
+        {/* --- WRAPPED IN PERMISSION CHECK SO BACKGROUND RENDERS --- */}
+        {permission?.granted && isFocused && (
+          (!isReviewing && !selectedPhoto) ? (
+            <View style={styles.flex1}>
 
-            <View
-              style={styles.camWrapper}
-              onStartShouldSetResponder={() => true}
-              onMoveShouldSetResponder={() => true}
-              onResponderMove={handleTouchMove}
-              onResponderRelease={() => { prevPinchDist.current = null; }}
-            >
-              <CameraView
-                style={styles.flex1}
-                ref={cameraRef}
-                flash={flash}
-                zoom={zoom}
+              <View
+                style={styles.camWrapper}
+                onStartShouldSetResponder={() => true}
+                onMoveShouldSetResponder={() => true}
+                onResponderMove={handleTouchMove}
+                onResponderRelease={() => { prevPinchDist.current = null; }}
               >
-                <TouchableOpacity
-                  style={styles.flashBtn}
-                  onPress={() => setFlash(f => f === 'off' ? 'on' : 'off')}
+                <CameraView
+                  style={styles.flex1}
+                  ref={cameraRef}
+                  flash={flash}
+                  zoom={zoom}
                 >
-                  <MaterialIcons
-                    name={flash === 'on' ? 'flash-on' : 'flash-off'}
-                    size={24}
-                    color={flash === 'on' ? '#FFD700' : 'white'}
-                  />
+                  {/* ALL YOUR GOOD UI IS KEPT HERE */}
+                  <TouchableOpacity
+                    style={styles.flashBtn}
+                    onPress={() => setFlash(f => f === 'off' ? 'on' : 'off')}
+                  >
+                    <MaterialIcons
+                      name={flash === 'on' ? 'flash-on' : 'flash-off'}
+                      size={24}
+                      color={flash === 'on' ? '#FFD700' : 'white'}
+                    />
+                  </TouchableOpacity>
+
+                  <View style={styles.viewfinder} />
+
+                  <View style={styles.zoomIndicator}>
+                    <Text style={styles.zoomText}>
+                      {Math.round(zoom * 10 + 1)}x
+                    </Text>
+                  </View>
+                </CameraView>
+              </View>
+
+              <View style={styles.bottomBar}>
+                <TouchableOpacity style={styles.sideBtn} onPress={pickImage}>
+                  <MaterialIcons name="photo-library" size={32} color="white" />
                 </TouchableOpacity>
 
-                <View style={styles.viewfinder} />
+                <TouchableOpacity style={styles.shutterOut} onPress={takePhoto}>
+                  <View style={styles.shutterIn} />
+                </TouchableOpacity>
 
-                <View style={styles.zoomIndicator}>
-                  <Text style={styles.zoomText}>
-                    {Math.round(zoom * 10 + 1)}x
-                  </Text>
-                </View>
-              </CameraView>
-            </View>
+                <View style={styles.sideBtn}>
+                  {burstPhotos.length > 0 && (
+                    <TouchableOpacity
+                      style={styles.stackContainer}
+                      onPress={() => setIsReviewing(true)}
+                    >
+                      {burstPhotos.slice(0, 3).reverse().map((uri, i) => (
+                        <View
+                          key={i}
+                          style={[
+                            styles.stackFrame,
+                            {
+                              transform: [{ rotate: `${i * 3}deg` }],
+                              marginTop: i > 0 ? -74 : 0
+                            }
+                          ]}
+                        >
+                          <Image source={{ uri }} style={styles.flex1} />
+                        </View>
+                      ))}
 
-            <View style={styles.bottomBar}>
-              <TouchableOpacity style={styles.sideBtn} onPress={pickImage}>
-                <MaterialIcons name="photo-library" size={32} color="white" />
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.shutterOut} onPress={takePhoto}>
-                <View style={styles.shutterIn} />
-              </TouchableOpacity>
-
-              <View style={styles.sideBtn}>
-                {burstPhotos.length > 0 && (
-                  <TouchableOpacity
-                    style={styles.stackContainer}
-                    onPress={() => setIsReviewing(true)}
-                  >
-                    {burstPhotos.slice(0, 3).reverse().map((uri, i) => (
-                      <View
-                        key={i}
-                        style={[
-                          styles.stackFrame,
-                          {
-                            transform: [{ rotate: `${i * 3}deg` }],
-                            marginTop: i > 0 ? -74 : 0
-                          }
-                        ]}
-                      >
-                        <Image source={{ uri }} style={styles.flex1} />
+                      <View style={styles.badge}>
+                        <Text style={styles.badgeText}>{burstPhotos.length}</Text>
                       </View>
-                    ))}
-
-                    <View style={styles.badge}>
-                      <Text style={styles.badgeText}>{burstPhotos.length}</Text>
-                    </View>
-                  </TouchableOpacity>
-                )}
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
             </View>
-          </View>
-        ) : (
-          <View style={styles.flex1}>
+          ) : (
+            <View style={styles.flex1}>
 
-            <View style={styles.header}>
-              <TouchableOpacity onPress={handleBackPress}>
-                <MaterialIcons name="chevron-left" size={50} color="white" />
-              </TouchableOpacity>
-
-              <Text style={styles.headerTitle}>
-                {isReviewing ? "Select Photo" : "Confirm Bird"}
-              </Text>
-            </View>
-
-            {isReviewing ? (
-              <ScrollView contentContainerStyle={styles.grid}>
-                {burstPhotos.map((uri, i) => (
-                  <TouchableOpacity
-                    key={i}
-                    style={styles.gridCard}
-                    onPress={() => {
-                      setSelectedPhoto(uri);
-                      setIsReviewing(false);
-                    }}
-                  >
-                    <Image source={{ uri }} style={styles.flex1} />
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            ) : (
-              <View style={styles.finalBox}>
-                <Image source={{ uri: selectedPhoto }} style={styles.finalImg} />
-
-                <TouchableOpacity style={styles.actionBtn} onPress={handleIdentify}>
-                  <Text style={styles.btnText}>Identify Bird</Text>
+              <View style={styles.header}>
+                <TouchableOpacity onPress={handleBackPress}>
+                  <MaterialIcons name="chevron-left" size={50} color="white" />
                 </TouchableOpacity>
+
+                <Text style={styles.headerTitle}>
+                  {isReviewing ? "Select Photo" : "Confirm Bird"}
+                </Text>
               </View>
-            )}
-          </View>
+
+              {isReviewing ? (
+                <ScrollView contentContainerStyle={styles.grid}>
+                  {burstPhotos.map((uri, i) => (
+                    <TouchableOpacity
+                      key={i}
+                      style={styles.gridCard}
+                      onPress={() => {
+                        setSelectedPhoto(uri);
+                        setIsReviewing(false);
+                      }}
+                    >
+                      <Image source={{ uri }} style={styles.flex1} />
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              ) : (
+                <View style={styles.finalBox}>
+                  <Image source={{ uri: selectedPhoto }} style={styles.finalImg} />
+
+                  <TouchableOpacity style={styles.actionBtn} onPress={handleIdentify}>
+                    <Text style={styles.btnText}>Identify Bird</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          )
         )}
 
         <BirdResultScreen
@@ -282,6 +314,21 @@ export default function CameraScreen() {
           birdData={birdData}
           onClose={() => setResultVisible(false)}
         />
+
+        {/* --- ADDED LOADING OVERLAYS --- */}
+        {isLoading && (
+          <View style={styles.loadingOverlay}>
+            <MaterialIcons name="camera-alt" size={50} color="#E8D5A3" />
+            <Text style={styles.loadingText}>Preparing Camera...</Text>
+          </View>
+        )}
+
+        {isIdentifying && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#E8D5A3" />
+            <Text style={styles.loadingText}>Identifying Bird...</Text>
+          </View>
+        )}
 
       </SafeAreaView>
     </ImageBackground>
@@ -442,5 +489,22 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 18
+  },
+
+  // --- ADDED LOADING STYLES ---
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject, 
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.6)", 
+    zIndex: 999 
+  },
+
+  loadingText: {
+    fontFamily: 'LondrinaSolid-regular',
+    color: "white",
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: "600"
   }
 });

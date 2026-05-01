@@ -1,14 +1,26 @@
-import { ImageBackground, View, Image, Text, Pressable, ScrollView} from 'react-native';
+import { ImageBackground, View, Image, Text, Pressable, ScrollView, Linking } from 'react-native';
 import Style from './Style.js';
-
-
 
 import { useRouter } from 'expo-router';
 import { WebView } from "react-native-webview";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getWiki } from "./api";
 
 //need all this info to make a read more page
 function Read({ BirdPic, Info, Map, Birdname}) {
   const router = useRouter();
+
+  const handleWikipedia = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const res = await getWiki(Birdname, token);
+      if (res && res.url) {
+        Linking.openURL(res.url);
+      }
+    } catch (err) {
+      console.log("Failed to open wikipedia:", err);
+    }
+  };
     return ( 
     <ImageBackground source={{ uri: 'https://i.pinimg.com/736x/96/be/5d/96be5d6ff03c61316b42e6a07a46ab90.jpg' }} style={Style.flex1}>
       <View style={{ flex: 1, backgroundColor: "#0a0d04a0" }}>
@@ -32,7 +44,7 @@ function Read({ BirdPic, Info, Map, Birdname}) {
         <Text style = {{fontFamily: 'LondrinaSolid-regular', fontSize: 17, textAlign:'center', color:'#ffffff', top: -320, padding:10,}}>
             {Info}
             </Text>
-            <Pressable style={{width: 160, height: 60, justifyContent: 'center', bottom: 250, alignSelf:'center', backgroundColor: '#2F3820', borderRadius: 20, borderWidth: 3, borderColor: '#F6E2BE'}} onPress={() => router.replace('/Grid')} >
+            <Pressable style={{width: 160, height: 60, justifyContent: 'center', bottom: 250, alignSelf:'center', backgroundColor: '#2F3820', borderRadius: 20, borderWidth: 3, borderColor: '#F6E2BE'}} onPress={handleWikipedia} >
               <Text style={{color:"#F6E2BE", fontFamily: 'LondrinaSolid-regular', fontSize: 20, textAlign: 'center', justifyContent:'center' }}>READ ON WIKIPEDIA</Text>
               </Pressable>  
     </ScrollView>

@@ -10,12 +10,11 @@ import Style from './Style.js';
 //THING LEFT ON THIS PAGE
 //RARITY CALCULATION, everything right now is hardcoded to common idk how to calculate rarity, if you do just calculate is and store in the rare variable
 
-const question =
-  "https://static.vecteezy.com/system/resources/previews/000/440/531/original/question-mark-vector-icon.jpg";
+const question = 'https://as1.ftcdn.net/jpg/03/35/13/14/220_F_335131435_DrHIQjlOKlu3GCXtpFkIG1v0cGgM9vJC.jpg';
 
 // default card, not clickable, shows while others load
 const TestBirds = [
-  { BirdPic: question, Birdname: "Unknown Bird", Rarity: "?", info: "Unknown Bird" },
+  { BirdPic: question, Birdname: "Loading...", Rarity: "", info: "Loading..." },
 ];
 
 function Scroll() {
@@ -41,7 +40,7 @@ function Scroll() {
       const token = await AsyncStorage.getItem('token');
       if (!token) return;
 
-      //get names
+      //get caught birds from backend
       const names = await getCaughtBirdNames(token);
       console.log("names:", names);
 
@@ -50,15 +49,14 @@ function Scroll() {
         setBirds([
           {
             BirdPic: question,
-            Birdname: "Unknown Bird",
-            Rarity: "?",
-            info: "Unknown Bird",
+            Birdname: "Loading...",
+            Rarity: "",
+            info: "Loading...",
           },
         ]);
         return;
       }
 
-      const rare = "?";
 
       //get images
       const imageResults = await Promise.allSettled(
@@ -85,7 +83,10 @@ function Scroll() {
         }
 
         if (!url) url = question;
-        
+
+        //hardcode rarity as it was before
+        const rare = "Common";
+
         //birdcard made with image, name, rarity(change), info = loading until summary is gotten
         return {
           BirdPic: url,
@@ -130,7 +131,7 @@ function Scroll() {
           }
         }
 
-        if (!raw){
+        if (!raw) {
           return bird;
         }
 
@@ -209,10 +210,10 @@ function Scroll() {
 
     let diff = index - current;
 
-    if(diff > total / 2){
-       diff = diff - total;
+    if (diff > total / 2) {
+      diff = diff - total;
     }
-    if(diff < -total / 2){
+    if (diff < -total / 2) {
       diff = diff + total;
     }
     return diff;
@@ -223,42 +224,42 @@ function Scroll() {
       source={{ uri: 'https://i.pinimg.com/1200x/4f/e9/3a/4fe93a8428778e21e9d8211e4088b08f.jpg' }}
       style={{ flex: 1 }}
     >
-        <View style={Style.cardscreen}>
-          <View style={Style.CardContainer} {...panResponder.panHandlers}>
+      <View style={Style.cardscreen}>
+        <View style={Style.CardContainer} {...panResponder.panHandlers}>
 
-            <Pressable style={Style.gridButton} onPress={() => router.replace('/Grid')}>
-              <Text style={{
-                color: "#2F3820",
-                fontFamily: 'LondrinaSolid-regular',
-                fontSize: 30,
-                textAlign: 'center'
-              }}>
-                GRID
-              </Text>
-            </Pressable>
+          <Pressable style={Style.gridButton} onPress={() => router.replace('/Grid')}>
+            <Text style={{
+              color: "#2F3820",
+              fontFamily: 'LondrinaSolid-regular',
+              fontSize: 30,
+              textAlign: 'center'
+            }}>
+              GRID
+            </Text>
+          </Pressable>
 
-            {birds.map((bird, index) => {
+          {birds.map((bird, index) => {
 
-              const position = getPosition(index, Index, birds.length);
+            const position = getPosition(index, Index, birds.length);
 
-              if (Math.abs(position) > 3){
-                return null;
-              }
+            if (Math.abs(position) > 3) {
+              return null;
+            }
 
-              return (
-                <BirdCard
-                  key={index}
-                  BirdPic={bird.BirdPic}
-                  Birdname={bird.Birdname}
-                  info={bird.info}
-                  Rarity={bird.Rarity}
-                  position={position}
-                />
-              );
-            })}
+            return (
+              <BirdCard
+                key={index}
+                BirdPic={bird.BirdPic}
+                Birdname={bird.Birdname}
+                info={bird.info}
+                Rarity={bird.Rarity}
+                position={position}
+              />
+            );
+          })}
 
-          </View>
         </View>
+      </View>
     </ImageBackground>
   );
 }

@@ -43,17 +43,6 @@ export default function HomeScreen() {
     loadLiveStats();
   }, []);
 
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#2f3820" }}>
-        <ActivityIndicator size="large" color="#E8D5A3" />
-        <Text style={{ color: "white", marginTop: 10, fontFamily: "LondrinaSolid" }}>
-          Loading...
-        </Text>
-      </View>
-    );
-  }
-
   return (
     <ImageBackground
       source={{ uri: "https://i.pinimg.com/1200x/0c/34/eb/0c34ebd1e937148e8daec033b06f4b48.jpg" }}
@@ -72,14 +61,10 @@ export default function HomeScreen() {
             Welcome
           </Text>
 
-          <Text style={{ color: "#A97A51", fontSize: 30, fontFamily: "LondrinaSolid" }}>
-            Streak: {userData?.streak || 0} days🔥
-          </Text>
-
           <View style={{ height: 30 }} />
 
           <View style={{ height: 400, borderRadius: 20, backgroundColor: "#FDFADF", width: "90%", padding: 10 }}>
-            <Text style={{ color: "#89572A", fontWeight: "bold", fontSize: 20, textAlign: "center", marginBottom: 10, fontFamily: "LondrinaSolid-regular"}}>
+            <Text style={{ color: "#89572A", fontWeight: "bold", fontSize: 20, textAlign: "center", marginBottom: 10, fontFamily: "LondrinaSolid-regular" }}>
               Leaderboard
             </Text>
 
@@ -144,6 +129,26 @@ export default function HomeScreen() {
           </View>
 
         </View>
+
+        {/* LOADING SCREEN OVERLAY */}
+        {isLoading && (
+          <View style={{ 
+            position: "absolute", 
+            top: 0, 
+            left: 0, 
+            right: 0, 
+            bottom: 0, 
+            justifyContent: "center", 
+            alignItems: "center", 
+            backgroundColor: "rgba(0,0,0,0.6)" // Dim transparent background
+          }}>
+            <ActivityIndicator size="large" color="#E8D5A3" />
+            <Text style={{ color: "white", marginTop: 10, fontFamily: "LondrinaSolid" }}>
+              Loading...
+            </Text>
+          </View>
+        )}
+
       </View>
     </ImageBackground>
   );
